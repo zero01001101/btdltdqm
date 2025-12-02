@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chương Trình Trắc Nghiệm Thuế và Tài Chính</title>
+    <!-- Tải Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Thiết lập font Inter cho giao diện */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .quiz-card {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 5px 15px -5px rgba(0, 0, 0, 0.04);
+        }
+        .option-button {
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .option-button:hover {
+            transform: translateY(-2px);
+            background-color: #e5e7eb;
+        }
+        /* Hiệu ứng khi chọn */
+        .option-selected {
+            border-color: #2563eb;
+            background-color: #eff6ff;
+            box-shadow: 0 0 0 2px #bfdbfe;
+        }
+        /* Hiệu ứng câu trả lời đúng/sai */
+        .option-correct {
+            background-color: #d1fae5;
+            border-color: #059669;
+            box-shadow: 0 0 0 2px #a7f3d0;
+        }
+        .option-incorrect {
+            background-color: #fee2e2;
+            border-color: #ef4444;
+            box-shadow: 0 0 0 2px #fecaca;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8 flex justify-center items-start min-h-screen">
+
+    <div id="quiz-container" class="w-full max-w-2xl bg-white rounded-xl p-6 sm:p-8 quiz-card transition-all duration-300">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Ôn Tập: Thuế và Tài Chính (40 Câu)</h1>
+        <div id="quiz-content">
+            <!-- Phần này sẽ được JavaScript điền vào -->
+        </div>
+        <div id="results-screen" class="hidden text-center py-10">
+            <h2 class="text-4xl font-extrabold text-blue-600 mb-4">Kết Quả Bài Trắc Nghiệm</h2>
+            <p id="final-score" class="text-2xl font-semibold text-gray-700 mb-6"></p>
+            <button onclick="restartQuiz()" class="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-150 transform hover:scale-105">
+                Làm Lại Bài Thi
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu quiz đã được trích xuất đầy đủ từ file temple.docx (40 câu)
+        const quizData = [
+            {
+                questionNumber: 1,
+                question: "Chức năng khởi thủy (ban đầu) của thuế là:",
+                answerOptions: [
+                    { text: "Điều tiết chu kỳ kinh tế", isCorrect: false, rationale: "Đây là một chức năng vĩ mô, xuất hiện sau này khi vai trò của thuế được mở rộng." },
+                    { text: "Huy động nguồn thu cho nhà nước", isCorrect: true, rationale: "Chức năng cơ bản và ra đời sớm nhất của thuế là để tạo lập nguồn tài chính, nuôi sống bộ máy nhà nước." },
+                    { text: "Kiềm chế lạm phát", isCorrect: false, rationale: "Đây là một vai trò trong chính sách tài khóa, không phải chức năng khởi thủy." },
+                    { text: "Điều tiết thu nhập, góp phần đảm bảo công bằng xã hội", isCorrect: false, rationale: "Đây là chức năng phân phối lại, phát triển sau chức năng huy động nguồn thu." },
+                ],
+                hint: "Hãy nhớ lại lý do ra đời đầu tiên và cơ bản nhất của nhà nước cần đến nguồn thu."
+            },
+            {
+                questionNumber: 2,
+                question: "Thuế có vai trò tạo lập nguồn thu chủ yếu cho ngân sách nhà nước vì:",
+                answerOptions: [
+                    { text: "Thuế không có tính hoàn trả trực tiếp", isCorrect: false, rationale: "Tính không hoàn trả chỉ là một đặc điểm của thuế, không phải là lý do chính khiến nó là nguồn thu chủ yếu." },
+                    { text: "Thuế có phạm vi điều tiết rộng", isCorrect: false, rationale: "Phạm vi điều tiết rộng là đúng, nhưng chưa đủ để giải thích vai trò chủ yếu." },
+                    { text: "Thuế có phạm vi điều tiết rộng và có tính hoàn trả trực tiếp", isCorrect: false, rationale: "Thuế không có tính hoàn trả trực tiếp, do đó khẳng định này là sai." },
+                    { text: "Thuế có phạm vi điều tiết rộng và có tính bắt buộc", isCorrect: true, rationale: "Nhờ tính bắt buộc và áp dụng trên nhiều đối tượng (phạm vi rộng), thuế đảm bảo được nguồn thu lớn và ổn định cho ngân sách." },
+                ],
+                hint: "Gợi ý: Thuế có hai đặc điểm cốt lõi đảm bảo nguồn thu lớn và ổn định."
+            },
+            {
+                questionNumber: 3,
+                question: "Thuế có thể góp phần điều tiết vĩ mô nền kinh tế vì:",
+                answerOptions: [
+                    { text: "Thuế có tính bắt buộc", isCorrect: false, rationale: "Tính bắt buộc là đặc điểm thu, không liên quan trực tiếp đến cơ chế điều tiết vĩ mô." },
+                    { text: "Thuế có tính không hoàn trả trực tiếp", isCorrect: false, rationale: "Tính không hoàn trả liên quan đến mục đích sử dụng nguồn thu hơn là cơ chế điều tiết." },
+                    { text: "Thuế có phạm vi điều tiết rộng", isCorrect: false, rationale: "Phạm vi rộng chỉ tạo điều kiện, nhưng cơ chế tác động chính là khác." },
+                    { text: "Thuế điều tiết vào thu nhập của các chủ thể kinh tế", isCorrect: true, rationale: "Bằng cách thay đổi thuế suất đánh vào thu nhập (hoặc tiêu dùng), thuế trực tiếp thay đổi khả năng chi tiêu, đầu tư của các chủ thể, từ đó điều tiết tổng cầu và cung của nền kinh tế." },
+                ],
+                hint: "Hãy nghĩ về cách thuế tác động đến quyết định tiêu dùng và đầu tư của người dân và doanh nghiệp."
+            },
+            {
+                questionNumber: 4,
+                question: "Tính bắt buộc cuả thuế khác với phạt tiền ở chỗ:",
+                answerOptions: [
+                    { text: "Tính bắt buộc của thuế là tính bắt buộc phi hình sự", isCorrect: false, rationale: "Cả thuế và phạt tiền đều có thể là phi hình sự, đây không phải điểm khác biệt cơ bản." },
+                    { text: "Tính bắt buộc của thuế là tính bắt buộc hình sự", isCorrect: false, rationale: "Khẳng định này không đúng, tính bắt buộc của thuế không mang tính hình sự." },
+                    { text: "Tính bắt buộc của thuế được thực hiện bởi quyền lực chính trị đặc biệt của nhà nước", isCorrect: true, rationale: "Thuế là một nghĩa vụ đóng góp theo luật định dựa trên chủ quyền quốc gia, khác với phạt tiền là một hình thức xử lý vi phạm pháp luật." },
+                    { text: "Tính bắt buộc của thuế mang tính đơn phương, vô điều kiện", isCorrect: false, rationale: "Phạt tiền cũng mang tính đơn phương, vô điều kiện." },
+                ],
+                hint: "Điểm khác biệt nằm ở bản chất: một bên là nghĩa vụ tài chính định kỳ, một bên là chế tài xử phạt do vi phạm."
+            },
+            {
+                questionNumber: 5,
+                question: "Yếu tố nào sau đây được coi là “linh hồn”của một sắc thuế:",
+                answerOptions: [
+                    { text: "Người nộp thuế", isCorrect: false, rationale: "Người nộp thuế là chủ thể, không phải linh hồn của sắc thuế." },
+                    { text: "Cơ sở thuế", isCorrect: false, rationale: "Cơ sở thuế là căn cứ tính, nhưng chưa phải là yếu tố quyết định mức độ và tính chất điều tiết." },
+                    { text: "Đối tượng chịu thuế", isCorrect: false, rationale: "Đối tượng chịu thuế xác định phạm vi, nhưng chưa quyết định mức gánh nặng." },
+                    { text: "Thuế suất", isCorrect: true, rationale: "Thuế suất quyết định mức độ động viên và khả năng điều tiết của sắc thuế đó, được coi là linh hồn vì nó thể hiện rõ nhất chính sách thuế." },
+                ],
+                hint: "Yếu tố này quyết định trực tiếp đến số tiền thuế phải nộp và thể hiện rõ nhất ý đồ điều tiết của nhà nước."
+            },
+            {
+                questionNumber: 6,
+                question: "Căn cứ vào phương thức đánh thuế, thuế được phân loại thành:",
+                answerOptions: [
+                    { text: "Thuế tài sản và thuế trực thu", isCorrect: false, rationale: "Đây là sự kết hợp giữa phân loại theo đối tượng và phương thức." },
+                    { text: "Thuế tiêu dùng và thuế gián thu", isCorrect: false, rationale: "Đây là sự kết hợp giữa phân loại theo đối tượng và phương thức." },
+                    { text: "Thuế trực thu và thuế gián thu", isCorrect: true, rationale: "Phân loại theo phương thức đánh thuế (người nộp thuế và người chịu thuế có trùng nhau hay không) chia thuế thành trực thu và gián thu." },
+                    { text: "Thuế tiêu dùng, thuế thu nhập và thuế tài sản", isCorrect: false, rationale: "Đây là phân loại theo đối tượng chịu thuế." },
+                ],
+                hint: "Phân loại này dựa trên việc người nộp thuế có phải là người chịu thuế cuối cùng hay không."
+            },
+            {
+                questionNumber: 7,
+                question: "Căn cứ vào đối tượng chịu thuế, thuế được phân loại thành:",
+                answerOptions: [
+                    { text: "Thuế tài sản và trực thu", isCorrect: false, rationale: "Phân loại này không đồng nhất." },
+                    { text: "Thuế tiêu dùng và thuế thu nhập", isCorrect: false, rationale: "Đây là hai loại chính, nhưng còn thiếu loại thuế tài sản." },
+                    { text: "Thuế trực thu và thuế gián thu", isCorrect: false, rationale: "Đây là phân loại theo phương thức đánh thuế." },
+                    { text: "Thuế tiêu dùng, thuế thu nhập và thuế tài sản", isCorrect: true, rationale: "Đây là ba nhóm đối tượng chịu thuế chính mà nhà nước thường đánh thuế, tương ứng với quá trình kiếm tiền, tiêu tiền và sở hữu tài sản." },
+                ],
+                hint: "Gợi ý: Thuế có thể đánh vào 3 lĩnh vực kinh tế chính: kiếm được, tiêu đi, và sở hữu."
+            },
+            {
+                questionNumber: 8,
+                question: "Loại thuế nào sau đây được phân loại theo mối quan hệ giữa số thuế phải nộp với thu nhập:",
+                answerOptions: [
+                    { text: "Thuế tiêu dùng", isCorrect: false, rationale: "Thuế tiêu dùng là phân loại theo đối tượng chịu thuế." },
+                    { text: "Thuế lũy thoái", isCorrect: true, rationale: "Đây là loại thuế có tỷ suất thuế bình quân giảm khi thu nhập tăng, thể hiện mối quan hệ nghịch biến với thu nhập." },
+                    { text: "Thuế thu nhập", isCorrect: false, rationale: "Thuế thu nhập là phân loại theo đối tượng chịu thuế." },
+                    { text: "Thuế gián thu", isCorrect: false, rationale: "Thuế gián thu là phân loại theo phương thức đánh thuế." },
+                ],
+                hint: "Loại thuế này liên quan đến cách mà gánh nặng thuế thay đổi theo mức thu nhập của người nộp thuế."
+            },
+            {
+                questionNumber: 9,
+                question: "Nội dung nào KHÔNG thuộc đặc điểm của thuế gián thu:",
+                answerOptions: [
+                    { text: "Thuế không được cộng vào giá bán sản phẩm", isCorrect: true, rationale: "Thực tế thuế gián thu (như GTGT, TTĐB) luôn được cộng vào giá bán sản phẩm và do người tiêu dùng chịu." },
+                    { text: "Thuế không ảnh hưởng đến hoạt động kinh doanh của doanh nghiệp", isCorrect: false, rationale: "Thuế gián thu vẫn ảnh hưởng gián tiếp đến hoạt động kinh doanh do có thể làm giảm cầu." },
+                    { text: "Thuế được cộng vào giá bán sản phẩm", isCorrect: false, rationale: "Đây là một đặc điểm ĐÚNG của thuế gián thu." },
+                    { text: "Thuế có tính chất lũy thoái so với thu nhập", isCorrect: false, rationale: "Đây là một đặc điểm ĐÚNG của thuế gián thu vì mức thuế tuyệt đối không đổi nhưng tỷ lệ trên thu nhập của người thu nhập thấp thì cao hơn." },
+                ],
+                hint: "Hãy xem xét cơ chế chuyển gánh nặng thuế của thuế gián thu sang người tiêu dùng cuối cùng."
+            },
+            {
+                questionNumber: 10,
+                question: "Thuế gián thu là thuế:",
+                answerOptions: [
+                    { text: "Đánh trực tiếp vào thu nhập của người nộp thuế", isCorrect: false, rationale: "Đây là đặc điểm của thuế trực thu." },
+                    { text: "Đánh thông qua giá cả hàng hóa", isCorrect: true, rationale: "Thuế gián thu là loại thuế được cộng vào giá bán hàng hóa, dịch vụ và do người tiêu dùng chịu, được người sản xuất/kinh doanh nộp hộ." },
+                    { text: "Có tính đến hoàn cảnh của người nộp thuế", isCorrect: false, rationale: "Đặc điểm này thuộc về thuế trực thu (qua các khoản giảm trừ gia cảnh)." },
+                    { text: "Không tính đến hoàn cảnh của người nộp thuế", isCorrect: false, rationale: "Mặc dù đúng về bản chất, nhưng 'đánh thông qua giá cả hàng hóa' giải thích rõ ràng hơn về cơ chế gián thu." },
+                ],
+                hint: "Phân loại này dựa trên phương thức thu: không thu trực tiếp vào thu nhập hay tài sản mà qua các khâu luân chuyển hàng hóa."
+            },
+            {
+                questionNumber: 11,
+                question: "Loại thuế nào KHÔNG được phân loại căn cứ vào đối tượng chịu thuế:",
+                answerOptions: [
+                    { text: "Thuế tiêu dùng", isCorrect: false, rationale: "Thuế tiêu dùng là một loại thuế phân loại theo đối tượng chịu thuế (lĩnh vực tiêu dùng)." },
+                    { text: "Thuế thu nhập", isCorrect: false, rationale: "Thuế thu nhập là một loại thuế phân loại theo đối tượng chịu thuế (lĩnh vực thu nhập)." },
+                    { text: "Thuế gián thu", isCorrect: true, rationale: "Thuế gián thu là phân loại theo phương thức đánh thuế (trực thu/gián thu), không phải theo đối tượng chịu thuế." },
+                    { text: "Thuế tài sản", isCorrect: false, rationale: "Thuế tài sản là một loại thuế phân loại theo đối tượng chịu thuế (lĩnh vực tài sản)." },
+                ],
+                hint: "Gợi ý: Hãy phân biệt giữa tiêu thức 'đối tượng chịu thuế' và 'phương thức đánh thuế'."
+            },
+            {
+                questionNumber: 12,
+                question: "Thuế là khoản thu nhập của các cá nhân và tổ chức chuyển giao cho nhà nước dưới hình thức:",
+                answerOptions: [
+                    { text: "Bắt buộc, không hoàn trả trực tiếp", isCorrect: true, rationale: "Đây là đặc điểm cốt lõi của thuế: tính bắt buộc theo luật định và không gắn với bất kỳ lợi ích hay dịch vụ hoàn trả cụ thể nào cho người nộp." },
+                    { text: "Bắt buộc, có hoàn trả trực tiếp", isCorrect: false, rationale: "Đây là đặc điểm của phí hoặc lệ phí, không phải thuế." },
+                    { text: "Tự nguyện và không hoàn trả trực tiếp", isCorrect: false, rationale: "Thuế mang tính bắt buộc, không phải tự nguyện." },
+                    { text: "Tự nguyện và có hoàn trả trực tiếp", isCorrect: false, rationale: "Khẳng định này sai cả về tính bắt buộc và tính hoàn trả." },
+                ],
+                hint: "Hãy nhớ hai đặc tính quan trọng nhất phân biệt thuế với các khoản thu khác của nhà nước."
+            },
+            {
+                questionNumber: 13,
+                question: "Hình thức động viên nguồn thu của Nhà nước thông qua thuế có đặc điểm chính là:",
+                answerOptions: [
+                    { text: "Tính bắt buộc, tính không hoàn trả trực tiếp, tính pháp lý cao", isCorrect: true, rationale: "Đây là bộ ba đặc điểm cơ bản, thể hiện quyền lực nhà nước, mục đích sử dụng chung và cơ sở pháp lý vững chắc của thuế." },
+                    { text: "Tính bắt buộc, tính hoàn trả trực tiếp và hoàn trả gián tiếp", isCorrect: false, rationale: "Thuế không có tính hoàn trả trực tiếp." },
+                    { text: "Tính không hoàn trả trực tiếp, tính lãnh thổ", isCorrect: false, rationale: "Còn thiếu tính bắt buộc và tính pháp lý cao." },
+                    { text: "Tính không hoàn trả trực tiếp, tính pháp lý cao", isCorrect: false, rationale: "Còn thiếu tính bắt buộc." },
+                ],
+                hint: "Ba đặc điểm này là nền tảng để phân biệt thuế với các khoản thu ngân sách khác như phí, lệ phí hay vay nợ."
+            },
+            {
+                questionNumber: 14,
+                question: "Trong một luật thuế thường quy định rõ ai phải nộp thuế và người đó được gọi là:",
+                answerOptions: [
+                    { text: "Đối tượng nộp thuế", isCorrect: true, rationale: "Đối tượng nộp thuế (Subject of Tax) là cá nhân/tổ chức có trách nhiệm pháp lý thực hiện nghĩa vụ nộp tiền thuế vào ngân sách nhà nước." },
+                    { text: "Đối tượng chịu thuế", isCorrect: false, rationale: "Đối tượng chịu thuế (Tax Bearer) là người gánh chịu gánh nặng kinh tế của thuế, có thể khác với người nộp thuế." },
+                    { text: "Miễn giảm thuế", isCorrect: false, rationale: "Miễn giảm thuế là chính sách ưu đãi." },
+                    { text: "Cơ sở tính thuế", isCorrect: false, rationale: "Cơ sở tính thuế là căn cứ để tính ra số tiền thuế phải nộp." },
+                ],
+                hint: "Hãy phân biệt giữa người có nghĩa vụ pháp lý đóng tiền và người chịu gánh nặng kinh tế cuối cùng."
+            },
+            {
+                questionNumber: 15,
+                question: "Hệ thống thuế được coi là công bằng theo chiều ngang khi:",
+                answerOptions: [
+                    { text: "Nếu các cá nhân có điều kiện về mọi mặt đều như nhau thì được đối xử ngang nhau trong việc thực hiện nghĩa vụ thuế", isCorrect: true, rationale: "Công bằng ngang đòi hỏi đối xử bình đẳng với những người ở vị thế kinh tế tương đương (equal treatment of equals)." },
+                    { text: "Nếu người có khả năng nộp thuế nhiều hơn thì phải nộp thuế cao hơn những người khác", isCorrect: false, rationale: "Đây là khái niệm công bằng dọc (Vertical Equity)." },
+                    { text: "Các cá nhân đều phải nộp thuế ngang nhau", isCorrect: false, rationale: "Khái niệm này không tính đến khả năng nộp thuế." },
+                    { text: "Tất cả các cá nhân đều có nghĩa vụ đóng thuế cho Nhà nước như nhau", isCorrect: false, rationale: "Nghĩa vụ đóng thuế là như nhau, nhưng mức đóng góp phải dựa trên điều kiện và khả năng nộp thuế." },
+                ],
+                hint: "Hãy nhớ đến nguyên tắc 'bình đẳng giữa những người bình đẳng' trong chính sách thuế."
+            },
+            {
+                questionNumber: 16,
+                question: "Chức năng điều tiết kinh tế vĩ mô của thuế KHÔNG biểu hiện qua:",
+                answerOptions: [
+                    { text: "Là công cụ huy động nguồn lực tài chính cho Nhà nước", isCorrect: true, rationale: "Đây là chức năng tạo nguồn thu, hay chức năng tài chính của thuế, không phải chức năng điều tiết kinh tế vĩ mô." },
+                    { text: "Là công cụ kiềm chế lạm phát", isCorrect: false, rationale: "Điều tiết lạm phát là một biểu hiện của điều tiết vĩ mô (chính sách tài khóa)." },
+                    { text: "Là công cụ phân phối lại sản phẩm xã hội", isCorrect: false, rationale: "Phân phối lại thu nhập là một chức năng điều tiết quan trọng của thuế." },
+                    { text: "Là công cụ để bảo hộ sản xuất nội địa", isCorrect: false, rationale: "Sử dụng thuế xuất nhập khẩu để bảo hộ là một hình thức điều tiết vĩ mô." },
+                ],
+                hint: "Gợi ý: Hãy phân biệt giữa chức năng cơ bản 'tạo nguồn thu' và chức năng 'can thiệp/điều chỉnh' nền kinh tế."
+            },
+            {
+                questionNumber: 17,
+                question: "Loại mức thuế nào sau đây có thuế suất tăng dần theo mức độ tăng của căn cứ tính thuế:",
+                answerOptions: [
+                    { text: "Mức thuế ổn định", isCorrect: false, rationale: "Mức thuế ổn định là thuế suất không đổi." },
+                    { text: "Mức thuế tuyệt đối", isCorrect: false, rationale: "Mức thuế tuyệt đối là số tiền cố định, không phải tỷ lệ." },
+                    { text: "Mức thuế lũy tiến", isCorrect: true, rationale: "Thuế lũy tiến là loại thuế có thuế suất tăng theo mức tăng của căn cứ tính thuế (ví dụ: thu nhập), đảm bảo công bằng dọc." },
+                    { text: "Mức thuế thống nhất", isCorrect: false, rationale: "Mức thuế thống nhất là một tỷ lệ cố định trên cơ sở tính thuế." },
+                ],
+                hint: "Loại thuế này thường được áp dụng cho Thuế Thu nhập Cá nhân để đảm bảo công bằng xã hội."
+            },
+            {
+                questionNumber: 18,
+                question: "Thuế lũy thoái là thuế có:",
+                answerOptions: [
+                    { text: "Tỷ suất thuế bình quân tăng khi thu nhập tăng", isCorrect: false, rationale: "Đây là đặc điểm của thuế lũy tiến." },
+                    { text: "Tỷ suất thuế bình quân giảm khi thu nhập tăng", isCorrect: true, rationale: "Thuế lũy thoái là loại thuế mà tỷ lệ phần trăm thu nhập dùng để nộp thuế sẽ giảm khi thu nhập tăng lên." },
+                    { text: "Tỷ suất thuế bình quân giảm khi thu nhập giảm", isCorrect: false, rationale: "Đây là mối quan hệ đồng biến, không phải lũy thoái." },
+                    { text: "Tỷ suất thuế bình quân không đổi khi thu nhập tăng", isCorrect: false, rationale: "Đây là đặc điểm của thuế tỷ lệ/thống nhất." },
+                ],
+                hint: "Hãy xem xét các loại thuế gián thu (như GTGT): người giàu và người nghèo cùng chịu một mức thuế tuyệt đối, nhưng mức thuế này chiếm tỷ trọng lớn hơn trong thu nhập của người nghèo."
+            },
+            {
+                questionNumber: 19,
+                question: "Thuế giá trị gia tăng là:",
+                answerOptions: [
+                    { text: "Thuế tiêu dùng và thuế trực thu", isCorrect: false, rationale: "Thuế GTGT là thuế gián thu." },
+                    { text: "Thuế tiêu dùng và thuế gián thu", isCorrect: true, rationale: "Thuế GTGT đánh vào giá trị tăng thêm của hàng hóa/dịch vụ trong quá trình tiêu dùng, do người tiêu dùng chịu và do doanh nghiệp nộp thay (gián thu)." },
+                    { text: "Thuế tài sản và thuế trực thu", isCorrect: false, rationale: "Khẳng định này sai hoàn toàn." },
+                    { text: "Thuế thu nhập và thuế trực thu", isCorrect: false, rationale: "Khẳng định này sai hoàn toàn." },
+                ],
+                hint: "Gợi ý: Thuế này thuộc nhóm đánh vào hoạt động nào (kiếm tiền, tiêu tiền, hay sở hữu) và theo phương thức nào (trực tiếp hay gián tiếp)."
+            },
+            {
+                questionNumber: 20,
+                question: "Thuế tiêu dùng là loại thuế:",
+                answerOptions: [
+                    { text: "Đánh vào tổng thu nhập", isCorrect: false, rationale: "Đây là đặc điểm của Thuế Thu nhập." },
+                    { text: "Đánh vào phần thu nhập được sử dụng cho tiêu dùng hiện tại", isCorrect: true, rationale: "Thuế tiêu dùng (Consumption Tax) đánh vào các khoản chi tiêu hàng hóa và dịch vụ, là phần thu nhập được sử dụng để tiêu dùng." },
+                    { text: "Đánh vào thu nhập được sử dụng cho tiêu dùng tương lai", isCorrect: false, rationale: "Phần thu nhập cho tiêu dùng tương lai là tiết kiệm/đầu tư." },
+                    { text: "Đánh vào giá trị tài sản", isCorrect: false, rationale: "Đây là đặc điểm của Thuế Tài sản." },
+                ],
+                hint: "Loại thuế này tập trung vào khâu nào trong chu trình kinh tế của cá nhân/tổ chức."
+            },
+            {
+                questionNumber: 21,
+                question: "Thuế thu nhập là loại thuế:",
+                answerOptions: [
+                    { text: "Đánh vào phần thu nhập được mang tiêu dùng trong hiện tại", isCorrect: false, rationale: "Đây là thuế tiêu dùng." },
+                    { text: "Đánh vào giá trị tài sản mua", isCorrect: false, rationale: "Đây là thuế tiêu dùng hoặc thuế tài sản (tùy bối cảnh)." },
+                    { text: "Đánh vào thu nhập được sử dụng cho tiêu dùng tương lai", isCorrect: false, rationale: "Phần thu nhập cho tiêu dùng tương lai là tiết kiệm/đầu tư." },
+                    { text: "Đánh vào thu nhập nhận được", isCorrect: true, rationale: "Thuế thu nhập (Income Tax) đánh trực tiếp vào tổng thu nhập (lương, lãi, lợi nhuận...) mà các chủ thể kinh tế nhận được." },
+                ],
+                hint: "Loại thuế này đánh vào tổng số tiền mà một cá nhân hoặc tổ chức 'kiếm được'."
+            },
+            {
+                questionNumber: 22,
+                question: "Tiêu chuẩn nào sau đây KHÔNG là tiêu chuẩn xây dựng hệ thống thuế:",
+                answerOptions: [
+                    { text: "Tiêu chuẩn công bằng", isCorrect: false, rationale: "Công bằng là một tiêu chuẩn quan trọng (công bằng ngang và dọc)." },
+                    { text: "Tiêu chuẩn hiệu quả", isCorrect: false, rationale: "Hiệu quả đòi hỏi thuế không gây méo mó kinh tế quá mức." },
+                    { text: "Tiêu chuẩn không thay đổi", isCorrect: true, rationale: "Hệ thống thuế cần phải thích ứng và thay đổi theo sự phát triển kinh tế-xã hội, do đó 'không thay đổi' không phải là tiêu chuẩn." },
+                    { text: "Tiêu chuẩn rõ ràng, minh bạch", isCorrect: false, rationale: "Minh bạch giúp người nộp thuế dễ hiểu và dễ tuân thủ." },
+                ],
+                hint: "Tiêu chuẩn này trái ngược với tính linh hoạt và thích ứng cần có của một chính sách kinh tế vĩ mô."
+            },
+            {
+                questionNumber: 23,
+                question: "Thuế trực thu khác thuế gián thu ở đặc điểm:",
+                answerOptions: [
+                    { text: "Đánh trực tiếp vào thu nhập của người nộp thuế", isCorrect: false, rationale: "Chỉ thu nhập chưa đủ, còn có thể là tài sản." },
+                    { text: "Đánh trực tiếp vào tài sản của người nộp thuế", isCorrect: false, rationale: "Chỉ tài sản chưa đủ, còn có thể là thu nhập." },
+                    { text: "Đánh thông qua giá cả của hàng hóa", isCorrect: false, rationale: "Đây là đặc điểm của thuế gián thu." },
+                    { text: "Đánh trực tiếp vào thu nhập hoặc tài sản của người nộp thuế", isCorrect: true, rationale: "Thuế trực thu đánh thẳng vào túi tiền của người chịu thuế (thu nhập hoặc tài sản), người nộp thuế chính là người chịu thuế." },
+                ],
+                hint: "Điểm mấu chốt là đối tượng đánh thuế: thu nhập hoặc tài sản, và không chuyển gánh nặng."
+            },
+            {
+                questionNumber: 24,
+                question: "Thuế gián thu là các loại thuế sau:",
+                answerOptions: [
+                    { text: "Thuế GTGT, thuế xuất nhập khẩu, thuế TNCN", isCorrect: false, rationale: "Thuế TNCN là thuế trực thu." },
+                    { text: "Thuế xuất nhập khẩu, thuế TTĐB, thuế nhà đất", isCorrect: false, rationale: "Thuế nhà đất là thuế trực thu (thuế tài sản)." },
+                    { text: "Thuế GTGT, thuế xuất nhập khẩu, thuế TTĐB", isCorrect: true, rationale: "Cả ba loại thuế này đều được cộng vào giá bán và do người tiêu dùng chịu, doanh nghiệp nộp hộ (gián thu)." },
+                    { text: "Thuế thu nhập cá nhân, thuế môn bài, thuế tài nguyên", isCorrect: false, rationale: "Cả ba loại thuế này đều là thuế trực thu (mặc dù môn bài và tài nguyên có tính chất khác nhau, nhưng không phải là thuế gián thu theo cơ chế chuyển gánh nặng)." },
+                ],
+                hint: "Hãy xác định xem loại thuế nào được tính vào giá sản phẩm và do người tiêu dùng gánh chịu."
+            },
+            {
+                questionNumber: 25,
+                question: "Ba chức năng cơ bản của thuế là:",
+                answerOptions: [
+                    { text: "Đảm bảo nguồn thu cho ngân sách Nhà nước; Thực hiện phân phối lại thu nhập; Điều tiết vĩ mô nền kinh tế", isCorrect: true, rationale: "Đây là ba chức năng được công nhận rộng rãi: Tài chính, Phân phối và Điều tiết kinh tế vĩ mô." },
+                    { text: "Đảm bảo thu ngân sách nhà nước; Điều tiết nền kinh tế; Bảo hộ một số ngành trong nước", isCorrect: false, rationale: "Bảo hộ ngành trong nước là một khía cạnh của điều tiết vĩ mô, không phải một chức năng cơ bản riêng biệt." },
+                    { text: "Nuôi sống bộ máy Nhà nước; Cân bằng thu nhập; Điều tiết vĩ mô nền kinh tế", isCorrect: false, rationale: "Cân bằng thu nhập là một phần của Phân phối lại." },
+                    { text: "Nuôi sống bộ máy Nhà nước; Thực hiện phân phối lại thu nhập; Thực hiện chức năng ngoại thương", isCorrect: false, rationale: "Ngoại thương là một khía cạnh của điều tiết vĩ mô." },
+                ],
+                hint: "Ba chức năng này bao gồm: mục đích tài chính, mục đích xã hội, và mục đích kinh tế."
+            },
+            {
+                questionNumber: 26,
+                question: "Dựa vào tiêu thức nào dưới đây để phân loại thành thuế trực thu và thuế gián thu:",
+                answerOptions: [
+                    { text: "Theo đối tượng chịu thuế", isCorrect: false, rationale: "Theo đối tượng chịu thuế phân loại thành thuế thu nhập, thuế tiêu dùng, thuế tài sản." },
+                    { text: "Theo phương thức đánh thuế", isCorrect: true, rationale: "Phân loại trực thu/gián thu dựa trên phương thức thu và khả năng chuyển gánh nặng thuế (người nộp thuế và người chịu thuế có trùng nhau hay không)." },
+                    { text: "Theo khả năng nộp thuế", isCorrect: false, rationale: "Khả năng nộp thuế là tiêu chuẩn để xác định tính công bằng dọc." },
+                    { text: "Theo phương pháp tính thuế", isCorrect: false, rationale: "Phương pháp tính thuế quyết định thuế suất (tỷ lệ, tuyệt đối, lũy tiến, lũy thoái)." },
+                ],
+                hint: "Tiêu thức này liên quan đến việc gánh nặng thuế có được chuyển từ người nộp sang người khác hay không."
+            },
+            {
+                questionNumber: 27,
+                question: "Tại sao nói thuế là một biện pháp động viên bắt buộc cưỡng chế quyền lực của Nhà nước đối với các thể nhân và pháp nhân:",
+                answerOptions: [
+                    { text: "Thuế là khoản trích 1 phần thu nhập do kinh doanh, lao động, đầu tư tài chính mang lại nộp vào ngân sách nhà nước", isCorrect: false, rationale: "Đây là mô tả nguồn gốc khoản thu, không phải tính cưỡng chế." },
+                    { text: "Thuế là một khoản bao giờ cũng chứa đựng yếu tố thực tế về kinh tế - xã hội", isCorrect: false, rationale: "Đây là mô tả bản chất kinh tế-xã hội." },
+                    { text: "Thuế là một khoản không hoàn trả cho người nộp thuế", isCorrect: false, rationale: "Đây là mô tả tính không hoàn trả." },
+                    { text: "Thuế là nguồn thu chủ yếu của ngân sách nhà nước", isCorrect: true, rationale: "Tính cưỡng chế bắt buộc là nhờ quyền lực tối cao của Nhà nước, được quy định bằng pháp luật và được thực hiện một cách đơn phương." },
+                ],
+                hint: "Hãy tập trung vào từ khóa 'bắt buộc cưỡng chế' và mối liên hệ với quyền lực tối cao của Nhà nước."
+            },
+            {
+                questionNumber: 28,
+                question: "Ưu điểm của thuế trực thu:",
+                answerOptions: [
+                    { text: "Dễ hành thu, quản lý", isCorrect: false, rationale: "Thuế trực thu thường khó hành thu và quản lý hơn thuế gián thu." },
+                    { text: "Đảm bảo tính công bằng xã hội", isCorrect: true, rationale: "Thuế trực thu, đặc biệt là thuế lũy tiến, có thể tính đến hoàn cảnh cá nhân và thu nhập, do đó đảm bảo công bằng dọc tốt hơn." },
+                    { text: "Đảm bảo tính tự nguyện", isCorrect: false, rationale: "Thuế mang tính bắt buộc, không phải tự nguyện." },
+                    { text: "Đối tượng chịu thuế rất rộng", isCorrect: false, rationale: "Đối tượng chịu thuế trực thu thường hẹp hơn thuế gián thu (chỉ tập trung vào người có thu nhập/tài sản)." },
+                ],
+                hint: "Loại thuế này thường được dùng để thu hẹp khoảng cách giàu nghèo."
+            },
+            {
+                questionNumber: 29,
+                question: "Ưu điểm của thuế gián thu:",
+                answerOptions: [
+                    { text: "Đảm bảo tính công bằng xã hội", isCorrect: false, rationale: "Thuế gián thu có tính chất lũy thoái, làm giảm công bằng xã hội." },
+                    { text: "Khó hành thu, quản lý", isCorrect: false, rationale: "Thuế gián thu thường dễ hành thu và quản lý hơn (thu qua khâu lưu thông, số lượng người nộp ít hơn)." },
+                    { text: "Đối tượng chịu thuế hẹp", isCorrect: false, rationale: "Đối tượng chịu thuế gián thu (người tiêu dùng) rất rộng." },
+                    { text: "Đảm bảo tính tự nguyện", isCorrect: true, rationale: "Việc nộp thuế gián thu gắn liền với hành vi mua sắm, nên người dân cảm thấy ít bị cưỡng bức hơn và có thể 'tự nguyện' không mua để không phải nộp." },
+                ],
+                hint: "Ưu điểm này liên quan đến cách thức người dân cảm nhận gánh nặng thuế khi họ quyết định chi tiêu."
+            },
+            {
+                questionNumber: 30,
+                question: "Ưu điểm của thuế trực thu là:",
+                answerOptions: [
+                    { text: "Đảm bảo sự bình đẳng của mọi đối tượng chịu thuế trước pháp luật", isCorrect: false, rationale: "Cả thuế trực thu và gián thu đều phải đảm bảo điều này." },
+                    { text: "Đảm bảo nền sản xuất nội địa phát triển", isCorrect: false, rationale: "Đây là vai trò của thuế xuất nhập khẩu (thuế gián thu)." },
+                    { text: "Là công cụ kiểm soát thu nhập chịu thuế của Nhà Nước đối với người có thu nhập", isCorrect: false, rationale: "Đây là một lợi ích hành chính, không phải ưu điểm cốt lõi về chính sách." },
+                    { text: "Đảm bảo sự công bằng giữa các đối tượng chịu thuế có thu nhập, có tài sản", isCorrect: true, rationale: "Thuế trực thu, đặc biệt là thuế lũy tiến, có thể cá nhân hóa mức đóng góp theo khả năng nộp thuế, từ đó đảm bảo công bằng xã hội." },
+                ],
+                hint: "Ưu điểm quan trọng nhất của thuế trực thu là khả năng điều chỉnh theo khả năng chi trả của từng cá nhân."
+            },
+            {
+                questionNumber: 31,
+                question: "Thuế gián thu là thuế mà doanh nghiệp nộp thay cho ai:",
+                answerOptions: [
+                    { text: "Cho người nhận gia công", isCorrect: false, rationale: "Không liên quan đến cơ chế thuế gián thu." },
+                    { text: "Cho người tiêu dùng", isCorrect: true, rationale: "Doanh nghiệp cộng thuế vào giá bán và thu từ người tiêu dùng, sau đó nộp lại cho Nhà nước, vì vậy doanh nghiệp là người nộp hộ." },
+                    { text: "Cho sản phẩm, hàng hóa tiêu thụ của bản thân doanh nghiệp", isCorrect: false, rationale: "Doanh nghiệp chỉ là người nộp, không phải chịu." },
+                    { text: "Cho đơn vị ủy thác xuất khẩu", isCorrect: false, rationale: "Không liên quan đến cơ chế thuế gián thu." },
+                ],
+                hint: "Hãy nhớ lại ai là người chịu gánh nặng kinh tế cuối cùng của thuế gián thu."
+            },
+            {
+                questionNumber: 32,
+                question: "Thuế là một bộ phận cấu thành của giá bán và thu vào người tiêu dùng. Vậy thuế đó là:",
+                answerOptions: [
+                    { text: "Thuế thu nhập doanh nghiệp", isCorrect: false, rationale: "TNDN là thuế trực thu, đánh vào lợi nhuận, không phải cấu thành giá bán cho người tiêu dùng theo cơ chế chuyển gánh nặng." },
+                    { text: "Thuế thu nhập cá nhân", isCorrect: false, rationale: "TNCN là thuế trực thu, đánh vào thu nhập, không phải cấu thành giá bán." },
+                    { text: "Thuế gián thu", isCorrect: true, rationale: "Thuế gián thu (như GTGT, TTĐB) được cộng vào giá bán, chuyển gánh nặng sang người tiêu dùng, do đó là một bộ phận của giá bán." },
+                    { text: "Thuế trực thu", isCorrect: false, rationale: "Thuế trực thu không được chuyển gánh nặng theo cách này." },
+                ],
+                hint: "Loại thuế nào có tính năng 'chuyển gánh nặng' và 'ẩn mình' trong giá sản phẩm?"
+            },
+            {
+                questionNumber: 33,
+                question: "So sánh với thuế gián thu, thuế trực thu là loại thuế có ý nghĩa như thế nào:",
+                answerOptions: [
+                    { text: "Không bình đẳng giữa người sản xuất thuộc các thành phần kinh tế khác nhau", isCorrect: false, rationale: "Thuế trực thu không gây sự phân biệt này." },
+                    { text: "Chưa công bằng giữa những đối tượng có thu nhập khác nhau", isCorrect: false, rationale: "Ngược lại, thuế trực thu thường đảm bảo công bằng hơn." },
+                    { text: "Không hợp lý với thu nhập của từng đối tượng", isCorrect: false, rationale: "Ngược lại, thuế trực thu thường điều chỉnh theo thu nhập." },
+                    { text: "Công bằng vì phần đóng góp phù hợp với kết quả thu nhập của từng đối tượng", isCorrect: true, rationale: "Thuế trực thu, đặc biệt theo thuế suất lũy tiến, đảm bảo rằng người có thu nhập cao hơn sẽ đóng góp tỷ lệ lớn hơn, phù hợp với khả năng nộp thuế." },
+                ],
+                hint: "Ý nghĩa nổi bật nhất của thuế trực thu là liên quan đến vấn đề công bằng xã hội."
+            },
+            {
+                questionNumber: 34,
+                question: "Thuế TNDN ở Việt Nam là 20% thuộc loại mức thuế:",
+                answerOptions: [
+                    { text: "Mức thuế tuyệt đối", isCorrect: false, rationale: "Thuế tuyệt đối là số tiền cố định, không phải tỷ lệ 20%." },
+                    { text: "Mức thuế tương đối", isCorrect: true, rationale: "Mức thuế tương đối (hay thuế suất tỷ lệ) là một tỷ lệ phần trăm cố định (20%) trên cơ sở tính thuế (thu nhập chịu thuế)." },
+                    { text: "Mức thuế lũy tiến", isCorrect: false, rationale: "Lũy tiến là thuế suất tăng dần theo thu nhập, TNDN là tỷ lệ cố định." },
+                    { text: "Mức thuế lũy thoái", isCorrect: false, rationale: "Lũy thoái là thuế suất giảm dần theo thu nhập." },
+                ],
+                hint: "Hãy phân biệt giữa thuế suất tỷ lệ cố định, thuế suất lũy tiến, và thuế suất tuyệt đối."
+            },
+            {
+                questionNumber: 35,
+                question: "Mục đích của việc phân loại thuế thành thuế trực thu và thuế gián thu:",
+                answerOptions: [
+                    { text: "Để tổ chức đúng đắn việc thu nộp thuế phù hợp với quy trình thu từng loại thuế", isCorrect: false, rationale: "Đây là một lợi ích hành chính, không phải mục đích chính." },
+                    { text: "Để đảm bảo nguồn thu cho ngân sách nhà nước và có tác động đến đời sống kinh tế xã hội", isCorrect: false, rationale: "Đây là chức năng của thuế, không phải mục đích của việc phân loại." },
+                    { text: "Để định hướng xây dựng chính sách thuế và quản lý hệ thống thuế", isCorrect: true, rationale: "Việc phân loại giúp nhà nước có cái nhìn tổng quát, từ đó đưa ra các quyết định về chính sách (ưu tiên trực thu để công bằng hay gián thu để dễ thu) và cơ chế quản lý phù hợp." },
+                    { text: "Sắp xếp các sắc thuế khác nhau trong hệ thống thuế thành những nhóm khác nhau theo những tiêu thức khác nhau", isCorrect: false, rationale: "Đây là mô tả hành động, không phải mục đích." },
+                ],
+                hint: "Việc phân loại này là cơ sở để các nhà hoạch định chính sách đưa ra các quyết định vĩ mô."
+            },
+            {
+                questionNumber: 36,
+                question: "Tại sao nói “Thuế góp phần thực hiện công bằng xã hội, bình đẳng giữa các thành phần kinh tế và tầng lớp dân cư”:",
+                answerOptions: [
+                    { text: "Thuế là nguồn thu chủ yếu của NSNN", isCorrect: false, rationale: "Đây là chức năng tài chính, không phải công bằng xã hội." },
+                    { text: "Thuế là một khoản thu không hoàn trả cho người nộp thuế", isCorrect: false, rationale: "Đây là đặc điểm, không phải lý do cho công bằng xã hội." },
+                    { text: "Thuế là một khoản thu vào các thể nhân, pháp nhân có thu nhập do lao động, do hoạt động sản xuất kinh doanh,… tạo ra", isCorrect: true, rationale: "Việc đánh thuế vào thu nhập/kết quả hoạt động, đặc biệt với thuế suất lũy tiến, cho phép phân phối lại thu nhập từ người giàu sang người nghèo, từ đó góp phần tạo công bằng xã hội." },
+                    { text: "Thuế là một khoản bao giờ cũng chức đựng yếu tố về kinh tế - xã hội", isCorrect: false, rationale: "Đây là mô tả bản chất chung." },
+                ],
+                hint: "Hãy tập trung vào chức năng 'phân phối lại' của thuế và cách nó tác động đến thu nhập cá nhân."
+            },
+            {
+                questionNumber: 37,
+                question: "Thuế trực thu là thuế trực tiếp thu vào hoạt động nào đưới đây:",
+                answerOptions: [
+                    { text: "Hàng hóa xuất khẩu, nhập khẩu", isCorrect: false, rationale: "Đây là thuế gián thu (Xuất nhập khẩu)." },
+                    { text: "Sản xuất kinh doanh của các tổ chức Việt Nam và của nước ngoài hoạt động tại Việt Nam, của dân cư có thu nhập", isCorrect: true, rationale: "Thuế TNDN và Thuế TNCN là thuế trực thu, đánh trực tiếp vào kết quả của hoạt động sản xuất, kinh doanh, và thu nhập của dân cư." },
+                    { text: "Hàng hóa gia công, ủy thác gia công", isCorrect: false, rationale: "Đây thường là đối tượng của thuế gián thu (như GTGT)." },
+                    { text: "Giá trị hàng hóa dùng làm quà biết, tặng, tiêu dùng nội bộ", isCorrect: false, rationale: "Đây là đối tượng của thuế gián thu (như GTGT)." },
+                ],
+                hint: "Thuế trực thu đánh vào hai lĩnh vực chính: kiếm tiền và sở hữu."
+            },
+            {
+                questionNumber: 38,
+                question: "Vì sao nói thuế tồn tại và phát triển là một tất yếu khách quan:",
+                answerOptions: [
+                    { text: "Thuế được nhà nước sử dụng như một công cụ kinh tế quan trọng", isCorrect: false, rationale: "Đây là mô tả vai trò, không phải tính tất yếu khách quan của sự tồn tại." },
+                    { text: "Thuế là hình thức động viên cổ xưa nhất của Tài chính nhà nước", isCorrect: false, rationale: "Đây là mô tả lịch sử." },
+                    { text: "Thuế là phạm trù kinh tế xuất hiện và tồn tại cùng với sự hình thành và phát triển của nhà nước", isCorrect: true, rationale: "Sự ra đời và tồn tại của nhà nước luôn đi kèm với nhu cầu tài chính để duy trì hoạt động, và thuế là nguồn lực cơ bản nhất đáp ứng nhu cầu đó, do đó là một tất yếu khách quan." },
+                    { text: "Thuế là một công cụ để động viên một phần thu nhập của người dân", isCorrect: false, rationale: "Đây là mô tả mục đích." },
+                ],
+                hint: "Tính tất yếu gắn liền với sự kiện lịch sử vĩ đại nào trong xã hội loài người."
+            },
+            {
+                questionNumber: 39,
+                question: "Hiện tượng thuế chồng thuế là hiện tượng:",
+                answerOptions: [
+                    { text: "Đánh nhiều loại thuế lên cùng một đối tượng", isCorrect: false, rationale: "Điều này là bình thường (ví dụ: Thuế TNCN và Thuế Tài sản)." },
+                    { text: "Đánh thuế trùng lắp trên cùng một đối tượng chịu thuế", isCorrect: true, rationale: "Thuế chồng thuế xảy ra khi cùng một căn cứ tính thuế bị đánh thuế nhiều lần, dẫn đến gánh nặng không hợp lý (ví dụ: đánh thuế GTGT trên cả giá trị cũ và giá trị mới)." },
+                    { text: "Nhiều đối tượng cùng chịu một loại thuế", isCorrect: false, rationale: "Đây là điều bình thường trong hệ thống thuế." },
+                    { text: "Đối tượng phải chịu một mức thuế quá cao", isCorrect: false, rationale: "Đây là vấn đề về thuế suất, không phải hiện tượng chồng thuế." },
+                ],
+                hint: "Hiện tượng này xảy ra khi cùng một cơ sở bị đánh thuế hơn một lần."
+            },
+            {
+                questionNumber: 40,
+                question: "Đối với thuế gián thu, khi nào người chịu thuế đồng thời là người nộp thuế:",
+                answerOptions: [
+                    { text: "Người tiêu dùng vật tư, hàng hóa cho tiêu dùng phi sản xuất và sản xuất", isCorrect: false, rationale: "Trong hầu hết trường hợp, người tiêu dùng không trực tiếp nộp thuế gián thu cho cơ quan thuế." },
+                    { text: "Người gia công hàng hóa để bán trong nước và xuất khẩu vào khu chế xuất", isCorrect: false, rationale: "Người gia công nộp, nhưng người tiêu dùng chịu (trong nước)." },
+                    { text: "Người nhập khẩu trực tiếp để tiêu dùng", isCorrect: true, rationale: "Khi cá nhân/tổ chức nhập khẩu hàng hóa trực tiếp để tiêu dùng cá nhân, họ là người nộp Thuế Nhập khẩu/TTĐB tại cửa khẩu, đồng thời là người chịu gánh nặng kinh tế cuối cùng." },
+                    { text: "Người xuất khẩu, nhập khẩu", isCorrect: false, rationale: "Người nhập khẩu nộp, nhưng chỉ khi nhập khẩu để tiêu dùng mới chịu thuế." },
+                ],
+                hint: "Hãy xem xét trường hợp nào mà quá trình 'mua hàng' và 'nộp thuế tại hải quan' diễn ra đồng thời cho mục đích cá nhân."
+            },
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let isAnswerChecked = false;
+
+        const quizContent = document.getElementById('quiz-content');
+        const resultsScreen = document.getElementById('results-screen');
+        const finalScoreText = document.getElementById('final-score');
+
+        // Hàm trộn ngẫu nhiên thứ tự các options
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function renderQuestion() {
+            if (currentQuestionIndex >= quizData.length) {
+                showResults();
+                return;
+            }
+
+            const currentQuestion = quizData[currentQuestionIndex];
+            isAnswerChecked = false;
+
+            // Đảm bảo các tùy chọn được trộn mỗi lần hiển thị
+            currentQuestion.shuffledOptions = shuffleArray([...currentQuestion.answerOptions]);
+
+            let optionsHtml = currentQuestion.shuffledOptions.map((option, index) => `
+                <button
+                    class="option-button w-full text-left p-4 mb-3 border border-gray-300 rounded-lg bg-white hover:bg-gray-100 focus:outline-none"
+                    data-option-index="${index}"
+                    onclick="selectOption(this, ${index})"
+                    >
+                    <span class="font-medium text-gray-800">${String.fromCharCode(65 + index)}. </span>
+                    <span class="text-gray-700">${option.text}</span>
+                </button>
+            `).join('');
+
+            quizContent.innerHTML = `
+                <div class="mb-6">
+                    <p class="text-sm font-semibold text-blue-600 mb-2">Câu hỏi ${currentQuestion.questionNumber}/${quizData.length}</p>
+                    <h2 class="text-xl font-semibold text-gray-900 leading-relaxed">${currentQuestion.question}</h2>
+                </div>
+                <div id="options-container" class="space-y-3">
+                    ${optionsHtml}
+                </div>
+                <div id="feedback-area" class="mt-4 p-4 rounded-lg hidden">
+                    <p id="rationale-text" class="text-sm"></p>
+                    <p id="hint-text" class="text-xs text-gray-500 mt-2">Gợi ý: ${currentQuestion.hint}</p>
+                </div>
+                <div class="flex justify-between mt-8">
+                    <button id="check-button" class="px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-150 disabled:bg-green-400" onclick="checkAnswer()" disabled>
+                        Kiểm Tra
+                    </button>
+                    <button id="next-button" class="px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-150 disabled:bg-blue-400" onclick="nextQuestion()" disabled>
+                        Câu Tiếp Theo
+                    </button>
+                </div>
+                <div class="mt-4 text-center text-sm text-gray-500">
+                    <p>Điểm hiện tại: <span id="current-score" class="font-bold text-gray-700">${score}</span>/${quizData.length}</p>
+                </div>
+            `;
+        }
+
+        function selectOption(button, optionIndex) {
+            if (isAnswerChecked) return;
+
+            // Xóa trạng thái chọn của tất cả các nút
+            document.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.remove('option-selected');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+
+            // Đặt trạng thái chọn cho nút hiện tại
+            button.classList.add('option-selected');
+            button.setAttribute('aria-pressed', 'true');
+
+            // Lưu trữ lựa chọn của người dùng
+            userAnswers[currentQuestionIndex] = optionIndex;
+
+            // Bật nút Kiểm Tra
+            document.getElementById('check-button').disabled = false;
+        }
+
+        function checkAnswer() {
+            if (isAnswerChecked) return;
+            isAnswerChecked = true;
+
+            const selectedOptionIndex = userAnswers[currentQuestionIndex];
+            const currentQuestion = quizData[currentQuestionIndex];
+            const feedbackArea = document.getElementById('feedback-area');
+            const rationaleText = document.getElementById('rationale-text');
+            const nextButton = document.getElementById('next-button');
+            const checkButton = document.getElementById('check-button');
+
+            const isCorrect = currentQuestion.shuffledOptions[selectedOptionIndex].isCorrect;
+
+            // Hiển thị kết quả và rationale
+            feedbackArea.classList.remove('hidden');
+            feedbackArea.classList.add(isCorrect ? 'bg-green-50' : 'bg-red-50');
+            rationaleText.classList.add(isCorrect ? 'text-green-800' : 'text-red-800');
+            rationaleText.innerHTML = `
+                <span class="font-bold">${isCorrect ? 'Chính xác! ' : 'Chưa đúng. '}</span>
+                ${currentQuestion.shuffledOptions.find(opt => opt.isCorrect).rationale}
+            `;
+
+            // Cập nhật điểm
+            if (isCorrect) {
+                score++;
+                document.getElementById('current-score').textContent = score;
+            }
+
+            // Đánh dấu các tùy chọn
+            document.querySelectorAll('.option-button').forEach((btn, index) => {
+                const option = currentQuestion.shuffledOptions[index];
+                btn.disabled = true;
+                btn.classList.remove('option-selected', 'hover:bg-gray-100');
+
+                if (option.isCorrect) {
+                    btn.classList.add('option-correct');
+                } else if (index === selectedOptionIndex) {
+                    btn.classList.add('option-incorrect');
+                }
+            });
+
+            // Vô hiệu hóa nút Kiểm Tra và Bật nút Câu Tiếp Theo
+            checkButton.disabled = true;
+            nextButton.disabled = false;
+            nextButton.focus(); // Tập trung vào nút Tiếp theo để tiện thao tác
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuestion();
+        }
+
+        function showResults() {
+            quizContent.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreText.innerHTML = `Bạn đã hoàn thành bài thi với <span class="text-blue-700 font-bold">${score}</span>/${quizData.length} câu trả lời đúng.`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            quizContent.classList.remove('hidden');
+            resultsScreen.classList.add('hidden');
+            renderQuestion();
+        }
+
+        // Bắt đầu quiz khi tải trang
+        window.onload = renderQuestion;
+    </script>
+</body>
+</html>
