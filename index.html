@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ôn Tập Thuế và Thực Hành</title>
+    <!-- Tải Tailwind CSS để có giao diện hiện đại và responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Thiết lập font Inter làm font chính, rất hiện đại và dễ đọc */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f7f9; /* Màu nền nhẹ nhàng */
+        }
+
+        /* Lớp CSS cho hiệu ứng chuyển cảnh mượt mà */
+        .smooth-transition {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+        /* Hiệu ứng khi hover: nâng nhẹ và đổ bóng rõ hơn */
+        .smooth-transition:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hiệu ứng khi click: Giảm kích thước nhẹ để phản hồi */
+        .smooth-transition:active {
+            transform: scale(0.98);
+        }
+
+        /* Hiệu ứng cho toàn bộ trang khi điều hướng */
+        .page-out {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+
+        .page-in {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.5s ease-in, transform 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 page-in">
+
+    <div id="main-content" class="w-full max-w-4xl bg-white p-6 md:p-10 rounded-3xl shadow-xl">
+        
+        <!-- Tiêu đề Chính (Đã được đổi và căn giữa) -->
+        <div class="text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800 mb-2">
+                Ôn Tập Thuế và Thực Hành
+            </h1>
+            <p class="text-xl text-gray-500 mb-8 md:mb-12">
+                Chọn chương học hoặc bắt đầu với bài ôn tổng hợp.
+            </p>
+        </div>
+
+        <!-- Container cho các nút Chương học (sử dụng Grid để responsive) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- CHƯƠNG 1 -->
+            <button class="menu-button smooth-transition bg-indigo-500 text-white p-6 rounded-xl shadow-lg hover:bg-indigo-600" 
+                    data-link="">
+                <div class="font-bold text-2xl">Chương 1</div>
+                <!-- NOTE: Chèn link Chương 1 vào thuộc tính data-link="" ở trên -->
+            </button>
+            
+            <!-- CHƯƠNG 2 -->
+            <button class="menu-button smooth-transition bg-green-500 text-white p-6 rounded-xl shadow-lg hover:bg-green-600" 
+                    data-link="">
+                <div class="font-bold text-2xl">Chương 2</div>
+                <!-- NOTE: Chèn link Chương 2 vào thuộc tính data-link="" ở trên -->
+            </button>
+
+            <!-- CHƯƠNG 3 -->
+            <button class="menu-button smooth-transition bg-yellow-500 text-white p-6 rounded-xl shadow-lg hover:bg-yellow-600" 
+                    data-link="">
+                <div class="font-bold text-2xl">Chương 3</div>
+                <!-- NOTE: Chèn link Chương 3 vào thuộc tính data-link="" ở trên -->
+            </button>
+
+            <!-- CHƯƠNG 4 -->
+            <button class="menu-button smooth-transition bg-pink-500 text-white p-6 rounded-xl shadow-lg hover:bg-pink-600" 
+                    data-link="">
+                <div class="font-bold text-2xl">Chương 4</div>
+                <!-- NOTE: Chèn link Chương 4 vào thuộc tính data-link="" ở trên -->
+            </button>
+
+            <!-- CHƯƠNG 5 -->
+            <button class="menu-button smooth-transition bg-red-500 text-white p-6 rounded-xl shadow-lg hover:bg-red-600" 
+                    data-link="">
+                <div class="font-bold text-2xl">Chương 5</div>
+                <!-- NOTE: Chèn link Chương 5 vào thuộc tính data-link="" ở trên -->
+            </button>
+            
+            <!-- CHƯƠNG 6 -->
+            <button class="menu-button smooth-transition bg-teal-500 text-white p-6 rounded-xl shadow-lg hover:bg-teal-600" 
+                    data-link="">
+                <div class="font-bold text-2xl">Chương 6</div>
+                <!-- NOTE: Chèn link Chương 6 vào thuộc tính data-link="" ở trên -->
+            </button>
+        </div>
+
+        <!-- Button Bài Ôn Tổng Hợp (Nổi bật) -->
+        <div class="mt-8 md:mt-12">
+            <button class="menu-button smooth-transition w-full text-white p-6 rounded-xl shadow-2xl 
+                           bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700" 
+                    data-link="">
+                <div class="flex items-center justify-center space-x-3">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.974 2.888a1 1 0 00-.364 1.118l1.519 4.674c.3.921-.755 1.688-1.54 1.118l-3.974-2.888a1 1 0 00-1.176 0l-3.974 2.888c-.784.57-1.838-.197-1.539-1.118l1.519-4.674a1 1 0 00-.364-1.118L2.927 9.5c-.783-.57-.381-1.81.588-1.81h4.915a1 1 0 00.95-.69l1.519-4.674z"></path></svg>
+                    <span class="font-extrabold text-2xl uppercase tracking-wider">Bài Ôn Tổng Hợp</span>
+                </div>
+                <!-- NOTE: Chèn link Bài Ôn Tổng Hợp vào thuộc tính data-link="" ở trên -->
+            </button>
+        </div>
+
+        <!-- Đã loại bỏ phần LƯU Ý QUAN TRỌNG -->
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.menu-button');
+            const mainContent = document.getElementById('main-content');
+
+            buttons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault(); // Ngăn chặn hành vi chuyển link mặc định ngay lập tức
+                    
+                    const targetLink = button.getAttribute('data-link');
+                    
+                    // Kiểm tra nếu link đã được chèn vào
+                    if (targetLink && targetLink.length > 0) {
+                        
+                        // Bước 1: Thêm hiệu ứng chuyển cảnh mượt mà
+                        mainContent.classList.remove('page-in');
+                        mainContent.classList.add('page-out');
+                        
+                        // Bước 2: Chuyển hướng sau khi hiệu ứng kết thúc (ví dụ 300ms)
+                        setTimeout(() => {
+                            window.location.href = targetLink;
+                        }, 300); // Đảm bảo thời gian này khớp với transition CSS
+                    } else {
+                        // Thông báo khi link chưa được điền (sử dụng modal thay vì alert)
+                        showLinkMissingModal(button.querySelector('div').textContent);
+                    }
+                });
+            });
+            
+            // Hàm tạo modal thông báo link bị thiếu (thay thế cho alert)
+            function showLinkMissingModal(buttonName) {
+                // Tạo một div modal overlay
+                const modalHtml = `
+                    <div id="link-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
+                        <div class="bg-white p-8 rounded-xl shadow-2xl max-w-sm w-full transform transition-transform duration-300 scale-100">
+                            <h3 class="text-2xl font-bold text-red-600 mb-4">Lỗi Điều Hướng</h3>
+                            <p class="text-gray-700 mb-6">
+                                Nút <strong>${buttonName}</strong> chưa được điền link!
+                            </p>
+                            <p class="text-gray-500 text-sm mb-6">
+                                Vui lòng chỉnh sửa code HTML và điền link của bạn vào thuộc tính <code>data-link=""</code> tương ứng.
+                            </p>
+                            <button id="close-modal-btn" class="w-full bg-blue-500 text-white p-3 rounded-lg font-semibold hover:bg-blue-600 transition duration-150">
+                                Đóng
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Chèn modal vào body
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+                // Thêm sự kiện đóng modal
+                const modalOverlay = document.getElementById('link-modal-overlay');
+                document.getElementById('close-modal-btn').addEventListener('click', () => {
+                    modalOverlay.classList.add('opacity-0');
+                    setTimeout(() => modalOverlay.remove(), 300);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
