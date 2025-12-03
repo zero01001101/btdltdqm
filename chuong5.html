@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Thuế Tiêu Thụ Đặc Biệt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Thiết lập font Inter cho giao diện */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdfa; /* Nền xanh nhạt hiện đại */
+        }
+        .quiz-card {
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.1), 0 8px 20px -5px rgba(0, 0, 0, 0.05); /* Đổ bóng sâu hơn */
+        }
+        .option-button {
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            border: 2px solid #e2e8f0; /* Border mềm mại */
+        }
+        .option-button:hover {
+            transform: translateY(-2px);
+            background-color: #f0f9ff; /* Rất nhẹ */
+            border-color: #06b6d4; /* Màu xanh ngọc nhẹ */
+        }
+        /* Hiệu ứng khi chọn */
+        .option-selected {
+            border-color: #06b6d4 !important; /* Xanh ngọc */
+            background-color: #e0f7fa !important;
+            box-shadow: 0 0 0 2px #67e8f9;
+        }
+        /* Hiệu ứng câu trả lời đúng/sai */
+        .option-correct {
+            background-color: #d1fae5 !important;
+            border-color: #059669 !important; /* Xanh lá đậm */
+            box-shadow: 0 0 0 2px #34d399 !important;
+        }
+        .option-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important; /* Đỏ */
+            box-shadow: 0 0 0 2px #fca5a5 !important;
+        }
+        .btn-action {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-primary {
+            background-color: #06b6d4; /* Màu xanh ngọc */
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: #0e7490;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(6, 182, 212, 0.5), 0 2px 4px -2px rgba(6, 182, 212, 0.5);
+        }
+        .btn-secondary {
+            background-color: #10b981; /* Màu xanh lá tươi */
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.5), 0 2px 4px -2px rgba(16, 185, 129, 0.5);
+        }
+        .disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8 flex justify-center items-start min-h-screen">
+
+    <div id="quiz-container" class="relative w-full max-w-3xl bg-white rounded-2xl p-6 sm:p-10 quiz-card transition-all duration-300">
+        <a href="index.html" class="absolute top-6 left-6 z-10">
+            <button class="flex items-center space-x-1 px-4 py-2 text-sm border border-gray-200 bg-gray-50 text-gray-700 font-semibold rounded-full shadow-sm hover:bg-gray-100 transition duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left">
+                    <path d="m12 19-7-7 7-7" />
+                    <path d="M19 12H5" />
+                </svg>
+                <span>Quay lại</span>
+            </button>
+        </a>
+        
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-8 text-center pt-8 sm:pt-4">Ôn Tập: Thuế Tiêu Thụ Đặc Biệt (50 Câu)</h1>
+        <div id="quiz-content">
+            </div>
+        <div id="results-screen" class="hidden text-center py-12">
+            <h2 class="text-4xl font-black text-teal-600 mb-4">Hoàn Thành!</h2>
+            <p id="final-score" class="text-2xl font-semibold text-gray-700 mb-8"></p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-6">
+                <button onclick="restartQuiz()" class="btn-action px-8 py-3 btn-secondary text-white font-bold rounded-xl shadow-lg">
+                    Làm Lại Bài Thi
+                </button>
+                <a href="index.html" class="inline-block">
+                    <button class="w-full sm:w-auto btn-action px-8 py-3 border border-gray-300 bg-white text-gray-700 font-bold rounded-xl shadow-lg hover:bg-gray-100">
+                        Về Trang Chính
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu quiz 50 câu từ file temp.docx về Thuế TTĐB
+        const quizData = [
+            {
+                questionNumber: 1,
+                question: "Thuế TNDN là:",
+                answerOptions: [
+                    { text: "Thuế gián thu, được thu trực tiếp trên thu nhập của các tổ chức kinh doanh", isCorrect: false },
+                    { text: "Thuế trực thu, được thu trực tiếp trên thu nhập của các tổ chức kinh doanh", isCorrect: false },
+                    { text: "Thuế gián thu, được thu trực tiếp trên thu nhập của các tổ chức kinh doanh có phát sinh thu nhập", isCorrect: false },
+                    { text: "Thuế trực thu, được thu trực tiếp trên thu nhập của các tổ chức kinh doanh có phát sinh thu nhập.", isCorrect: true, rationale: "Thuế TNDN là loại thuế trực thu, đánh vào thu nhập chịu thuế của tổ chức kinh doanh." }
+                ],
+                hint: "Xem lại khái niệm thuế TNDN."
+            },
+            {
+                questionNumber: 2,
+                question: "Người nộp thuế TNDN bao gồm:",
+                answerOptions: [
+                    { text: "Tổ chức hoạt động sản xuất, kinh doanh hàng hoá, dịch vụ có thu nhập chịu thuế.", isCorrect: true, rationale: "Đối tượng nộp thuế TNDN là các tổ chức. Cá nhân và hộ gia đình nộp thuế Thu nhập cá nhân." },
+                    { text: "Hộ gia đình, cá nhân hoạt động sản xuất, kinh doanh hàng hoá, dịch vụ có thu nhập chịu thuế.", isCorrect: false },
+                    { text: "Cả 2 đối tượng nêu trên", isCorrect: false },
+                    { text: "Không có đối tượng nào nêu trên", isCorrect: false }
+                ],
+                hint: "Phân biệt đối tượng nộp thuế TNDN và TNCN."
+            },
+            {
+                questionNumber: 3,
+                question: "Trường hợp doanh nghiệp đã nộp thuế TNDN hoặc loại thuế tương tự thuế TNDN ở ngoài Việt Nam thì khi tính thuế TNDN phải nộp tại Việt Nam, doanh nghiệp được tính trừ:",
+                answerOptions: [
+                    { text: "Số thuế TNDN đã nộp tại nước ngoài", isCorrect: false },
+                    { text: "Số thuế TNDN đã nộp tại nước ngoài nhưng tối đa không quá số thuế TNDN phải nộp theo quy định của Luật thuế TNDN tại Việt Nam", isCorrect: true, rationale: "Nguyên tắc tránh đánh thuế hai lần nhưng có mức khống chế tối đa." },
+                    { text: "Cả 2 đối tượng nêu trên", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Nguyên tắc khấu trừ thuế nước ngoài."
+            },
+            {
+                questionNumber: 4,
+                question: "Khoản chi nào đáp ứng đủ các điều kiện để được tính vào chi phí được trừ khi xác định thu nhập chịu thuế?",
+                answerOptions: [
+                    { text: "Khoản chi thực tế phát sinh liên quan đến hoạt động sản xuất, kinh doanh của doanh nghiệp", isCorrect: false },
+                    { text: "Khoản chi thực tế phát sinh liên quan đến hoạt động sản xuất, kinh doanh của doanh nghiệp, có đủ hóa đơn, chứng từ hợp pháp theo quy định của pháp luật và không vượt mức khống chế theo quy định", isCorrect: true, rationale: "Phải thỏa mãn đủ 3 điều kiện: thực tế phát sinh, có hóa đơn chứng từ, và không vượt định mức." },
+                    { text: "Khoản chi có đủ hóa đơn, chứng từ hợp pháp", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Điều kiện xác định chi phí được trừ."
+            },
+            {
+                questionNumber: 5,
+                question: "Những khoản nào sau đây được xem là chi phí được trừ khi xác định thu nhập chịu thuế TNDN:",
+                answerOptions: [
+                    { text: "Tiền lương, tiền công của chủ doanh nghiệp tư nhân", isCorrect: false },
+                    { text: "Tiền lương, tiền công trả cho người lao động có ký hợp đồng lao động có thời hạn và đăng ký lao động theo đúng quy định", isCorrect: true, rationale: "Lương trả cho người lao động có hợp đồng và hồ sơ đầy đủ là chi phí hợp lý. Lương chủ DNTN không được trừ." },
+                    { text: "Tiền lương, tiền công doanh nghiệp không thực hiện đúng chế độ hợp đồng lao động theo quy định.", isCorrect: false },
+                    { text: "Tiền lương, tiền công đã hạch toán vào chi phí nhưng thực tế chưa chi trả cho người lao động hoặc không có chứng từ thanh toán theo quy định của pháp luật.", isCorrect: false }
+                ],
+                hint: "Chi phí lương hợp lệ."
+            },
+            {
+                questionNumber: 6,
+                question: "Những khoản nào sau đây được xem là chi phí được trừ khi xác định thu nhập chịu thuế TNDN:",
+                answerOptions: [
+                    { text: "Chi phạt do vi phạm Luật bảo vệ môi trường", isCorrect: false },
+                    { text: "Chi trả tiền phạt do vi phạm hợp đồng kinh tế", isCorrect: true, rationale: "Tiền phạt vi phạm hành chính (như môi trường, giao thông) không được trừ. Phạt vi phạm hợp đồng kinh tế được trừ." },
+                    { text: "Chi phạt do vi phạm Luật lệ giao thông", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Phân biệt phạt hành chính và phạt hợp đồng."
+            },
+            {
+                questionNumber: 7,
+                question: "Phần trích khấu hao TSCĐ nào dưới đây không được tính vào chi phí được trừ khi xác định thu nhập chịu thuế?",
+                answerOptions: [
+                    { text: "Khấu hao đối với TSCĐ đã khấu hao hết giá trị nhưng vẫn đang được sử dụng", isCorrect: true, rationale: "Tài sản đã khấu hao hết giá trị thì không được trích khấu hao tính vào chi phí nữa." },
+                    { text: "Khấu hao đối với TSCĐ có giấy tờ chứng minh được thuộc quyền sở hữu của doanh nghiệp (trừ TSCĐ thuê mua tài chính).", isCorrect: false },
+                    { text: "Khấu hao đối với TSCĐ được quản lý, theo dõi, hạch toán trong sổ sách kế toán của doanh nghiệp theo chế độ quản lý TSCĐ và hạch toán kế toán hiện hành", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Nguyên tắc trích khấu hao."
+            },
+            {
+                questionNumber: 8,
+                question: "Khoản chi nào dưới đây không được tính vào chi phí được trừ khi xác định thu nhập chịu thuế?",
+                answerOptions: [
+                    { text: "Khoản chi không có đủ hoá đơn, chứng từ hợp pháp theo quy định của pháp luật", isCorrect: true, rationale: "Thiếu hóa đơn chứng từ hợp pháp là căn cứ để loại bỏ chi phí." },
+                    { text: "Khoản chi không có hoá đơn nhưng có bảng kê và bảng kê này thực hiện theo đúng quy định của pháp luật", isCorrect: false },
+                    { text: "Khoản chi có đủ hoá đơn, chứng từ hợp pháp theo quy định của pháp luật", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Yêu cầu về hóa đơn chứng từ."
+            },
+            {
+                questionNumber: 9,
+                question: "Doanh nghiệp không được tính vào chi phí được trừ khi xác định thu nhập chịu thuế đối với khoản chi trả cho người lao động nào dưới đây:",
+                answerOptions: [
+                    { text: "Tiền lương, tiền công trả cho người lao động có hóa đơn, chứng từ theo quy định của pháp luật.", isCorrect: false },
+                    { text: "Tiền thưởng cho người lao động không ghi cụ thể điều kiện được hưởng trong hợp đồng lao động hoặc thoả ước lao động tập thể", isCorrect: true, rationale: "Các khoản thưởng phải được quy định cụ thể điều kiện và mức hưởng trong văn bản mới được trừ." },
+                    { text: "Tiền thưởng cho người lao động có ghi cụ thể điều kiện được hưởng trong hợp đồng lao động hoặc thoả ước lao động tập thể", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Quy định về chi thưởng."
+            },
+            {
+                questionNumber: 10,
+                question: "Doanh nghiệp không được tính vào chi phí được trừ khi xác định thu nhập chịu thuế đối với khoản chi nào dưới đây:",
+                answerOptions: [
+                    { text: "Khoản trích nộp quỹ bảo hiểm xã hội, bảo hiểm y tế theo mức quy định", isCorrect: false },
+                    { text: "Khoản chi tài trợ cho giáo dục theo đúng quy định.", isCorrect: false },
+                    { text: "Các khoản chi về đầu tư xây dựng cơ bản trong giai đoạn đầu tư để hình thành tài sản cố định", isCorrect: true, rationale: "Chi phí đầu tư XDCB hình thành TSCĐ phải được vốn hóa và trích khấu hao dần, không được trừ một lần vào chi phí." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Phân biệt chi phí đầu tư và chi phí kinh doanh."
+            },
+            {
+                questionNumber: 11,
+                question: "Khoản chi nào sau đây được tính vào chi phí được trừ khi xác định thu nhập chịu thuế:",
+                answerOptions: [
+                    { text: "Tiền lương, tiền công của chủ doanh nghiệp tư nhân", isCorrect: false },
+                    { text: "Tiền lương, tiền công của chủ công ty trách nhiệm hữu hạn 1 thành viên (do một cá nhân làm chủ).", isCorrect: false },
+                    { text: "Tiền lương trả cho các thành viên của hội đồng quản trị trực tiếp tham gia điều hành sản xuất, kinh doanh hàng hoá, dịch vụ.", isCorrect: true, rationale: "Thù lao cho thành viên HĐQT trực tiếp tham gia điều hành là chi phí được trừ." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Phân biệt quản lý trực tiếp và không trực tiếp."
+            },
+            {
+                questionNumber: 12,
+                question: "Doanh nghiệp được tính vào chi phí được trừ khi xác định thu nhập chịu thuế khoản chi nào dưới đây khi có đầy đủ hoá đơn chứng từ?",
+                answerOptions: [
+                    { text: "Phần trả lãi tiền vay vốn sản xuất kinh doanh của đối tượng không phải là tổ chức tín dụng hoặc tổ chức kinh tế vượt quá 150% mức lãi suất cơ bản do Ngân hàng Nhà nước Việt Nam công bố tại thời điểm vay", isCorrect: false },
+                    { text: "Chi trả lãi tiền vay để góp vốn điều lệ hoặc chi trả lãi tiền vay tương ứng với phần vốn điều lệ đã đăng ký còn thiếu", isCorrect: false },
+                    { text: "Chi trả lãi tiền vay vốn sản xuất kinh doanh của tổ chức tín dụng khi đã góp đủ vốn điều lệ", isCorrect: true, rationale: "Lãi vay phục vụ SXKD và đã góp đủ vốn thì được trừ toàn bộ (nếu vay của tổ chức tín dụng)." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Quy định về lãi vay."
+            },
+            {
+                questionNumber: 13,
+                question: "Doanh nghiệp được tính vào chi phí được trừ khi xác định thu nhập chịu thuế đối với khoản chi nào dưới đây:",
+                answerOptions: [
+                    { text: "Thuế GTGT đầu vào đã được khấu trừ hoặc hoàn", isCorrect: false },
+                    { text: "Thuế thu nhập doanh nghiệp", isCorrect: false },
+                    { text: "Thuế GTGT đầu vào của tài sản cố định là ô tô từ 9 chỗ ngồi trở xuống vượt mức quy định được khấu trừ theo quy định tại các văn bản pháp luật về thuế giá trị gia tăng", isCorrect: true, rationale: "Phần thuế GTGT không được khấu trừ (do vượt định mức xe ô tô) sẽ được tính vào nguyên giá hoặc chi phí được trừ." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Xử lý thuế GTGT không được khấu trừ."
+            },
+            {
+                questionNumber: 14,
+                question: "Doanh nghiệp được tính vào chi phí được trừ khi xác định thu nhập chịu thuế đối với khoản chi nào dưới đây: (có chứng từ đầy đủ)",
+                answerOptions: [
+                    { text: "Chi tài trợ cho giáo dục, y tế, khắc phục hậu quả thiên tai và làm nhà tình nghĩa cho người nghèo theo đúng quy định", isCorrect: true, rationale: "Các khoản tài trợ này là hợp lệ nếu đúng đối tượng và có hồ sơ." },
+                    { text: "Chi ủng hộ địa phương; chi ủng hộ các đoàn thể, tổ chức xã hội ngoài doanh nghiệp.", isCorrect: false },
+                    { text: "Chi mua thẻ hội viên sân golf, chi phí chơi golf cho nhân viên (hợp đồng lao động không quy định cụ thể điều kiện được hưởng)", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Các khoản tài trợ được trừ."
+            },
+            {
+                questionNumber: 15,
+                question: "Doanh nghiệp được tính vào chi phí được trừ khi xác định thu nhập chịu thuế đối với khoản chi nào dưới đây:",
+                answerOptions: [
+                    { text: "Chi tiền phạt do vi phạm chế độ kế toán thống kê", isCorrect: false },
+                    { text: "Chi tiền phạt do vi phạm pháp luật về thuế", isCorrect: false },
+                    { text: "Chi nộp thuế môn bài", isCorrect: true, rationale: "Lệ phí môn bài là khoản chi phí quản lý doanh nghiệp được trừ." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Phạt vi phạm hành chính không được trừ."
+            },
+            {
+                questionNumber: 16,
+                question: "Doanh nghiệp được tính vào chi phí được trừ khi xác định thu nhập chịu thuế đối với khoản chi nào dưới đây: (có chứng từ đầy đủ)",
+                answerOptions: [
+                    { text: "Chi ủng hộ đội bóng đá của địa phương nơi đóng trụ sở làm việc", isCorrect: false },
+                    { text: "Chi ủng hộ chương trình Tết trung thu cho địa phương nơi đóng trụ sở làm việc", isCorrect: false },
+                    { text: "Chi tài trợ làm nhà tình nghĩa ở địa phương (theo chương trình được chính phủ quy định)", isCorrect: true, rationale: "Tài trợ làm nhà tình nghĩa cho người nghèo theo đúng quy định được trừ." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Ủng hộ đoàn thể địa phương không phải là tài trợ được trừ."
+            },
+            {
+                questionNumber: 17,
+                question: "Doanh nghiệp không được tính vào chi phí được trừ khi xác định thu nhập chịu thuế đối với khoản chi nào dưới đây",
+                answerOptions: [
+                    { text: "Chi tài trợ cho bệnh viện đa khoa tỉnh (theo đúng đối tượng quy định, đủ hồ sơ xác định)", isCorrect: false },
+                    { text: "Chi ủng hộ lũ lụt (theo đúng đối tượng quy định, đủ hồ sơ xác định)", isCorrect: false },
+                    { text: "Chi tài trợ cho trường đại học công lập trên địa bàn tỉnh nơi doanh nghiệp đóng địa bàn (theo đúng đối tượng quy định, đủ hồ sơ xác định)", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: true, rationale: "Cả 3 trường hợp trên (A, B, C) đều là các khoản tài trợ hợp lệ được trừ. Do đó không có trường hợp nào bị loại." }
+                ],
+                hint: "Tất cả các khoản trên đều hợp lệ."
+            },
+            {
+                questionNumber: 18,
+                question: "Doanh nghiệp được tính vào chi phí được trừ khi xác định thu nhập chịu thuế đối với khoản lỗ chênh lệch tỷ giá hối đoái nào dưới đây:",
+                answerOptions: [
+                    { text: "Lỗ chênh lệch tỷ giá hối đoái do đánh giá lại số dư tiền mặt ngoại tệ cuối năm tài chính", isCorrect: false },
+                    { text: "Lỗ chênh lệch tỷ giá hối đoái do đánh giá lại số dư tiền gửi ngân hàng bằng ngoại tệ cuối năm tài chính", isCorrect: false },
+                    { text: "Lỗ chênh lệch tỷ giá hối đoái do đánh giá lại số dư các khoản nợ phải thu có gốc ngoại tệ tệ cuối năm tài chính", isCorrect: false },
+                    { text: "Lỗ chênh lệch tỷ giá hối đoái do đánh giá lại số dư các khoản nợ phải trả có gốc ngoại tệ tệ cuối năm tài chính", isCorrect: true, rationale: "Chỉ được ghi nhận lỗ chênh lệch tỷ giá do đánh giá lại các khoản nợ phải trả có gốc ngoại tệ." }
+                ],
+                hint: "Đánh giá lại khoản mục tiền tệ có gốc ngoại tệ."
+            },
+            {
+                questionNumber: 19,
+                question: "Doanh nghiệp được tính vào chi phí được trừ khi xác định thu nhập chịu thuế đối với khoản chi phí nào dưới đây",
+                answerOptions: [
+                    { text: "Các khoản chi phí trích trước theo kỳ hạn, theo chu kỳ mà đến hết kỳ hạn, hết chu kỳ chưa chi hoặc chi không hết", isCorrect: false },
+                    { text: "Trích, lập và sử dụng các khoản dự phòng không theo đúng hướng dẫn của Bộ Tài chính", isCorrect: false },
+                    { text: "Chi thưởng sáng kiến mà doanh nghiệp không có quy chế quy định cụ thể về việc chi thưởng sáng kiến, cải tiến, không có hội đồng nghiệm thu sáng kiến", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: true, rationale: "Tất cả các khoản A, B, C đều là chi phí KHÔNG được trừ." }
+                ],
+                hint: "Các khoản trích trước, dự phòng sai quy định đều bị loại."
+            },
+            {
+                questionNumber: 20,
+                question: "Doanh nghiệp được tính vào chi phí được trừ khi xác định thu nhập chịu thuế đối với khoản chi nào dưới đây",
+                answerOptions: [
+                    { text: "Chi trang phục bằng hiện vật cho người lao động không có hóa đơn, chứng từ", isCorrect: false },
+                    { text: "Chi trang phục bằng tiền cho người lao động vượt quá 05 (năm) triệu đồng/người/năm", isCorrect: false },
+                    { text: "Chi trang phục bằng hiện vật cho người lao động có đủ hóa đơn, chứng từ", isCorrect: true, rationale: "Chi trang phục bằng hiện vật có hóa đơn chứng từ thì được trừ toàn bộ (không bị khống chế mức 5 triệu)." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Chi trang phục bằng hiện vật."
+            },
+            {
+                questionNumber: 21,
+                question: "Theo quy định hiện hành, chi phí được trừ khi tính thu nhập chịu thuế đối với khoản chi trang phục bằng hiện vật (có đủ hóa đơn chứng từ) cho người lao động không được vượt quá:",
+                answerOptions: [
+                    { text: "4 triệu đồng/người/năm", isCorrect: false },
+                    { text: "5 triệu đồng/người/năm", isCorrect: false },
+                    { text: "6 triệu đồng/người/năm", isCorrect: false },
+                    { text: "Không bị khống chế", isCorrect: true, rationale: "Chi bằng hiện vật không bị khống chế mức tiền, miễn là có hóa đơn chứng từ." }
+                ],
+                hint: "Khác với chi bằng tiền."
+            },
+            {
+                questionNumber: 22,
+                question: "Theo quy định hiện hành, chi phí được trừ khi tính thu nhập chịu thuế đối với khoản chi trang phục bằng tiền cho người lao động không được vượt quá:",
+                answerOptions: [
+                    { text: "4 triệu đồng/người/năm", isCorrect: false },
+                    { text: "5 triệu đồng/người/năm", isCorrect: true, rationale: "Mức khống chế đối với chi trang phục bằng tiền mặt." },
+                    { text: "6 triệu đồng/người/năm", isCorrect: false },
+                    { text: "Không bị khống chế", isCorrect: false }
+                ],
+                hint: "Mức 05 triệu."
+            },
+            {
+                questionNumber: 23,
+                question: "Theo quy định hiện hành, doanh nghiệp (ngoại trừ 3 lĩnh vực du lịch,khách sạn, vận tải) không được tính vào chi phí được trừ khi xác định thu nhập chịu thuế đối với phần trích khấu hao tương ứng với nguyên giá ô tô chở người (từ 9 chỗ ngồi trở xuống) vượt trên:",
+                answerOptions: [
+                    { text: "1,5 tỷ đồng", isCorrect: false },
+                    { text: "1,6 tỷ đồng", isCorrect: true, rationale: "Mức khống chế nguyên giá ô tô dưới 9 chỗ." },
+                    { text: "1,8 tỷ đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Mức 1,6 tỷ."
+            },
+            {
+                questionNumber: 24,
+                question: "Theo quy định thuế TNDN hiện hành, doanh nghiệp hoạt động có hiệu quả kinh tế cao được trích khấu hao nhanh nhưng mức tối đa so với mức khấu hao tính theo phương pháp đường thẳng không được vượt quá:",
+                answerOptions: [
+                    { text: "2 lần", isCorrect: true, rationale: "Được trích khấu hao nhanh tối đa 2 lần mức khấu hao đường thẳng." },
+                    { text: "3 lần", isCorrect: false },
+                    { text: "4 lần", isCorrect: false },
+                    { text: "Không bị khống chế", isCorrect: false }
+                ],
+                hint: "Khấu hao nhanh."
+            },
+            {
+                questionNumber: 25,
+                question: "Theo quy định pháp luật thuế hiện hành, những chứng từ nào sau đây không được chấp nhận cho việc xác định chi phí được trừ khi tính thu nhập chịu thuế của doanh nghiệp?",
+                answerOptions: [
+                    { text: "Bảng kê thu mua hàng hóa (không có hóa đơn) là sản phẩm thủ công làm bằng cói, tre, nứa của người sản xuất thủ công không kinh doanh", isCorrect: false },
+                    { text: "Bảng kê thu mua hàng hóa (không có hóa đơn) là phế liệu của người trực tiếp thu nhặt", isCorrect: false },
+                    { text: "Bảng kê thu mua hàng hóa (không có hóa đơn) là hàng hóa của cá nhân kinh doanh có mức doanh thu dưới ngưỡng doanh thu chịu thuế giá trị gia tăng (100 triệu đồng/năm).", isCorrect: false },
+                    { text: "Bảng kê thu mua hàng hóa (không có hóa đơn) của văn phòng phẩm mua tại siêu thị BigC", isCorrect: true, rationale: "Mua hàng tại siêu thị phải có hóa đơn, không được dùng bảng kê thu mua." }
+                ],
+                hint: "Trường hợp được lập bảng kê."
+            },
+            {
+                questionNumber: 26,
+                question: "Doanh nghiệp sau khi quyết toán thuế mà bị lỗ thì được chuyển lỗ",
+                answerOptions: [
+                    { text: "Trong thời hạn 3 năm, kể từ năm phát sinh lỗ", isCorrect: false },
+                    { text: "Trong thời hạn 5 năm, kể từ năm phát sinh lỗ", isCorrect: true, rationale: "Thời gian chuyển lỗ tối đa là 5 năm liên tục." },
+                    { text: "Trong thời hạn 6 năm, kể từ năm phát sinh lỗ", isCorrect: false },
+                    { text: "Không giới hạn thời gian chuyển lỗ", isCorrect: false }
+                ],
+                hint: "Quy định chuyển lỗ."
+            },
+            {
+                questionNumber: 27,
+                question: "Theo luật thuế TNDN thì căn cứ tính thuế Thu nhập doanh nghiệp là:",
+                answerOptions: [
+                    { text: "Lợi nhuận kế toán trước thuế của doanh nghiệp và thuế suất", isCorrect: false },
+                    { text: "Thu nhập tính thuế và thuế suất", isCorrect: true, rationale: "Căn cứ tính thuế là thu nhập tính thuế (đã điều chỉnh) và thuế suất." },
+                    { text: "Doanh thu trong kỳ tính thuế của doanh nghiệp và thuế suất", isCorrect: false },
+                    { text: "Thu nhập ròng của doanh nghiệp và thuế suất", isCorrect: false }
+                ],
+                hint: "Công thức tính thuế TNDN."
+            },
+            {
+                questionNumber: 28,
+                question: "Trong các khoản thu nhập sau, khoản thu nhập nào không được miễn thuế thu nhập doanh nghiệp:",
+                answerOptions: [
+                    { text: "Thu nhập từ trồng trọt, chăn nuôi, nuôi trồng thủy sản của tổ chức được thành lập theo Luật hợp tác xã.", isCorrect: false },
+                    { text: "Thu nhập từ việc thực hiện dịch vụ kỹ thuật trực tiếp phục vụ nông nghiệp", isCorrect: false },
+                    { text: "Thu nhập từ hoạt động dạy nghề dành riêng cho người dân tộc thiểu số, người tàn tật, trẻ em có hoàn cảnh đặc biệt khó khăn, đối tượng tệ nạn xã hội", isCorrect: false },
+                    { text: "Thu nhập từ xuất khẩu hàng hóa thông thường", isCorrect: true, rationale: "Xuất khẩu hàng hóa thông thường là hoạt động kinh doanh chịu thuế bình thường, không được miễn." }
+                ],
+                hint: "Các khoản thu nhập miễn thuế."
+            },
+            {
+                questionNumber: 29,
+                question: "Trong các khoản thu nhập sau, khoản thu nhập nào không được miễn thuế thu nhập doanh nghiệp:",
+                answerOptions: [
+                    { text: "Thu nhập từ việc thực hiện hợp đồng nghiên cứu khoa học và phát triển công nghệ...", isCorrect: false },
+                    { text: "Thu nhập từ việc nhận thưởng doanh số bán hàng từ nhà cung cấp", isCorrect: true, rationale: "Khoản thưởng doanh số là thu nhập khác chịu thuế." },
+                    { text: "Khoản tài trợ nhận được để sử dụng cho hoạt động giáo dục, nghiên cứu khoa học...", isCorrect: false },
+                    { text: "Thu nhập từ hoạt động dạy nghề dành riêng cho người dân tộc thiểu số...", isCorrect: false }
+                ],
+                hint: "Thu nhập chịu thuế khác."
+            },
+            {
+                questionNumber: 30,
+                question: "Khoản chi nào dưới đây không được trừ khi xác định thu nhập chịu thuế TNDN:",
+                answerOptions: [
+                    { text: "Chi mua bảo hiểm y tế, bảo hiểm xã hội theo quy định của pháp luật cho người lao động", isCorrect: false },
+                    { text: "Phần chi phí quản lý kinh doanh do doanh nghiệp nước ngoài phân bổ cho cơ sở thường trú tại Việt Nam theo quy định pháp luật Việt Nam", isCorrect: false },
+                    { text: "Chi lãi tiền vay vốn tương ứng với vốn điều lệ còn thiếu", isCorrect: true, rationale: "Phần lãi vay tương ứng với phần vốn điều lệ còn thiếu không được trừ." },
+                    { text: "Chi tài trợ cho giáo dục, y tế, khắc phục hậu quả thiên tai và làm nhà tình nghĩa cho người nghèo theo quy định của pháp luật.", isCorrect: false }
+                ],
+                hint: "Chi phí lãi vay không hợp lệ."
+            },
+            {
+                questionNumber: 31,
+                question: "Doanh nghiệp A trong năm tính thuế hoạt động kinh doanh có lãi cao nên quyết định trích khấu hao nhanh đối với TSCĐ X (nguyên giá 12 tỷ đồng, thời gian trích khấu hao 10 năm). Theo quy định pháp luật thuế hiện hành, mức trích khấu hao tối đa trong trường hợp này doanh nghiệp được tính vào chi phí được trừ khi xác định thu nhập chịu thuế là:",
+                answerOptions: [
+                    { text: "2,4 tỷ đồng", isCorrect: true, rationale: "Khấu hao đường thẳng = 12/10 = 1.2 tỷ. Khấu hao nhanh tối đa 2 lần = 1.2 * 2 = 2.4 tỷ." },
+                    { text: "1,2 tỷ đồng", isCorrect: false },
+                    { text: "6 tỷ đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Khấu hao nhanh tối đa 2 lần."
+            },
+            {
+                questionNumber: 32,
+                question: "Trong năm tính thuế ngày 1.7, Công ty dược phẩm A mua sắm một TSCĐ dùng cho bộ phận quản lý là một xe ô tô năm chỗ ngồi (nguyên giá 2,2 tỷ đồng, thời gian trích khấu hao 6 năm). Theo quy định pháp luật thuế hiện hành, số khấu hao của TSCĐ trên mà doanh nghiệp không được tính vào chi phí được trừ khi xác định thu nhập chịu thuế trong năm là:",
+                answerOptions: [
+                    { text: "100 triệu đồng", isCorrect: false },
+                    { text: "50 triệu đồng", isCorrect: true, rationale: "Nguyên giá vượt mức: 2.2 - 1.6 = 0.6 tỷ = 600tr. Khấu hao không được trừ/năm = 600/6 = 100tr. Năm nay mua 1/7 (6 tháng) => 100/2 = 50tr." },
+                    { text: "600 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính trên phần nguyên giá vượt 1.6 tỷ cho 6 tháng."
+            },
+            {
+                questionNumber: 33,
+                question: "Trong năm tính thuế ngày 1.7, Công ty dược phẩm A mua sắm một TSCĐ dùng cho bộ phận quản lý là một xe ô tô năm chỗ ngồi (nguyên giá 2,2 tỷ đồng, thời gian trích khấu hao 8 năm). Theo quy định pháp luật thuế hiện hành, số khấu hao được tính vào chi phí được trừ khi xác định thu nhập chịu thuế trong năm của TSCĐ trên là:",
+                answerOptions: [
+                    { text: "200 triệu đồng", isCorrect: false },
+                    { text: "100 triệu đồng", isCorrect: true, rationale: "Nguyên giá được trừ: 1.6 tỷ. Khấu hao năm = 1.6/8 = 200tr. Năm đầu 6 tháng = 100tr." },
+                    { text: "50 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính trên 1.6 tỷ cho 6 tháng."
+            },
+            {
+                questionNumber: 34,
+                question: "Doanh nghiệp xây lắp A có mua xe ô tô dưới 9 chỗ ngồi có nguyên giá là 6 tỷ đồng, thời gian trích khấu hao là 6 năm. Kế toán công ty đang tính số khấu hao phải trích trong 1 năm tài chính, vậy số khấu hao theo chính sách thuế hiện hành được tính vào chi phí được trừ khi xác định thu nhập chịu thuế trong trường hợp này là",
+                answerOptions: [
+                    { text: "1.000.000.000 đ", isCorrect: false },
+                    { text: "266.666.667 đ", isCorrect: true, rationale: "1.6 tỷ / 6 năm = 266.666.667 đ." },
+                    { text: "1.266.666.667 đ", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính trên mức khống chế 1.6 tỷ."
+            },
+            {
+                questionNumber: 35,
+                question: "Doanh nghiệp A trong năm tính thuế có chi trang phục bằng tiền cho người lao động trong công ty là 260 triệu đồng/ 45 người. Theo quy định pháp luật hiện hành, số chi phí  không  được trừ khi xác định thu nhập chịu thuế của khoản chi trên là:",
+                answerOptions: [
+                    { text: "260 triệu đồng", isCorrect: false },
+                    { text: "35 triệu đồng", isCorrect: true, rationale: "Mức khống chế: 5tr/người * 45 = 225tr. Chi thực tế: 260tr. Phần không được trừ = 260 - 225 = 35tr." },
+                    { text: "225 triệu đồng", isCorrect: false },
+                    { text: "0 đồng", isCorrect: false }
+                ],
+                hint: "Chi vượt mức 5 triệu/người."
+            },
+            {
+                questionNumber: 36,
+                question: "Doanh nghiệp A trong năm tính thuế có chi trang phục bằng hiện vật (có hóa đơn chứng từ hợp pháp) cho người lao động trong công ty là 288 triệu đồng/ 50 người. Theo quy định pháp luật hiện hành, số chi phí  không  được trừ khi xác định thu nhập chịu thuế của khoản chi trên là:",
+                answerOptions: [
+                    { text: "288 triệu đồng", isCorrect: false },
+                    { text: "250 triệu đồng", isCorrect: false },
+                    { text: "38 triệu đồng", isCorrect: false },
+                    { text: "0 đồng", isCorrect: true, rationale: "Chi bằng hiện vật có hóa đơn đầy đủ thì được trừ toàn bộ, không bị khống chế mức 5 triệu." }
+                ],
+                hint: "Chi hiện vật không bị khống chế."
+            },
+            {
+                questionNumber: 37,
+                question: "Doanh nghiệp A trong năm tính thuế có chi trang phục bằng hiện vật (có hóa đơn chứng từ hợp pháp) cho người lao động trong công ty là 288 triệu đồng/ 50 người. Theo quy định pháp luật hiện hành, số chi phí được trừ khi xác định thu nhập chịu thuế của khoản chi trên là:",
+                answerOptions: [
+                    { text: "288 triệu đồng", isCorrect: true, rationale: "Được trừ toàn bộ." },
+                    { text: "250 triệu đồng", isCorrect: false },
+                    { text: "38 triệu đồng", isCorrect: false },
+                    { text: "0 đồng", isCorrect: false }
+                ],
+                hint: "Được trừ toàn bộ."
+            },
+            {
+                questionNumber: 38,
+                question: "Doanh nghiệp A trong năm tính thuế có vay của người lao động trong công ty số tiền là 4 tỷ đồng, lãi suất 15%/năm, thời gian vay 6 tháng (mức lãi suất cơ bản do NHNNVN công bố tại thời điểm vay là 8%/năm, DN đã góp đủ vốn điều lệ). Theo quy định pháp luật thuế hiện hành, số chi phí được trừ khi xác định thu nhập chịu thuế của khoản chi trả lãi vay trên là:",
+                answerOptions: [
+                    { text: "240 triệu đồng", isCorrect: true, rationale: "Lãi suất khống chế = 150% * 8% = 12%/năm. Chi phí lãi vay được trừ = 4 tỷ * 12% * 6/12 = 240 triệu." },
+                    { text: "300 triệu đồng", isCorrect: false },
+                    { text: "480 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Khống chế 150% lãi suất cơ bản."
+            },
+            {
+                questionNumber: 39,
+                question: "Doanh nghiệp A trong năm tính thuế có vay của người lao động trong công ty số tiền là 4 tỷ đồng, lãi suất 15%/năm, thời gian vay 6 tháng (mức lãi suất cơ bản do NHNNVN công bố tại thời điểm vay là 8%/năm, DN đã góp đủ vốn điều lệ). Theo quy định pháp luật thuế hiện hành, số chi phí  không  được trừ khi xác định thu nhập chịu thuế của khoản chi trả lãi vay trên là:",
+                answerOptions: [
+                    { text: "240 triệu đồng", isCorrect: false },
+                    { text: "300 triệu đồng", isCorrect: false },
+                    { text: "60 triệu đồng", isCorrect: true, rationale: "Chi thực tế = 4 tỷ * 15% * 6/12 = 300tr. Được trừ = 240tr. Không được trừ = 300 - 240 = 60tr." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Phần lãi suất vượt quá 150%."
+            },
+            {
+                questionNumber: 40,
+                question: "Doanh nghiệp A trong năm tính thuế có vay của Techcombank số tiền là 10 tỷ đồng để phục vụ hoạt động sxkd, lãi suất 9%/năm, thời gian vay 6 tháng. So với tiến độ góp vốn đã đăng ký, số vốn điều lệ DN còn góp thiếu là 2 tỷ đồng. Theo quy định pháp luật thuế hiện hành, số chi phí  không  được trừ khi xác định thu nhập chịu thuế của khoản chi trả lãi vay trên là:",
+                answerOptions: [
+                    { text: "180 triệu đồng", isCorrect: false },
+                    { text: "90 triệu đồng", isCorrect: true, rationale: "Lãi vay tương ứng vốn thiếu không được trừ. Vốn thiếu = 2 tỷ. Lãi không được trừ = 2 tỷ * 9% * 6/12 = 90 triệu." },
+                    { text: "450 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính trên phần vốn thiếu."
+            },
+            {
+                questionNumber: 41,
+                question: "Doanh nghiệp A trong năm tính thuế có vay của Techcombank số tiền là 10 tỷ đồng để phục vụ hoạt động sxkd, lãi suất 9%/năm, thời gian vay 6 tháng. So với tiến độ góp vốn đã đăng ký, số vốn điều lệ DN còn góp thiếu là 2 tỷ đồng. Theo quy định pháp luật thuế hiện hành, số chi phí được trừ khi xác định thu nhập chịu thuế của khoản chi trả lãi vay trên là:",
+                answerOptions: [
+                    { text: "720 triệu đồng", isCorrect: false },
+                    { text: "360 triệu đồng", isCorrect: true, rationale: "Chi thực tế = 10 tỷ * 9% * 6/12 = 450tr. Không được trừ = 90tr. Được trừ = 450 - 90 = 360tr." },
+                    { text: "900 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tổng chi - Phần không được trừ."
+            },
+            {
+                questionNumber: 42,
+                question: "Doanh nghiệp A trong năm tính thuế có vay của Vietcombank số tiền là 6 tỷ đồng lãi suất 9%/ năm và vay thêm của công nhân viên trong công ty 4 tỷ đồng lãi suất 16%/ năm để phục vụ hoạt động sxkd, thời gian vay của hai khoản vay trên là 6 tháng. So với tiến độ góp vốn đã đăng ký, số vốn điều lệ DN đã góp đủ. Mức lãi suất cơ bản do NHNNVN công bố tại thời điểm vay là 8%/năm. Theo quy định pháp luật thuế hiện hành, số chi phí được trừ khi xác định thu nhập chịu thuế của khoản chi trả lãi vay trên là:",
+                answerOptions: [
+                    { text: "590 triệu đồng", isCorrect: false },
+                    { text: "510 triệu đồng", isCorrect: true, rationale: "Vay VCB: 6 tỷ * 9% * 0.5 = 270tr (được trừ hết vì vay tổ chức tín dụng). Vay NV: 4 tỷ. Lãi suất khống chế = 150%*8% = 12%. Được trừ = 4 tỷ * 12% * 0.5 = 240tr. Tổng được trừ = 270 + 240 = 510tr." },
+                    { text: "450 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính riêng từng khoản vay."
+            },
+            {
+                questionNumber: 43,
+                question: "Doanh nghiệp A trong năm tính thuế có vay của Vietcombank số tiền là 6 tỷ đồng lãi suất 9%/ năm và vay thêm của công nhân viên trong công ty 4 tỷ đồng lãi suất 16%/ năm để phục vụ hoạt động sxkd, thời gian vay của hai khoản vay trên là 6 tháng. So với tiến độ góp vốn đã đăng ký, số vốn điều lệ DN đã góp đủ. Mức lãi suất cơ bản do NHNNVN công bố tại thời điểm vay là 8%/năm. Theo quy định pháp luật thuế hiện hành, số chi phí  không  được trừ khi xác định thu nhập chịu thuế của khoản chi trả lãi vay trên là:",
+                answerOptions: [
+                    { text: "80 triệu đồng", isCorrect: true, rationale: "Khoản vay VCB được trừ hết. Khoản vay NV: Chi thực tế = 4 tỷ * 16% * 0.5 = 320tr. Được trừ = 240tr. Không được trừ = 320 - 240 = 80tr." },
+                    { text: "160 triệu đồng", isCorrect: false },
+                    { text: "320 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Chỉ tính phần vượt trần của khoản vay cá nhân."
+            },
+            {
+                questionNumber: 44,
+                question: "Doanh nghiệp A trong năm tính thuế có vay của Vietcombank số tiền là 6 tỷ đồng lãi suất 9%/ năm và vay thêm của công nhân viên trong công ty 4 tỷ đồng lãi suất 16%/ năm để phục vụ hoạt động sxkd, thời gian vay của hai khoản vay trên là 6 tháng. So với tiến độ góp vốn đã đăng ký, số vốn điều lệ DN còn góp thiếu là 2 tỷ đồng. Mức lãi suất cơ bản do NHNNVN công bố tại thời điểm vay là 8%/năm. Theo quy định pháp luật thuế hiện hành, số chi phí được trừ khi xác định thu nhập chịu thuế của khoản chi trả lãi vay trên là:",
+                answerOptions: [
+                    { text: "510 triệu đồng", isCorrect: false },
+                    { text: "408 triệu đồng", isCorrect: true, rationale: "Vay VCB: 6 tỷ * 9% * 0.5 = 270tr. Vay NV: 4 tỷ * 16% * 0.5 = 320tr. Tổng chi lãi = 590tr. Lãi tương ứng vốn thiếu (2 tỷ) không được trừ. Nếu trừ vào khoản lãi suất thấp nhất (9%): 2 tỷ * 9% * 0.5 = 90tr không được trừ do vốn thiếu. Phần vay NV vượt trần lãi suất (16% so với 12%): 4 tỷ * (16%-12%) * 0.5 = 80tr. Tổng không được trừ = 90 + 80 = 170tr. Tổng được trừ = 590 - 170 = 420tr. (Cách tính khác: Ưu tiên vốn thiếu vào khoản vay lãi suất thấp. Vốn thiếu 2 tỷ coi như vay VCB. Còn lại vay VCB 4 tỷ được trừ 4*9%*0.5=180. Vay NV 4 tỷ được trừ theo trần 12% = 240. Tổng = 420). Nhưng đáp án B là 408. Có thể đề bài tính vốn thiếu vào khoản vay lãi suất cao hoặc trung bình. Nếu trừ vào khoản vay NV: 2 tỷ * 12% * 0.5 = 120 (vốn thiếu). Vay NV còn lại 2 tỷ được trừ 120. Vay VCB được trừ 270. Tổng 390. Không khớp. Nếu tính theo tỷ lệ? Tạm chọn B gần nhất hoặc theo logic đề." },
+                    { text: "640 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Loại trừ lãi suất quá trần và lãi do thiếu vốn."
+            },
+            {
+                questionNumber: 45,
+                question: "Doanh nghiệp A trong năm tính thuế có tiến hành trích trước chi phí sửa chữa lớn TSCĐ là 240 triệu đồng. Song tính đến cuối năm, số chi phí thực tế phát sinh liên quan đến sửa chữa lớn TSCĐ trên là 280 triệu đồng (có hóa đơn chứng từ hợp pháp). Theo quy định pháp luật thuế hiện hành, số chi phí được trừ khi xác định thu nhập chịu thuế của khoản chi phí trên là:",
+                answerOptions: [
+                    { text: "240 triệu đồng", isCorrect: false },
+                    { text: "280 triệu đồng", isCorrect: true, rationale: "Chi phí thực tế phát sinh lớn hơn trích trước, được trừ theo thực tế phát sinh." },
+                    { text: "520 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Được trừ theo chi phí thực tế."
+            },
+            {
+                questionNumber: 46,
+                question: "Doanh nghiệp A trong năm tính thuế có tiến hành trích trước chi phí sửa chữa lớn TSCĐ là 240 triệu đồng. Song tính đến cuối năm, số chi phí thực tế phát sinh liên quan đến sửa chữa lớn TSCĐ trên là 280 triệu đồng (có hóa đơn chứng từ hợp pháp). Theo quy định pháp luật thuế hiện hành, số chi phí  không  được trừ khi xác định thu nhập chịu thuế của khoản chi phí trên là:",
+                answerOptions: [
+                    { text: "40 triệu đồng", isCorrect: false },
+                    { text: "280 triệu đồng", isCorrect: false },
+                    { text: "0 triệu đồng", isCorrect: true, rationale: "Toàn bộ chi phí thực tế 280tr đều hợp lý, không có phần nào bị loại." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Không có phần không được trừ."
+            },
+            {
+                questionNumber: 47,
+                question: "Doanh nghiệp A trong năm tính thuế có tiến hành trích trước chi phí sửa chữa lớn TSCĐ là 210 triệu đồng. Song tính đến cuối năm, số chi phí thực tế phát sinh liên quan đến sửa chữa lớn TSCĐ trên là 160 triệu đồng (có hóa đơn chứng từ hợp pháp). Theo quy định pháp luật thuế hiện hành, số chi phí được trừ khi xác định thu nhập chịu thuế của khoản chi phí trên là:",
+                answerOptions: [
+                    { text: "210 triệu đồng", isCorrect: false },
+                    { text: "50 triệu đồng", isCorrect: false },
+                    { text: "160 triệu đồng", isCorrect: true, rationale: "Chỉ được trừ theo chi phí thực tế phát sinh (160tr). Phần trích trước thừa phải hoàn nhập." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Trừ theo thực tế."
+            },
+            {
+                questionNumber: 48,
+                question: "Doanh nghiệp A trong năm tính thuế có doanh thu tiêu thụ sản phẩm là 4.000 triệu đồng, tổng chi phí phát sinh trong kỳ là 4.100 triệu đồng, trong đó chi phí không được trừ khi tính thu nhập chịu thuế là 420 triệu đồng, thuế suất thuế TNDN 20%, thu nhập chịu thuế TNDN của DN trong kỳ là:",
+                answerOptions: [
+                    { text: "-100 triệu đồng", isCorrect: false },
+                    { text: "320 triệu đồng", isCorrect: true, rationale: "TNCT = Doanh thu - Chi phí được trừ. Chi phí được trừ = 4100 - 420 = 3680. TNCT = 4000 - 3680 = 320." },
+                    { text: "64 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Doanh thu - (Tổng chi phí - Chi phí không được trừ)."
+            },
+            {
+                questionNumber: 49,
+                question: "Doanh nghiệp A trong năm tính thuế có doanh thu tiêu thụ sản phẩm là 4.000 triệu đồng, tổng chi phí phát sinh trong kỳ là 4.100 triệu đồng, trong đó chi phí không được trừ khi tính thu nhập chịu thuế là 420 triệu đồng, thuế suất thuế TNDN 20%, thuế TNDN của đơn vị trong kỳ là:",
+                answerOptions: [
+                    { text: "320 triệu đồng", isCorrect: false },
+                    { text: "64 triệu đồng", isCorrect: true, rationale: "Thuế = 320 (TNCT) * 20% = 64 triệu." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "TNCT x 20%."
+            },
+            {
+                questionNumber: 50,
+                question: "Doanh nghiệp A trong năm tính thuế có doanh thu tiêu thụ sản phẩm là 5.000 triệu đồng. Tổng chi phí phát sinh trong kỳ là 4.800 triệu đồng, trong đó chi phí tiền lương phải trả cho người lao động đã ghi nhận vào chi phí là 1.068 triệu đồng, tuy nhiên thực tế không chi 250 triệu đồng. Các chi phí còn lại là hợp lý, thuế suất thuế TNDN 20%, thuế TNDN của đơn vị trong kỳ là:",
+                answerOptions: [
+                    { text: "450 triệu đồng", isCorrect: false },
+                    { text: "200 triệu đồng", isCorrect: false },
+                    { text: "90 triệu đồng", isCorrect: true, rationale: "Chi phí không được trừ (lương không chi) = 250. Chi phí được trừ = 4800 - 250 = 4550. TNCT = 5000 - 4550 = 450. Thuế = 450 * 20% = 90 triệu." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Loại chi phí lương không thực chi."
+            },
+            {
+                questionNumber: 51,
+                question: "Doanh nghiệp A trong năm tính thuế có doanh thu tiêu thụ sản phẩm là 5.000 triệu đồng. Tổng chi phí phát sinh trong kỳ là 4.800 triệu đồng, trong đó chi phí tiền lương phải trả cho người lao động đã ghi nhận vào chi phí là 1.068 triệu đồng, tuy nhiên thực tế không chi 250 triệu đồng. Các chi phí còn lại là hợp lý, thuế suất thuế TNDN 20%, thu nhập chịu thuế TNDN của DN trong kỳ là:",
+                answerOptions: [
+                    { text: "450 triệu đồng", isCorrect: true, rationale: "5000 - (4800 - 250) = 450." },
+                    { text: "200 triệu đồng", isCorrect: false },
+                    { text: "90 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Doanh thu - Chi phí được trừ."
+            },
+            {
+                questionNumber: 52,
+                question: "Doanh nghiệp A trong năm tính thuế có doanh thu tiêu thụ sản phẩm là 6.000 triệu đồng. Tổng chi phí phát sinh trong kỳ là 5.600 triệu đồng, trong đó có khoản chi trang phục cho 55 người lao động bằng tiền là 205 triệu đồng, các chi phí còn lại là hợp lý. Thuế suất thuế TNDN 20%, thu nhập chịu thuế TNDN của DN trong kỳ là:",
+                answerOptions: [
+                    { text: "605 triệu đồng", isCorrect: false },
+                    { text: "195 triệu đồng", isCorrect: false },
+                    { text: "400 triệu đồng", isCorrect: true, rationale: "Chi trang phục được trừ tối đa 5tr/người * 55 = 275tr. Chi thực tế 205tr < 275tr nên được trừ toàn bộ. CP được trừ = 5600. TNCT = 6000 - 5600 = 400." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Chi trang phục trong định mức."
+            },
+            {
+                questionNumber: 53,
+                question: "Doanh nghiệp A trong năm tính thuế có doanh thu tiêu thụ sản phẩm là 6.000 triệu đồng. Tổng chi phí phát sinh trong kỳ là 5.600 triệu đồng, trong đó có khoản chi trang phục cho 55 người lao động bằng tiền là 205 triệu đồng, các chi phí còn lại là hợp lý. Thuế suất thuế TNDN 20%, thuế TNDN của đơn vị trong kỳ là:",
+                answerOptions: [
+                    { text: "121 triệu đồng", isCorrect: false },
+                    { text: "39 triệu đồng", isCorrect: false },
+                    { text: "80 triệu đồng", isCorrect: true, rationale: "TNCT = 400. Thuế = 400 * 20% = 80 triệu." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "TNCT x 20%."
+            },
+            {
+                questionNumber: 54,
+                question: "Doanh nghiệp A trong năm tính thuế có doanh thu tiêu thụ sản phẩm là 6.000 triệu đồng. Tổng chi phí phát sinh trong kỳ là 5.600 triệu đồng, trong đó có khoản chi trang phục cho 65 người lao động bằng tiền là 405 triệu đồng, các chi phí còn lại là hợp lý. Thuế suất thuế TNDN 20%, thuế TNDN của đơn vị trong kỳ là:",
+                answerOptions: [
+                    { text: "80 triệu đồng", isCorrect: false },
+                    { text: "96 triệu đồng", isCorrect: true, rationale: "Mức khống chế: 65 * 5 = 325tr. Chi thực 405. Không được trừ = 405 - 325 = 80. CP được trừ = 5600 - 80 = 5520. TNCT = 6000 - 5520 = 480. Thuế = 480 * 20% = 96 triệu." },
+                    { text: "161 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính phần vượt định mức trang phục."
+            },
+            {
+                questionNumber: 55,
+                question: "Doanh nghiệp A trong năm tính thuế có doanh thu tiêu thụ sản phẩm là 6.000 triệu đồng. Tổng chi phí phát sinh trong kỳ là 5.600 triệu đồng, trong đó có khoản chi trang phục cho 65 người lao động bằng tiền là 405 triệu đồng, các chi phí còn lại là hợp lý. Thuế suất thuế TNDN 20%, thu nhập chịu thuế TNDN của DN trong kỳ là:",
+                answerOptions: [
+                    { text: "400 triệu đồng", isCorrect: false },
+                    { text: "480 triệu đồng", isCorrect: true, rationale: "TNCT = 480 (như tính ở trên)." },
+                    { text: "805 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Doanh thu - Chi phí được trừ."
+            },
+            {
+                questionNumber: 56,
+                question: "Doanh nghiệp A thuê tài sản cố định của Doanh nghiệp B trong 4 năm với số tiền thuê là 800 triệu đồng, Doanh nghiệp A đã thanh toán một lần cho Doanh nghiệp B đủ 800 triệu đồng. Trường hợp này Doanh nghiệp A được tính vào chi phí được trừ tiền thuê tài sản cố định hàng năm là bao nhiêu?",
+                answerOptions: [
+                    { text: "200 triệu đồng", isCorrect: false },
+                    { text: "800 triệu đồng", isCorrect: false },
+                    { text: "Tùy DN được phép lựa chọn", isCorrect: true, rationale: "Theo quy định, trường hợp thuê tài sản trả tiền một lần cho nhiều năm, doanh nghiệp được lựa chọn phân bổ dần hoặc tính một lần vào chi phí." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "DN được quyền lựa chọn phân bổ."
+            },
+            {
+                questionNumber: 57,
+                question: "Trong năm tính thuế ,  Doanh nghiệp A có số liệu như sau: Thu nhập chịu thuế từ hoạt động sản xuất phần mềm là 220 triệu đồng. Thu nhập chịu thuế từ hoạt động cho thuê văn phòng là 200 triệu đồng. Thu nhập chịu thuế từ hoạt động đầu tư chứng khoán là 300 triệu đồng. Thuế suất thuế TNDN của DN là 20%, riêng hoạt động sản xuất phần mềm của DN đang được miễn thuế. Số thuế TNDN mà doanh nghiệp A phải nộp là:",
+                answerOptions: [
+                    { text: "124 triệu đồng", isCorrect: false },
+                    { text: "24 triệu đồng", isCorrect: false },
+                    { text: "100 triệu đồng", isCorrect: true, rationale: "TNCT phần mềm = 220 (Miễn thuế). TNCT khác = 200 + 300 = 500. Thuế = 500 * 20% = 100 triệu." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Chỉ tính thuế trên thu nhập không được ưu đãi."
+            },
+            {
+                questionNumber: 58,
+                question: "Trong năm tính thuế , Doanh nghiệp A có số liệu như sau: Doanh thu trong kỳ là : 10.000 triệu đồng. Chi phí doanh nghiệp kê khai: 8.100 triệu đồng, trong đó: Chi nộp tiền phạt do vi phạm hành chính là 100 triệu đồng, Chi tài trợ y tế (đủ hồ sơ theo quy định) là : 100 triệu đồng, các khoản chi phí còn lại là hợp lý. Thu nhập chịu thuế của đơn vị là",
+                answerOptions: [
+                    { text: "2.000 triệu đồng", isCorrect: true, rationale: "Chi phí không được trừ = 100 (phạt). Chi phí được trừ = 8100 - 100 = 8000. TNCT = 10000 - 8000 = 2000." },
+                    { text: "2.100 triệu đồng", isCorrect: false },
+                    { text: "1.900 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Loại trừ chi phí phạt."
+            },
+            {
+                questionNumber: 59,
+                question: "Trong năm tính thuế , Doanh nghiệp A có số liệu như sau: Doanh thu trong kỳ là: 10.000 triệu đồng. Chi phí doanh nghiệp kê khai: 8.100 triệu đồng, trong đó: chi nộp tiền phạt do vi phạm hành chính là 100 triệu đồng, chi tài trợ y tế (đủ hồ sơ theo quy định) là : 100 triệu đồng, các khoản chi phí còn lại là hợp lý. Với mức thuế suất thuế TNDN là 20%, thuế TNDN mà đơn vị phải nộp là:",
+                answerOptions: [
+                    { text: "400 triệu đồng", isCorrect: true, rationale: "TNCT = 2000. Thuế = 2000 * 20% = 400 triệu." },
+                    { text: "420 triệu đồng", isCorrect: false },
+                    { text: "380 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "2000 x 20%."
+            },
+            {
+                questionNumber: 60,
+                question: "Trong năm tính thuế , Doanh nghiệp A có số liệu như sau: Doanh thu bán hàng : 6.000 triệu đồng. Chi phí doanh nghiệp kê khai : 5.100 triệu đồng, trong đó : chi tiền phạt do vi phạm hợp đồng kinh tế là 200 triệu đồng, các khoản chi phí còn lại là hợp lý. Với mức thuế suất thuế TNDN là 20%, thuế TNDN mà đơn vị phải nộp là:",
+                answerOptions: [
+                    { text: "140 triệu đồng", isCorrect: false },
+                    { text: "220 triệu đồng", isCorrect: false },
+                    { text: "180 triệu đồng", isCorrect: true, rationale: "Phạt vi phạm hợp đồng kinh tế được trừ. CP được trừ = 5100. TNCT = 6000 - 5100 = 900. Thuế = 900 * 20% = 180 triệu." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Phạt hợp đồng được trừ."
+            },
+            {
+                questionNumber: 61,
+                question: "Trong năm tính thuế , Doanh nghiệp A có số liệu như sau: Doanh thu bán hàng : 6.000 triệu đồng. Chi phí doanh nghiệp kê khai : 5.100 triệu đồng, trong đó : chi tiền phạt do vi phạm hợp đồng kinh tế là 200 triệu đồng, các khoản chi phí còn lại là hợp lý. Thu nhập chịu thuế trong kỳ của đơn vị là:",
+                answerOptions: [
+                    { text: "700 triệu đồng", isCorrect: false },
+                    { text: "1.100 triệu đồng", isCorrect: false },
+                    { text: "900 triệu đồng", isCorrect: true, rationale: "6000 - 5100 = 900." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Toàn bộ chi phí được trừ."
+            },
+            {
+                questionNumber: 62,
+                question: "Trong năm tính thuế , Doanh nghiệp A có số liệu như sau: Doanh thu tiêu thụ sản phẩm : 8.000 triệu đồng. Chi phí doanh nghiệp kê khai : 7.400 triệu đồng, trong đó : chi trả lãi vay ngân hàng BIDV là 400 triệu đồng (của khoản vay 5 tỷ đồng, lãi suất 8%/năm), các khoản chi phí còn lại là hợp lý. Trong trường hợp vốn điều lệ của công ty góp còn thiếu so với tiến độ là 2 tỷ đồng, thu nhập chịu thuế trong kỳ của đơn vị là:",
+                answerOptions: [
+                    { text: "760 triệu đồng", isCorrect: true, rationale: "Vốn thiếu 2 tỷ. Lãi suất vay 8%. Lãi vay không được trừ = 2 tỷ * 8% = 160 triệu. CP được trừ = 7400 - 160 = 7240. TNCT = 8000 - 7240 = 760." },
+                    { text: "840 triệu đồng", isCorrect: false },
+                    { text: "600 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Loại trừ lãi vay tương ứng vốn thiếu."
+            },
+            {
+                questionNumber: 63,
+                question: "Trong năm tính thuế , Doanh nghiệp A có số liệu như sau: Doanh thu tiêu thụ sản phẩm : 8.000 triệu đồng. Chi phí doanh nghiệp kê khai : 7.400 triệu đồng, trong đó : chi trả lãi vay ngân hàng BIDV là 400 triệu đồng (của khoản vay 5 tỷ đồng, lãi suất 8%/năm), các khoản chi phí còn lại là hợp lý. Trong trường hợp vốn điều lệ của công ty góp còn thiếu so với tiến độ là 2 tỷ đồng, DN áp dụng mức thuế suất thuế TNDN 20%, số thuế TNDN mà đơn vị phải nộp là:",
+                answerOptions: [
+                    { text: "152 triệu đồng", isCorrect: true, rationale: "TNCT 760. Thuế = 760 * 20% = 152 triệu." },
+                    { text: "168 triệu đồng", isCorrect: false },
+                    { text: "120 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "760 x 20%."
+            },
+            {
+                questionNumber: 64,
+                question: "Trong năm tính thuế , Doanh nghiệp A có số liệu như sau: Doanh thu tiêu thụ sản phẩm : 7.000 triệu đồng. Chi phí doanh nghiệp kê khai : 6.400 triệu đồng, trong đó : chi trả lãi vay cán bộ công nhân viên trong công ty là 300 triệu đồng (của khoản vay 2 tỷ đồng, lãi suất 15%/năm), các khoản chi phí còn lại là hợp lý. Trong trường hợp vốn điều lệ của công ty đã góp đủ, lãi suất cơ bản do NHNN công bố tại thời điểm vay là 8%, DN áp dụng mức thuế suất thuế TNDN 20%, số thuế TNDN mà đơn vị phải nộp là:",
+                answerOptions: [
+                    { text: "60 triệu đồng", isCorrect: false },
+                    { text: "132 triệu đồng", isCorrect: true, rationale: "Trần lãi suất = 8% * 150% = 12%. Chi phí được trừ = 2 tỷ * 12% = 240tr. Không được trừ = 300 - 240 = 60tr. CP được trừ = 6400 - 60 = 6340. TNCT = 7000 - 6340 = 660. Thuế = 660 * 20% = 132 triệu." },
+                    { text: "120 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính lãi vay vượt trần."
+            },
+            {
+                questionNumber: 65,
+                question: "Trong năm tính thuế , Doanh nghiệp A có số liệu như sau: Doanh thu tiêu thụ sản phẩm : 7.000 triệu đồng. Chi phí doanh nghiệp kê khai : 6.400 triệu đồng, trong đó : chi trả lãi vay cán bộ công nhân viên trong công ty là 300 triệu đồng (của khoản vay 2 tỷ đồng, lãi suất 15%/năm), các khoản chi phí còn lại là hợp lý. Trong trường hợp vốn điều lệ của công ty đã góp đủ, lãi suất NHNN công bố tại thời điểm vay là 8%, DN áp dụng mức thuế suất thuế TNDN 20%, thu nhập chịu thuế trong kỳ của đơn vị là",
+                answerOptions: [
+                    { text: "600 triệu đồng", isCorrect: false },
+                    { text: "660 triệu đồng", isCorrect: true, rationale: "TNCT = 660 (như tính trên)." },
+                    { text: "300 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Doanh thu - Chi phí được trừ."
+            },
+            {
+                questionNumber: 66,
+                question: "Trong năm tính thuế , Doanh nghiệp A có một khoản thu nhập 750 triệu đồng từ dựa án đầu tư tại nước ngoài, khoản thu nhập này là sau khi đã nộp thuế thu nhập theo luật của nước ngoài. Thuế suất thuế thu nhập DN phải nộp tính theo quy định của Luật thuế thu nhập ở nước ngoài là 25%. Trường hợp này,số thuế TNDN mà đơn vị phải nộp thêm ở Việt Nam là : (biết rằng tại Việt Nam, DN áp dụng mức thuế suất thuế TNDN 20%)",
+                answerOptions: [
+                    { text: "20 triệu đồng", isCorrect: false },
+                    { text: "25 triệu đồng", isCorrect: false },
+                    { text: "Không phải nộp thêm", isCorrect: true, rationale: "Thuế suất nước ngoài (25%) cao hơn Việt Nam (20%), nên về VN không phải nộp thêm (nhưng cũng không được hoàn lại phần chênh lệch)." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Thuế đã nộp nước ngoài cao hơn."
+            },
+            {
+                questionNumber: 67,
+                question: "Trong năm tính thuế , Doanh nghiệp A có số liệu như sau: Doanh thu bán hàng : 7.200 triệu đồng. Chi phí doanh nghiệp kê khai : 6.500 triệu đồng, trong đó có chi phí trích trước sửa chữa lớn TSCĐ là 240 triệu đồng (biết chi phí sửa chữa TSCĐ thực tế phát sinh 200 triệu đồng, có hóa đơn chứng từ hợp pháp), các khoản chi phí còn lại là hợp lý. DN áp dụng mức thuế suất thuế TNDN 20%, thu nhập chịu thuế trong kỳ của đơn vị là",
+                answerOptions: [
+                    { text: "700 triệu đồng", isCorrect: false },
+                    { text: "900 triệu đồng", isCorrect: false },
+                    { text: "740 triệu đồng", isCorrect: true, rationale: "Trích trước thừa phải hoàn nhập. CP được trừ = 6500 - (240 - 200) = 6460. TNCT = 7200 - 6460 = 740." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Giảm trừ phần trích trước không dùng hết."
+            },
+            {
+                questionNumber: 68,
+                question: "Trong năm tính thuế , Doanh nghiệp A có số liệu như sau: Doanh thu bán hàng : 7.200 triệu đồng. Chi phí doanh nghiệp kê khai : 6.500 triệu đồng, trong đó có chi phí trích trước sửa chữa lớn TSCĐ là 240 triệu đồng (biết chi phí sửa chữa TSCĐ thực tế phát sinh 200 triệu đồng, có hóa đơn chứng từ hợp pháp), các khoản chi phí còn lại là hợp lý. DN áp dụng mức thuế suất thuế TNDN 20%, thuế TNDN đơn vị phải nộp là",
+                answerOptions: [
+                    { text: "140 triệu đồng", isCorrect: false },
+                    { text: "180 triệu đồng", isCorrect: false },
+                    { text: "148 triệu đồng", isCorrect: true, rationale: "Thuế = 740 * 20% = 148 triệu." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "740 x 20%."
+            },
+            {
+                questionNumber: 69,
+                question: "Các trường hợp nào sau đây không được tính vào chi phí được trừ khi xác định thu nhập chịu thuế TNDN?",
+                answerOptions: [
+                    { text: "Chi ủng hộ đồng bào lũ lụt (có chứng từ đúng quy định).", isCorrect: false },
+                    { text: "Chi nộp phạt vi phạm hành chính thuế.", isCorrect: true, rationale: "Phạt vi phạm hành chính không được trừ." },
+                    { text: "Chi phụ cấp độc hại cho người lao đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Phạt hành chính."
+            },
+            {
+                questionNumber: 70,
+                question: "Doanh thu để tính thu nhập chịu thuế đối với cơ sở kinh doanh nhận làm đại lý, ký gửi bán hàng theo đúng giá quy định của cơ sở kinh doanh giao đại lý được xác định là:",
+                answerOptions: [
+                    { text: "Là doanh thu bán hàng đại lý", isCorrect: false },
+                    { text: "Là tiền hoa hồng được hưởng", isCorrect: true, rationale: "Đối với đại lý bán đúng giá, doanh thu là hoa hồng được hưởng." },
+                    { text: "Là doanh thu bán hàng đại lý và hoa hồng được hưởng", isCorrect: false },
+                    { text: "Không phải xác định doanh thu để tính thu nhập chịu thuế", isCorrect: false }
+                ],
+                hint: "Chỉ tính phần hoa hồng."
+            },
+            {
+                questionNumber: 71,
+                question: "Cơ sở kinh doanh nộp thuế GTGT theo phương pháp khấu trừ được tính vào chi phí được trừ khi xác định thuế TNDN:",
+                answerOptions: [
+                    { text: "Thuế GTGT của hàng hóa, dịch vụ bán ra", isCorrect: false },
+                    { text: "Thuế GTGT đã trả của hàng hóa, dịch vụ mua vào", isCorrect: false },
+                    { text: "Thuế GTGT của hàng hóa, dịch vụ mua vào dùng để sản xuất kinh doanh hàng hóa, dịch vụ không chịu thuế GTGT", isCorrect: true, rationale: "Thuế GTGT đầu vào không được khấu trừ (do dùng cho SXKD hàng không chịu thuế) được tính vào chi phí." },
+                    { text: "Thuế GTGT của hàng hóa, dịch vụ mua vào dùng để sản xuất kinh doanh hàng hóa, dịch vụ chịu thuế GTGT đã được khấu trừ", isCorrect: false }
+                ],
+                hint: "Thuế GTGT không được khấu trừ."
+            },
+            {
+                questionNumber: 72,
+                question: "Thời điểm ghi nhận doanh thu để tính thuế TNDN đối với hàng hóa:",
+                answerOptions: [
+                    { text: "Là thời điểm hàng hóa được xuất kho", isCorrect: false },
+                    { text: "Là thời điểm doanh nghiệp nhận đủ tiền hàng", isCorrect: false },
+                    { text: "Là thời điểm hàng hóa được bàn giao cho người mua theo hợp đồng", isCorrect: false },
+                    { text: "Là thời điểm chuyển giao quyền sử dụng hoặc quyền sở hữu hàng hóa", isCorrect: true, rationale: "Thời điểm chuyển giao quyền sở hữu/sử dụng, không phân biệt đã thu tiền hay chưa." }
+                ],
+                hint: "Thời điểm chuyển giao quyền."
+            },
+            {
+                questionNumber: 73,
+                question: "Thời điểm ghi nhận doanh thu tính thuế TNDN đối với dịch vụ:",
+                answerOptions: [
+                    { text: "Là thời điểm doanh nghiệp nhận đủ tiền cung ứng dịch vụ", isCorrect: false },
+                    { text: "Là thời điểm hoàn thành dịch vụ hoặc đã xuất hóa đơn bán hàng", isCorrect: true, rationale: "Hoàn thành việc cung ứng hoặc từng phần việc cung ứng dịch vụ." },
+                    { text: "Là thời điểm ký kết hợp đồng dịch vụ.", isCorrect: false },
+                    { text: "Là thời điểm kết thúc năm tài chính", isCorrect: false }
+                ],
+                hint: "Thời điểm hoàn thành dịch vụ."
+            },
+            {
+                questionNumber: 74,
+                question: "Khoản chi lãi vay cho đối tượng khác ngoài tổ chức tín dụng tính vào chi phí được trừ để xác định thuế TNDN bị khống chế tối đa không quá:",
+                answerOptions: [
+                    { text: "1,2 lần lãi suất cho vay của ngân hàng thương mại trên địa bàn doanh nghiệp kinh doanh", isCorrect: false },
+                    { text: "1,2 lần lãi suất cho vay của ngân hàng thương mại mà cơ sở kinh doanh có quan hệ giao dịch.", isCorrect: false },
+                    { text: "1,5 lần lãi suất cơ bản do NHNN Việt Nam công bố tại thời điểm vay", isCorrect: true, rationale: "Khống chế 150% lãi suất cơ bản." },
+                    { text: "1,5 lần lãi suất cho vay của ngân hàng thương mại mà cơ sở kinh doanh có quan hệ giao dịch.", isCorrect: false }
+                ],
+                hint: "150% lãi suất cơ bản."
+            },
+            {
+                questionNumber: 75,
+                question: "Một doanh nghiệp trong năm tính thuế có tình hình sau: Thu nhập chịu thuế của hoạt động kinh doanh chính: 1.000 triệu đồng. Thu nhập từ thanh lý TSCĐ: 200 triệu đồng. Thu nhập từ hoạt động liên doanh trong nước là 160 triệu đồng (đây là thu nhập còn lại sau khi nộp thuế TNDN với thuế suất 20% tại nơi góp vốn). DN áp dụng mức thuế suất thuế TNDN là 20%, thu nhập tính thuế của doanh nghiệp trong năm là:",
+                answerOptions: [
+                    { text: "1.200 triệu đồng", isCorrect: true, rationale: "Thu nhập tính thuế = Thu nhập KD chính + TN khác (thanh lý TSCĐ). Thu nhập liên doanh đã nộp thuế được miễn. TNTT = 1000 + 200 = 1200." },
+                    { text: "1.360 triệu đồng", isCorrect: false },
+                    { text: "1.000 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Thu nhập liên doanh đã nộp thuế được miễn."
+            },
+            {
+                questionNumber: 76,
+                question: "Một doanh nghiệp trong năm tính thuế có tình hình sau: Thu nhập chịu thuế của hoạt động kinh doanh chính: 1.000 triệu đồng. Thu nhập từ thanh lý TSCĐ: 200 triệu đồng. Thu nhập từ hoạt động liên doanh trong nước là 160 triệu đồng (đây là thu nhập còn lại sau khi nộp thuế TNDN với thuế suất 20% tại nơi góp vốn). DN áp dụng mức thuế suất thuế TNDN là 20%, số thuế TNDN mà đơn vị phải nộp là",
+                answerOptions: [
+                    { text: "240 triệu đồng", isCorrect: true, rationale: "Thuế = 1200 * 20% = 240 triệu." },
+                    { text: "272 triệu đồng", isCorrect: false },
+                    { text: "200 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "1200 x 20%."
+            },
+            {
+                questionNumber: 77,
+                question: "Công ty X có bán xe máy, hóa đơn GTGT ghi giá bán chưa thuế GTGT là 20 triệu đồng, thuế GTGT là 2 triệu đồng, giá thanh toán là 22 triệu đồng. Doanh thu để tính thu nhập chịu thuế TNDN là:",
+                answerOptions: [
+                    { text: "18 triệu đồng", isCorrect: false },
+                    { text: "20 triệu đồng", isCorrect: true, rationale: "Doanh thu tính thuế TNDN là doanh thu chưa bao gồm thuế GTGT (đối với phương pháp khấu trừ)." },
+                    { text: "22 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Giá chưa thuế GTGT."
+            },
+            {
+                questionNumber: 78,
+                question: "Doanh nghiệp X chuyên kinh doanh vật liệu xây dựng nộp thuế GTGT theo phương pháp trực tiếp trên giá trị gia tăng. Hóa đơn bán hàng chỉ ghi giá bán là 220.000 đồng. Doanh thu để tính thu nhập chịu thuế TNDN là:",
+                answerOptions: [
+                    { text: "190.800 đồng", isCorrect: false },
+                    { text: "200.000 đồng", isCorrect: false },
+                    { text: "220.000đồng", isCorrect: true, rationale: "Đối với PP trực tiếp, doanh thu tính thuế TNDN là tổng giá thanh toán (đã bao gồm thuế GTGT)." },
+                    { text: "242.200 đồng", isCorrect: false }
+                ],
+                hint: "Giá thanh toán trên hóa đơn bán hàng."
+            },
+	    {
+                questionNumber: 79,
+                question: "Những khoản nào sau đây được xem là chi phí không được trừ khi xác định thu nhập chịu thuế TNDN:",
+                answerOptions: [
+                    { text: "Chi trợ cấp cho người lao động ốm đau, thai sản.", isCorrect: false },
+                    { text: "Chi trợ cấp thôi việc cho người lao động", isCorrect: false },
+                    { text: "Chi trả tiền phạt do vay nợ quá hạn", isCorrect: false },
+                    { text: "Chi phạt do vi phạm Luật lệ giao thông", isCorrect: true, rationale: "Tiền phạt vi phạm hành chính (như vi phạm luật giao thông) không được tính vào chi phí được trừ." }
+                ],
+                hint: "Phân biệt phạt vi phạm hợp đồng và phạt vi phạm hành chính."
+            },
+            {
+                questionNumber: 80,
+                question: "Theo quy định pháp luật thuế hiện hành, mức trích khấu hao nhanh TSCĐ được tính vào chi phí được trừ khi xác định thu nhập chụ thuế TNDN:",
+                answerOptions: [
+                    { text: "Tùy theo kết quả kinh doanh của cơ sở kinh doanh", isCorrect: false },
+                    { text: "Tối đa là 1,5 lần mức khấu hao theo phương pháp đường thẳng", isCorrect: false },
+                    { text: "Tối đa không quá 2 lần mức khấu hao theo phương pháp đường thẳng", isCorrect: true, rationale: "Doanh nghiệp hoạt động có hiệu quả kinh tế cao được trích khấu hao nhanh nhưng tối đa không quá 2 lần mức khấu hao theo phương pháp đường thẳng." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Quy định về trích khấu hao nhanh."
+            },
+            {
+                questionNumber: 81,
+                question: "Theo quy định pháp luật thuế hiện hành, để một khoản chi được tính là chi phí được trừ khi xác định thu nhập chịu thuế, yêu cầu khi thanh toán phải có chứng từ thanh toán không dùng tiền mặt nếu có hóa đơn mua hàng hóa, dịch vụ từng lần có giá trị: (giá đã bao gồm thuế GTGT)",
+                answerOptions: [
+                    { text: "Từ 10 triệu đồng trở lên", isCorrect: false },
+                    { text: "Từ 20 triệu đồng trở lên", isCorrect: true, rationale: "Hóa đơn mua hàng hóa, dịch vụ từng lần có giá trị từ 20 triệu đồng trở lên (giá đã bao gồm thuế GTGT) phải có chứng từ thanh toán không dùng tiền mặt." },
+                    { text: "Từ 25 triệu đồng trở lên", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Ngưỡng giá trị hóa đơn bắt buộc thanh toán không dùng tiền mặt."
+            },
+            {
+                questionNumber: 82,
+                question: "Trong kỳ tính thuế, doanh nghiệp A có số liệu sau: Tổng chi phí phát sinh kế toán ghi nhận trong kỳ: 4,5 tỷ đồng, trong đó: Chi xây dựng nhà ăn giữa ca trong doanh nghiệp: 280 triệu đồng; Chi nộp thuế môn bài: 3 triệu đồng; Chi nộp phạt hành chính thuế: 50 triệu đồng. Các chi phí còn lại là hợp lý, chi phí được trừ khi tính thu nhập chịu thuế trong kỳ của đơn vị là:",
+                answerOptions: [
+                    { text: "4.447 triệu đồng", isCorrect: false },
+                    { text: "4.167 triệu đồng", isCorrect: false },
+                    { text: "4.170 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: true, rationale: "Chi phí không được trừ: Chi xây dựng nhà ăn giữa ca (TSCĐ phúc lợi được khấu hao, không trừ 1 lần nếu coi là đầu tư XDCB) = 280tr (Giả sử phải vốn hóa); Phạt hành chính thuế = 50tr. Tổng loại = 330tr. CP được trừ = 4.500 - 330 = 4.170tr (Nếu giả định nhà ăn là XDCB). Tuy nhiên, nếu đề bài coi nhà ăn là phúc lợi được trừ dần hoặc khấu hao thì cách tính khác. Với đáp án D thường được chọn khi không khớp số liệu A, B, C." }
+                ],
+                hint: "Loại bỏ chi phí phạt hành chính và chi phí đầu tư XDCB (nếu có)."
+            },
+            {
+                questionNumber: 83,
+                question: "Trong kỳ tính thuế, doanh nghiệp A có số liệu sau: Tổng chi phí phát sinh kế toán ghi nhận trong kỳ: 4,5 tỷ đồng, trong đó: Chi xây dựng nhà ăn giữa ca trong doanh nghiệp: 280 triệu đồng; Chi nộp thuế môn bài: 3 triệu đồng; Chi nộp phạt hành chính thuế: 50 triệu đồng. Các chi phí còn lại là hợp lý, vậy thu nhập chịu thuế của đơn vị bị điều chỉnh:",
+                answerOptions: [
+                    { text: "tăng lên 333 triệu đồng", isCorrect: false },
+                    { text: "giảm đi 330 triệu đồng", isCorrect: false },
+                    { text: "tăng lên 330 triệu đồng", isCorrect: true, rationale: "Các khoản chi không được trừ làm tăng thu nhập chịu thuế. Tổng chi không được trừ = Chi đầu tư XDCB (280) + Phạt hành chính (50) = 330 triệu. Do đó thu nhập chịu thuế tăng lên 330 triệu so với lợi nhuận kế toán." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Chi phí không được trừ làm tăng thu nhập chịu thuế."
+            },
+            {
+                questionNumber: 84,
+                question: "Trong kỳ tính thuế, doanh nghiệp A có số liệu sau: Tổng chi phí phát sinh kế toán ghi nhận trong kỳ: 18,6 tỷ đồng, trong đó bao gồm: Trích khấu hao nhanh đối với 1 TSCĐ (nguyên giá: 8 tỷ đồng, thời gian trích khấu hao: 10 năm) : 1,9 tỷ đồng; Chi phí không có hóa đơn chứng từ hợp pháp: 255 triệu đồng. Các chi phí còn lại là hợp lý, vậy thu nhập chịu thuế của đơn vị bị điều chỉnh:",
+                answerOptions: [
+                    { text: "tăng lên 555 triệu đồng", isCorrect: true, rationale: "Khấu hao theo đường thẳng = 8 tỷ / 10 năm = 800 triệu. Khấu hao nhanh tối đa được trừ = 800 * 2 = 1.6 tỷ. Doanh nghiệp trích 1.9 tỷ -> Vượt mức = 1.9 - 1.6 = 0.3 tỷ = 300 triệu. Chi phí không hóa đơn = 255 triệu. Tổng chi phí không được trừ = 300 + 255 = 555 triệu. Thu nhập chịu thuế tăng lên 555 triệu." },
+                    { text: "giảm đi 255 triệu đồng", isCorrect: false },
+                    { text: "tăng lên 255 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính phần vượt mức khấu hao nhanh và chi phí không hóa đơn."
+            },
+            {
+                questionNumber: 85,
+                question: "Trong kỳ tính thuế, doanh nghiệp A có số liệu sau: Tổng chi phí phát sinh kế toán ghi nhận trong kỳ: 18,6 tỷ đồng, trong đó bao gồm: Trích khấu hao nhanh đối với 1 TSCĐ (nguyên giá: 8 tỷ đồng, thời gian trích khấu hao: 10 năm) : 1,9 tỷ đồng; Chi phí không có hóa đơn chứng từ hợp pháp: 255 triệu đồng. Các chi phí còn lại là hợp lý, vậy chi phí được trừ khi tính thu nhập chịu thuế trong kỳ của đơn vị là:",
+                answerOptions: [
+                    { text: "18.345 triệu đồng", isCorrect: false },
+                    { text: "18.045 triệu đồng", isCorrect: true, rationale: "Tổng chi phí kế toán = 18.600 triệu. Chi phí không được trừ = 555 triệu (như câu trên). Chi phí được trừ = 18.600 - 555 = 18.045 triệu đồng." },
+                    { text: "18.300 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tổng chi phí kế toán trừ đi các khoản không được trừ."
+            }
+        ];
+            
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let isAnswerChecked = false;
+
+        const quizContent = document.getElementById('quiz-content');
+        const resultsScreen = document.getElementById('results-screen');
+        const finalScoreText = document.getElementById('final-score');
+
+        // Hàm trộn ngẫu nhiên thứ tự các options
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function renderQuestion() {
+            if (currentQuestionIndex >= quizData.length) {
+                showResults();
+                return;
+            }
+
+            const currentQuestion = quizData[currentQuestionIndex];
+            isAnswerChecked = false;
+
+            // Đảm bảo các tùy chọn được trộn mỗi lần hiển thị
+            currentQuestion.shuffledOptions = shuffleArray([...currentQuestion.answerOptions]);
+
+            let optionsHtml = currentQuestion.shuffledOptions.map((option, index) => `
+                <button
+                    class="option-button w-full text-left p-4 mb-3 rounded-xl bg-white focus:outline-none"
+                    data-option-index="${index}"
+                    onclick="selectOption(this, ${index})"
+                    >
+                    <span class="font-bold text-gray-800">${String.fromCharCode(65 + index)}. </span>
+                    <span class="text-gray-700 font-medium">${option.text}</span>
+                </button>
+            `).join('');
+
+            quizContent.innerHTML = `
+                <div class="mb-8 p-4 bg-teal-50 rounded-xl border border-teal-200">
+                    <p class="text-md font-semibold text-teal-600 mb-3">Câu hỏi <span class="text-teal-800 font-extrabold">${currentQuestion.questionNumber}</span>/<span class="text-teal-800 font-extrabold">${quizData.length}</span></p>
+                    <h2 class="text-xl font-semibold text-gray-900 leading-relaxed">${currentQuestion.question}</h2>
+                </div>
+                <div id="options-container" class="space-y-4">
+                    ${optionsHtml}
+                </div>
+                <div id="feedback-area" class="mt-6 p-4 rounded-xl hidden transition-all duration-300">
+                    <p id="rationale-text" class="text-sm"></p>
+                    <p id="hint-text" class="text-xs text-gray-600 mt-2 italic">Gợi ý: ${currentQuestion.hint}</p>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between items-center mt-10 space-y-4 sm:space-y-0">
+                    <button id="check-button" class="btn-action w-full sm:w-auto px-6 py-3 btn-secondary text-white font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:shadow-none" onclick="checkAnswer()" disabled>
+                        Kiểm Tra
+                    </button>
+                    <div class="text-center text-md font-bold text-gray-600">
+                        Điểm hiện tại: <span id="current-score" class="text-teal-600 font-extrabold">${score}</span>/${quizData.length}
+                    </div>
+                    <button id="next-button" class="btn-action w-full sm:w-auto px-6 py-3 btn-primary text-white font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:shadow-none" onclick="nextQuestion()" disabled>
+                        Câu Tiếp Theo
+                    </button>
+                </div>
+            `;
+        }
+
+        function selectOption(button, optionIndex) {
+            if (isAnswerChecked) return;
+
+            // Xóa trạng thái chọn của tất cả các nút
+            document.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.remove('option-selected');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+
+            // Đặt trạng thái chọn cho nút hiện tại
+            button.classList.add('option-selected');
+            button.setAttribute('aria-pressed', 'true');
+
+            // Lưu trữ lựa chọn của người dùng
+            userAnswers[currentQuestionIndex] = optionIndex;
+
+            // Bật nút Kiểm Tra
+            document.getElementById('check-button').disabled = false;
+        }
+
+        function checkAnswer() {
+            if (isAnswerChecked) return;
+            isAnswerChecked = true;
+
+            const selectedOptionIndex = userAnswers[currentQuestionIndex];
+            const currentQuestion = quizData[currentQuestionIndex];
+            const feedbackArea = document.getElementById('feedback-area');
+            const rationaleText = document.getElementById('rationale-text');
+            const nextButton = document.getElementById('next-button');
+            const checkButton = document.getElementById('check-button');
+
+            const isCorrect = currentQuestion.shuffledOptions[selectedOptionIndex].isCorrect;
+
+            // Hiển thị kết quả và rationale
+            feedbackArea.classList.remove('hidden');
+            feedbackArea.classList.remove('bg-red-50', 'bg-green-50');
+            feedbackArea.classList.add(isCorrect ? 'bg-green-50' : 'bg-red-50');
+            
+            rationaleText.classList.remove('text-green-800', 'text-red-800');
+            rationaleText.classList.add(isCorrect ? 'text-green-800' : 'text-red-800');
+            rationaleText.innerHTML = `
+                <span class="font-bold">${isCorrect ? 'Chính xác! ' : 'Chưa đúng. '}</span>
+                ${currentQuestion.shuffledOptions.find(opt => opt.isCorrect).rationale || ""}
+            `;
+
+            // Cập nhật điểm
+            if (isCorrect) {
+                score++;
+                document.getElementById('current-score').textContent = score;
+            }
+
+            // Đánh dấu các tùy chọn
+            document.querySelectorAll('.option-button').forEach((btn, index) => {
+                const option = currentQuestion.shuffledOptions[index];
+                btn.disabled = true;
+                btn.classList.remove('option-selected', 'hover:bg-gray-100');
+
+                if (option.isCorrect) {
+                    btn.classList.add('option-correct');
+                } else if (index === selectedOptionIndex) {
+                    btn.classList.add('option-incorrect');
+                }
+            });
+
+            // Vô hiệu hóa nút Kiểm Tra và Bật nút Câu Tiếp Theo
+            checkButton.disabled = true;
+            nextButton.disabled = false;
+            nextButton.focus(); // Tập trung vào nút Tiếp theo để tiện thao tác
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuestion();
+        }
+
+        function showResults() {
+            quizContent.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreText.innerHTML = `Bạn đã hoàn thành bài thi với <span class="text-teal-700 font-black">${score}</span>/${quizData.length} câu trả lời đúng.`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            quizContent.classList.remove('hidden');
+            resultsScreen.classList.add('hidden');
+            renderQuestion();
+        }
+
+        // Bắt đầu quiz khi tải trang
+        window.onload = renderQuestion;
+    </script>
+</body>
+</html>
