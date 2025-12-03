@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Thuế Tiêu Thụ Đặc Biệt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Thiết lập font Inter cho giao diện */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdfa; /* Nền xanh nhạt hiện đại */
+        }
+        .quiz-card {
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.1), 0 8px 20px -5px rgba(0, 0, 0, 0.05); /* Đổ bóng sâu hơn */
+        }
+        .option-button {
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            border: 2px solid #e2e8f0; /* Border mềm mại */
+        }
+        .option-button:hover {
+            transform: translateY(-2px);
+            background-color: #f0f9ff; /* Rất nhẹ */
+            border-color: #06b6d4; /* Màu xanh ngọc nhẹ */
+        }
+        /* Hiệu ứng khi chọn */
+        .option-selected {
+            border-color: #06b6d4 !important; /* Xanh ngọc */
+            background-color: #e0f7fa !important;
+            box-shadow: 0 0 0 2px #67e8f9;
+        }
+        /* Hiệu ứng câu trả lời đúng/sai */
+        .option-correct {
+            background-color: #d1fae5 !important;
+            border-color: #059669 !important; /* Xanh lá đậm */
+            box-shadow: 0 0 0 2px #34d399 !important;
+        }
+        .option-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important; /* Đỏ */
+            box-shadow: 0 0 0 2px #fca5a5 !important;
+        }
+        .btn-action {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-primary {
+            background-color: #06b6d4; /* Màu xanh ngọc */
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: #0e7490;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(6, 182, 212, 0.5), 0 2px 4px -2px rgba(6, 182, 212, 0.5);
+        }
+        .btn-secondary {
+            background-color: #10b981; /* Màu xanh lá tươi */
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.5), 0 2px 4px -2px rgba(16, 185, 129, 0.5);
+        }
+        .disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8 flex justify-center items-start min-h-screen">
+
+    <div id="quiz-container" class="relative w-full max-w-3xl bg-white rounded-2xl p-6 sm:p-10 quiz-card transition-all duration-300">
+        <a href="index.html" class="absolute top-6 left-6 z-10">
+            <button class="flex items-center space-x-1 px-4 py-2 text-sm border border-gray-200 bg-gray-50 text-gray-700 font-semibold rounded-full shadow-sm hover:bg-gray-100 transition duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left">
+                    <path d="m12 19-7-7 7-7" />
+                    <path d="M19 12H5" />
+                </svg>
+                <span>Quay lại</span>
+            </button>
+        </a>
+        
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-8 text-center pt-8 sm:pt-4">Ôn Tập: Thuế Tiêu Thụ Đặc Biệt (50 Câu)</h1>
+        <div id="quiz-content">
+            </div>
+        <div id="results-screen" class="hidden text-center py-12">
+            <h2 class="text-4xl font-black text-teal-600 mb-4">Hoàn Thành!</h2>
+            <p id="final-score" class="text-2xl font-semibold text-gray-700 mb-8"></p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-6">
+                <button onclick="restartQuiz()" class="btn-action px-8 py-3 btn-secondary text-white font-bold rounded-xl shadow-lg">
+                    Làm Lại Bài Thi
+                </button>
+                <a href="index.html" class="inline-block">
+                    <button class="w-full sm:w-auto btn-action px-8 py-3 border border-gray-300 bg-white text-gray-700 font-bold rounded-xl shadow-lg hover:bg-gray-100">
+                        Về Trang Chính
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu quiz 50 câu từ file temp.docx về Thuế TTĐB
+        const quizData = [
+            {
+                questionNumber: 1,
+                question: "Hàng hóa nào sau đây thuộc đối tượng chịu thuế tiêu thụ đặc biệt:",
+                answerOptions: [
+                    { text: "Xe mô tô 2 bánh dung tích xilanh 90cm3", isCorrect: false },
+                    { text: "Xe mô tô 2 bánh dung tích xilanh 110cm3", isCorrect: false },
+                    { text: "Xe mô tô 2 bánh dung tích xilanh 150cm3", isCorrect: true, rationale: "Xe mô tô 2 bánh dung tích trên 125cm3 thuộc đối tượng chịu thuế TTĐB." },
+                    { text: "Xe mô tô 2 bánh dung tích xilanh 50cm3", isCorrect: false }
+                ],
+                hint: "Chú ý dung tích xi lanh trên 125cm3."
+            },
+            {
+                questionNumber: 2,
+                question: "Hàng hóa nào sau đây thuộc đối tượng chịu thuế tiêu thụ đặc biệt:",
+                answerOptions: [
+                    { text: "Du thuyền sử dụng cho mục đích kinh doanh du lịch", isCorrect: false },
+                    { text: "Du thuyền sử dụng cho mục đích cá nhân", isCorrect: true, rationale: "Du thuyền, máy bay sử dụng cho mục đích cá nhân thuộc diện chịu thuế TTĐB (trừ loại sử dụng cho kinh doanh vận chuyển)." },
+                    { text: "Máy bay sử dụng cho mục đích vận chuyển hàng hóa", isCorrect: false },
+                    { text: "Máy bay sử dụng cho mục đích vận chuyển hành khách", isCorrect: false }
+                ],
+                hint: "Phương tiện phục vụ mục đích cá nhân, dân dụng."
+            },
+            {
+                questionNumber: 3,
+                question: "Hàng hóa nào sau đây thuộc đối tượng KHÔNG chịu thuế tiêu thụ đặc biệt:",
+                answerOptions: [
+                    { text: "Rượu vang 200 sản xuất tại Việt Nam và bán cho người tiêu dùng tại Việt Nam", isCorrect: false },
+                    { text: "Rượu vang 200 nhập khẩu từ nước ngoài về Việt Nam và bán cho người tiêu dùng tại Việt Nam", isCorrect: false },
+                    { text: "Rượu vang 200 sản xuất tại Việt Nam xuất khẩu ra nước ngoài", isCorrect: true, rationale: "Hàng hóa xuất khẩu không thuộc diện chịu thuế TTĐB (hoặc chịu 0% tùy cách gọi, nhưng bản chất là không phải nộp thuế TTĐB trong nước)." },
+                    { text: "Rượu vang 200 sản xuất tại Việt Nam bán cho người nước ngoài đang du lịch tại Việt Nam", isCorrect: false }
+                ],
+                hint: "Hàng hóa xuất khẩu."
+            },
+            {
+                questionNumber: 4,
+                question: "Hàng hóa nào sau đây thuộc đối tượng chịu thuế tiêu thụ đặc biệt:",
+                answerOptions: [
+                    { text: "Quần áo thời trang cao cấp", isCorrect: false },
+                    { text: "Giày dép túi xách cao cấp", isCorrect: false },
+                    { text: "Rượu cao cấp", isCorrect: true, rationale: "Rượu là mặt hàng chịu thuế TTĐB, không phân biệt cao cấp hay bình dân." },
+                    { text: "Mỹ phẩm cao cấp", isCorrect: false }
+                ],
+                hint: "Chỉ có Rượu nằm trong danh mục."
+            },
+            {
+                questionNumber: 5,
+                question: "Hàng hóa nào sau đây thuộc đối tượng chịu thuế tiêu thụ đặc biệt:",
+                answerOptions: [
+                    { text: "Rượu do công ty Việt Nam sản xuất và tiêu thụ nội địa", isCorrect: true, rationale: "Hàng hóa sản xuất và tiêu dùng trong nước thuộc diện chịu thuế." },
+                    { text: "Rượu do công ty Việt Nam sản xuất bán cho công ty thương mại để xuất khẩu theo hợp đồng kinh tế", isCorrect: false },
+                    { text: "Rượu do công ty Việt Nam sản xuất trực tiếp xuất khẩu", isCorrect: false },
+                    { text: "Rượu do công ty Việt Nam sản xuất bán vào khu phi thuế quan", isCorrect: false }
+                ],
+                hint: "Tiêu thụ nội địa."
+            },
+            {
+                questionNumber: 6,
+                question: "Hàng hóa nào sau đây KHÔNG thuộc đối tượng chịu thuế tiêu thụ đặc biệt:",
+                answerOptions: [
+                    { text: "Xe ô tô 16 chỗ ngồi bán cho doanh nghiệp kinh doanh vận tải", isCorrect: false },
+                    { text: "Xe ô tô 45 chỗ ngồi bán cho doanh nghiệp kinh doanh vận tải", isCorrect: true, rationale: "Chỉ ô tô dưới 24 chỗ ngồi mới chịu thuế TTĐB. Xe 45 chỗ không chịu thuế TTĐB." },
+                    { text: "Xe ô tô 7 chỗ ngồi bán cho cá nhân", isCorrect: false },
+                    { text: "Xe ô tô 9 chỗ ngồi bán cho cá nhân", isCorrect: false }
+                ],
+                hint: "Xe trên 24 chỗ ngồi."
+            },
+            {
+                questionNumber: 7,
+                question: "Hàng hóa nào sau đây KHÔNG thuộc đối tượng chịu thuế tiêu thụ đặc biệt:",
+                answerOptions: [
+                    { text: "Xe mô tô 2 bánh 150cm3 bán cho cá nhân", isCorrect: false },
+                    { text: "Xe ô tô 45 chỗ ngồi bán cho doanh nghiệp kinh doanh vận tải", isCorrect: true, rationale: "Xe trên 24 chỗ ngồi." },
+                    { text: "Xe ô tô 7 chỗ ngồi bán cho cá nhân", isCorrect: false },
+                    { text: "Xe ô tô 9 chỗ ngồi bán cho cá nhân", isCorrect: false }
+                ],
+                hint: "Xe chở khách cỡ lớn."
+            },
+            {
+                questionNumber: 8,
+                question: "Hàng hóa nào sau đây thuộc đối tượng chịu thuế tiêu thụ đặc biệt:",
+                answerOptions: [
+                    { text: "Xe ô tô 7 chỗ ngồi được thiết kế nhằm mục đích chuyên chở phạm nhân", isCorrect: false },
+                    { text: "Xe ô tô 16 chỗ ngồi phục vụ tang lễ", isCorrect: false },
+                    { text: "Xe ô tô 9 chỗ ngồi phục được thiết kế nhằm mục đích chuyên chở bệnh nhân", isCorrect: false },
+                    { text: "Xe ô tô 9 chỗ ngồi bán cho gia đình sử dụng cho mục đích cá nhân", isCorrect: true, rationale: "Xe thiết kế chuyên dùng (cứu thương, chở phạm nhân, tang lễ) không chịu thuế TTĐB. Xe cá nhân 9 chỗ thì có." }
+                ],
+                hint: "Xe phục vụ mục đích cá nhân thông thường."
+            },
+            {
+                questionNumber: 9,
+                question: "Giá tính thuế tiêu thụ đặc biệt của hàng hóa sản xuất và tiêu dùng tại Việt Nam thuộc đối tượng chịu thuế tiêu thụ đặc biệt được xác định bằng:",
+                answerOptions: [
+                    { text: "Giá bán của cơ sở sản xuất chưa bao gồm thuế giá trị gia tăng", isCorrect: false },
+                    { text: "Giá bán của cơ sở sản xuất chưa có thuế giá trị gia tăng, chưa có thuế tiêu thụ đặc biệt, chưa có thuế bảo vệ môi trường (nếu có)", isCorrect: true, rationale: "Giá tính thuế TTĐB = (Giá bán chưa có thuế GTGT - Thuế BVMT) / (1 + Thuế suất TTĐB). Tức là giá chưa bao gồm các loại thuế này." },
+                    { text: "Giá bán của cơ sở sản xuất chưa có thuế giá trị gia tăng, chưa có thuế tiêu thụ đặc biệt, đã có thuế bảo vệ môi trường (nếu có)", isCorrect: false },
+                    { text: "Giá bán của cơ sở sản xuất đã có thuế giá trị gia tăng, chưa có thuế tiêu thụ đặc biệt, chưa có thuế bảo vệ môi trường (nếu có)", isCorrect: false }
+                ],
+                hint: "Giá chưa bao gồm bất kỳ loại thuế gián thu nào."
+            },
+            {
+                questionNumber: 10,
+                question: "Giá tính thuế tiêu thụ đặc biệt của hàng hóa nhập khẩu tại khâu nhập khẩu được xác định bằng:",
+                answerOptions: [
+                    { text: "Giá tính thuế nhập khẩu", isCorrect: false },
+                    { text: "Giá tính thuế nhập khẩu + Thuế nhập khẩu", isCorrect: true, rationale: "Giá tính thuế TTĐB hàng NK = Giá tính thuế NK + Thuế NK." },
+                    { text: "Giá tính thuế nhập khẩu + Thuế nhập khẩu + Thuế GTGT khâu nhập khẩu", isCorrect: false },
+                    { text: "Giá tính thuế nhập khẩu + Thuế GTGT khâu nhập khẩu", isCorrect: false }
+                ],
+                hint: "Cộng thêm thuế nhập khẩu vào giá gốc."
+            },
+            {
+                questionNumber: 11,
+                question: "Hàng hóa nào sau đây KHÔNG thuộc đối tượng chịu thuế tiêu thụ đặc biệt:",
+                answerOptions: [
+                    { text: "Điều hòa nhiệt độ công suất 9.000BTU", isCorrect: false },
+                    { text: "Điều hòa nhiệt độ công suất 12.000BTU", isCorrect: false },
+                    { text: "Điều hòa nhiệt độ công suất 18.000BTU", isCorrect: false },
+                    { text: "Điều hòa nhiệt độ công suất trên 90.000BTU", isCorrect: true, rationale: "Điều hòa công suất từ 90.000 BTU trở xuống mới chịu thuế TTĐB. Trên 90.000 BTU thì không." }
+                ],
+                hint: "Công suất lớn dùng cho công nghiệp."
+            },
+            {
+                questionNumber: 12,
+                question: "Dịch vụ nào sau đây KHÔNG thuộc đối tượng chịu thuế tiêu thụ đặc biệt:",
+                answerOptions: [
+                    { text: "Kinh doanh mát-xa", isCorrect: false },
+                    { text: "Kinh doanh vũ trường", isCorrect: false },
+                    { text: "Kinh doanh du lịch", isCorrect: true, rationale: "Du lịch không thuộc diện chịu thuế TTĐB. Chỉ có kinh doanh xổ số, đặt cược, casino, golf, vũ trường, massage, karaoke." },
+                    { text: "Kinh doanh ka-ra-ô-kê", isCorrect: false }
+                ],
+                hint: "Dịch vụ phổ thông."
+            },
+            {
+                questionNumber: 13,
+                question: "Dịch vụ nào sau đây KHÔNG thuộc đối tượng chịu thuế tiêu thụ đặc biệt:",
+                answerOptions: [
+                    { text: "Kinh doanh đặt cược", isCorrect: false },
+                    { text: "Kinh doanh xổ số", isCorrect: false },
+                    { text: "Kinh doanh sân golf", isCorrect: false },
+                    { text: "Kinh doanh sân chơi trẻ em", isCorrect: true, rationale: "Sân chơi trẻ em không thuộc đối tượng chịu thuế TTĐB." }
+                ],
+                hint: "Khu vui chơi lành mạnh cho trẻ em."
+            },
+            {
+                questionNumber: 14,
+                question: "Đối với dịch vụ thuộc đối tượng chịu thuế tiêu thụ đặc biệt, giá tính thuế tiêu thụ đặc biệt được xác định bằng",
+                answerOptions: [
+                    { text: "Giá dịch vụ chưa có thuế GTGT / (1 + thuế suất thuế TTĐB)", isCorrect: true, rationale: "Công thức quy đổi giá chưa thuế TTĐB." },
+                    { text: "Giá dịch vụ chưa có thuế GTGT", isCorrect: false },
+                    { text: "Giá dịch vụ chưa có thuế GTGT / Thuế suất thuế TTĐB", isCorrect: false },
+                    { text: "Giá dịch vụ chưa có thuế GTGT / (1 – Thuế suất thuế TTĐB)", isCorrect: false }
+                ],
+                hint: "Chia cho (1 + thuế suất)."
+            },
+            {
+                questionNumber: 15,
+                question: "Trường hợp cơ sở kinh doanh sân golf có kinh doanh các hàng hóa, dịch vụ khác không thuộc đối tượng chịu thuế tiêu thụ đặc biệt như khách sạn, ăn uống thì doanh thu kinh doanh các hàng hóa dịch vụ đó:",
+                answerOptions: [
+                    { text: "Phải đưa vào tính thuế tiêu thụ đặc biệt", isCorrect: false },
+                    { text: "Đưa vào tính thuế tiêu thụ đặc biệt nếu cơ quan thuế yêu cầu", isCorrect: false },
+                    { text: "Không phải đưa vào tính thuế tiêu thụ đặc biệt nếu cơ quan thuế không yêu cầu", isCorrect: false },
+                    { text: "Không phải đưa vào tính thuế tiêu thụ đặc biệt", isCorrect: true, rationale: "Hàng hóa dịch vụ không thuộc đối tượng chịu thuế TTĐB thì không phải tính thuế này." }
+                ],
+                hint: "Chỉ tính trên đối tượng chịu thuế."
+            },
+            {
+                questionNumber: 16,
+                question: "Anh Nam mua 1 chai rượu ngoại 400 có giá mua chưa bao gồm thuế giá trị gia tăng là 1.980.000đ. Thuế suất thuế giá trị gia tăng của rượu là 10%, thuế suất thuế tiêu thụ đặc biệt của rượu 400 là 65%. Giá tính thuế tiêu thụ đặc biệt của chai rượu này là:",
+                answerOptions: [
+                    { text: "1.200.000 đồng", isCorrect: true, rationale: "Giá mua chưa VAT = 1.980.000 (đã có TTĐB). Giá tính thuế TTĐB = 1.980.000 / (1 + 65%) = 1.200.000đ." },
+                    { text: "1.000.000 đồng", isCorrect: false },
+                    { text: "1.100.000 đồng", isCorrect: false },
+                    { text: "900.000 đồng", isCorrect: false }
+                ],
+                hint: "1.980.000 / 1.65."
+            },
+            {
+                questionNumber: 17,
+                question: "Anh Nam mua 1 chai rượu ngoại 400 có giá mua chưa bao gồm thuế giá trị gia tăng là 1.980.000đ. Thuế suất thuế giá trị gia tăng của rượu là 10%, thuế suất thuế tiêu thụ đặc biệt của rượu 400 là 65%. Thuế tiêu thụ đặc biệt anh Nam phải trả cho chai rượu này là:",
+                answerOptions: [
+                    { text: "650.000 đồng", isCorrect: false },
+                    { text: "780.000 đồng", isCorrect: true, rationale: "Giá tính thuế = 1.200.000đ. Thuế TTĐB = 1.200.000 * 65% = 780.000đ." },
+                    { text: "715.000 đồng", isCorrect: false },
+                    { text: "585.000 đồng", isCorrect: false }
+                ],
+                hint: "1.200.000 x 65%."
+            },
+            {
+                questionNumber: 18,
+                question: "Chị Hà mua 1 chiếc xe máy SH dung tích xi lanh 150cm3, tổng số tiền thanh toán đã bao gồm thuế giá trị gia tăng là 105.600.000 đồng. Thuế suất thuế giá trị gia tăng của xe máy là 10%. Thuế suất thuế tiêu thụ đặc biệt của xe máy là 20%. Giá tính thuế tiêu thụ đặc biệt của chiếc xe máy này là:",
+                answerOptions: [
+                    { text: "96.000.000 đồng", isCorrect: false },
+                    { text: "80.000.000 đồng", isCorrect: true, rationale: "Giá chưa VAT = 105.6 / 1.1 = 96tr. Giá tính TTĐB = 96 / (1 + 20%) = 80tr." },
+                    { text: "88.000.000 đồng", isCorrect: false },
+                    { text: "84.000.000 đồng", isCorrect: false }
+                ],
+                hint: "Lấy giá thanh toán chia 1.1 rồi chia 1.2."
+            },
+            {
+                questionNumber: 19,
+                question: "Chị Hà mua 1 chiếc xe máy SH dung tích xi lanh 150cm3 (Giá thanh toán 105.6tr). Thuế suất thuế tiêu thụ đặc biệt là 20%. Thuế tiêu thụ đặc biệt chị Hà phải trả cho chiếc xe này là:",
+                answerOptions: [
+                    { text: "16.000.000 đồng", isCorrect: true, rationale: "Giá tính thuế TTĐB là 80tr. Thuế TTĐB = 80 * 20% = 16tr." },
+                    { text: "19.200.000 đồng", isCorrect: false },
+                    { text: "17.600.000 đồng", isCorrect: false },
+                    { text: "14.000.000 đồng", isCorrect: false }
+                ],
+                hint: "80 triệu x 20%."
+            },
+            {
+                questionNumber: 20,
+                question: "Anh Minh đi siêu thị bigC mua 1 két bia Heniken về ăn Tết. Két bia này có giá bán chưa bao gồm thuế GTGT là 1.155.000 đồng. Thuế suất thuế giá trị gia tăng của bia là 10%. Thuế suất tiêu thụ đặc biệt của bia là 65%. Giá tính thuế tiêu thụ đặc biệt của két bia này là:",
+                answerOptions: [
+                    { text: "1.155.000 đồng", isCorrect: false },
+                    { text: "900.000 đồng", isCorrect: false },
+                    { text: "700.000 đồng", isCorrect: true, rationale: "Giá chưa VAT (đã có TTĐB) = 1.155.000. Giá tính TTĐB = 1.155.000 / (1 + 65%) = 700.000đ." },
+                    { text: "800.000 đồng", isCorrect: false }
+                ],
+                hint: "1.155.000 / 1.65."
+            },
+            {
+                questionNumber: 21,
+                question: "Anh Minh đi siêu thị bigC mua 1 két bia Heniken (Giá chưa VAT 1.155.000đ). Thuế tiêu thụ đặc biệt của bia là 65%. Thuế tiêu thụ đặc biệt anh Minh phải trả cho két bia này là:",
+                answerOptions: [
+                    { text: "585.000 đồng", isCorrect: false },
+                    { text: "750.750 đồng", isCorrect: false },
+                    { text: "520.000 đồng", isCorrect: false },
+                    { text: "455.000 đồng", isCorrect: true, rationale: "Giá tính thuế 700.000. Thuế = 700.000 * 65% = 455.000đ." }
+                ],
+                hint: "700.000 x 65%."
+            },
+            {
+                questionNumber: 22,
+                question: "Công ty TNHH Hoàng Anh chuyên kinh doanh xe oto nhập khẩu. Ngày 10/5/N, công ty nhập khẩu 1 lô hàng 10 chiếc xe oto 4 chỗ Vios2.0 với giá tính thuế nhập khẩu là 300.000.000 đồng/chiếc. Thuế suất thuế nhập khẩu là 50%. Giá tính thuế tiêu thụ đặc biệt của 1 chiếc xe oto nhập khẩu này là:",
+                answerOptions: [
+                    { text: "450.000.000 đồng", isCorrect: true, rationale: "Thuế NK = 300 * 50% = 150tr. Giá tính TTĐB = 300 + 150 = 450tr." },
+                    { text: "435.000.000 đồng", isCorrect: false },
+                    { text: "4.500.000.000 đồng", isCorrect: false },
+                    { text: "4.350.000.000 đồng", isCorrect: false }
+                ],
+                hint: "Giá nhập + Thuế nhập."
+            },
+            {
+                questionNumber: 23,
+                question: "Công ty TNHH Hoàng Anh (như câu trên). Thuế suất thuế tiêu thụ đặc biệt của dòng xe này là 45%. Thuế tiêu thụ đặc biệt phải nộp tại khâu nhập khẩu của lô hàng 10 chiếc này là:",
+                answerOptions: [
+                    { text: "202.500.000 đồng", isCorrect: false },
+                    { text: "217.500.000 đồng", isCorrect: false },
+                    { text: "2.175.000.000 đồng", isCorrect: false },
+                    { text: "2.025.000.000 đồng", isCorrect: true, rationale: "Giá tính TTĐB/chiếc = 450tr. Thuế/chiếc = 450 * 45% = 202.5tr. Tổng 10 chiếc = 2.025.000.000đ." }
+                ],
+                hint: "Tính cho cả lô 10 chiếc."
+            },
+            {
+                questionNumber: 24,
+                question: "Công ty cổ phần Thăng Long bán cho công ty Hà Anh 1.000 chai rượu Vodka 300 để tiêu thụ nội địa với giá bán chưa bao gồm thuế giá trị gia tăng là 66.000 đồng/chai. Thuế suất thuế tiêu thụ đặc biệt của rượu trên 200 là 65%. Thuế tiêu thụ đặc biệt công ty Thăng Long phải kê khai là:",
+                answerOptions: [
+                    { text: "40.000.000 đồng", isCorrect: false },
+                    { text: "26.000.000 đồng", isCorrect: true, rationale: "Giá tính thuế = 66.000 / 1.65 = 40.000đ/chai. Thuế = 40.000 * 65% * 1000 = 26.000.000đ." },
+                    { text: "36.363.000 đồng", isCorrect: false },
+                    { text: "23.636.000 đồng", isCorrect: false }
+                ],
+                hint: "Tính ngược từ giá bán chưa VAT."
+            },
+            {
+                questionNumber: 25,
+                question: "Công ty Thăng Long (như câu trên) bán 1000 chai nội địa (giá 66.000) và 600 chai xuất khẩu (giá 74.250). Thuế tiêu thụ đặc biệt phải kê khai là:",
+                answerOptions: [
+                    { text: "40.000.000 đồng", isCorrect: false },
+                    { text: "26.000.000 đồng", isCorrect: true, rationale: "Hàng xuất khẩu không chịu thuế TTĐB. Chỉ tính thuế cho 1000 chai nội địa: 26.000.000đ." },
+                    { text: "43.550.000 đồng", isCorrect: false },
+                    { text: "17.550.000 đồng", isCorrect: false }
+                ],
+                hint: "Chỉ tính phần tiêu thụ nội địa."
+            },
+            {
+                questionNumber: 26,
+                question: "Công ty Thăng Long bán 1.500 chai rượu vang nho 150 với giá bán chưa bao gồm thuế GTGT là 67.500 đồng/chai để tiêu thụ nội địa. Thuế suất thuế TTĐB rượu dưới 200 là 35%. Thuế tiêu thụ đặc biệt phải kê khai là:",
+                answerOptions: [
+                    { text: "26.250.000 đồng", isCorrect: true, rationale: "Giá tính thuế = 67.500 / 1.35 = 50.000đ. Thuế = 50.000 * 35% * 1500 = 26.250.000đ." },
+                    { text: "17.500.000 đồng", isCorrect: false },
+                    { text: "50.000.000 đồng", isCorrect: false },
+                    { text: "75.000.000 đồng", isCorrect: false }
+                ],
+                hint: "50.000đ x 35% x 1500."
+            },
+            {
+                questionNumber: 27,
+                question: "Công ty Thăng Long bán: 1.000 chai Vodka 300 (giá 66.000, thuế suất 65%) và 1.500 chai vang 150 (giá 67.500, thuế suất 35%). Thuế tiêu thụ đặc biệt phải kê khai là:",
+                answerOptions: [
+                    { text: "26.000.000 đồng", isCorrect: false },
+                    { text: "26.250.000 đồng", isCorrect: false },
+                    { text: "52.250.000 đồng", isCorrect: true, rationale: "Tổng thuế = Thuế Vodka (26tr) + Thuế Vang (26.25tr) = 52.250.000đ." },
+                    { text: "50.250.000đồng", isCorrect: false }
+                ],
+                hint: "Cộng kết quả 2 câu trên."
+            },
+            {
+                questionNumber: 28,
+                question: "Công ty Thăng Long: Trực tiếp xuất khẩu 2.000 chai Vodka. Bán nội địa 500 chai Vodka (giá 66.000, thuế 65%). Thuế tiêu thụ đặc biệt phải kê khai là:",
+                answerOptions: [
+                    { text: "52.000.000 đồng", isCorrect: false },
+                    { text: "65.000.000 đồng", isCorrect: false },
+                    { text: "78.000.000 đồng", isCorrect: false },
+                    { text: "13.000.000 đồng", isCorrect: true, rationale: "Trực tiếp XK miễn thuế. Nội địa: 500 chai * (66.000/1.65 * 0.65) = 500 * 26.000 = 13.000.000đ." }
+                ],
+                hint: "Chỉ tính 500 chai nội địa."
+            },
+            {
+                questionNumber: 29,
+                question: "Công ty Thăng Long: Xuất khẩu 2000 chai. Bán nội địa 500 chai. Bán cho cty Hoàng Anh 1000 chai để xuất khẩu theo hợp đồng (đủ hồ sơ). Thuế TTĐB phải kê khai:",
+                answerOptions: [
+                    { text: "13.000.000 đồng", isCorrect: true, rationale: "Xuất khẩu và bán cho cty TM để xuất khẩu (có đủ hồ sơ) đều không chịu thuế TTĐB. Chỉ tính 500 chai nội địa: 13.000.000đ." },
+                    { text: "52.000.000 đồng", isCorrect: false },
+                    { text: "32.500.000 đồng", isCorrect: false },
+                    { text: "97.500.000 đồng", isCorrect: false }
+                ],
+                hint: "Bán cho công ty thương mại để xuất khẩu được miễn thuế."
+            },
+            {
+                questionNumber: 30,
+                question: "Công ty Thăng Long bán cho công ty Hoàng Anh 1.000 chai rượu Vodka 400 để xuất khẩu theo hợp đồng kinh tế đã ký với bên nước ngoài (có hợp đồng và chứng từ đầy đủ). Thuế tiêu thụ đặc biệt phải kê khai cho đơn hàng này là:",
+                answerOptions: [
+                    { text: "84.500.000 đồng", isCorrect: false },
+                    { text: "52.000.000 đồng", isCorrect: false },
+                    { text: "32.500.000 đồng", isCorrect: false },
+                    { text: "0 đồng", isCorrect: true, rationale: "Hàng bán để xuất khẩu có đủ hồ sơ không chịu thuế TTĐB." }
+                ],
+                hint: "Không chịu thuế."
+            },
+            {
+                questionNumber: 31,
+                question: "Công ty Tuấn Phát nhập 5 chiếc xe Altis 2.0. Giá tính thuế NK 400tr/chiếc. Thuế NK 50%. Giá tính thuế TTĐB tại khâu nhập khẩu của lô hàng này là:",
+                answerOptions: [
+                    { text: "600.000.000 đồng", isCorrect: false },
+                    { text: "3.000.000.000 đồng", isCorrect: true, rationale: "Giá tính TTĐB đơn vị = 400 + (400*50%) = 600tr. Lô 5 chiếc = 600 * 5 = 3 tỷ." },
+                    { text: "870.000.000 đồng", isCorrect: false },
+                    { text: "4.350.000.000 đồng", isCorrect: false }
+                ],
+                hint: "Tính tổng cho 5 chiếc."
+            },
+            {
+                questionNumber: 32,
+                question: "Công ty Tuấn Phát nhập 5 chiếc xe Altis 2.0 (như trên). Thuế TTĐB 45%. Thuế TTĐB phải nộp tại cơ quan hải quan của lô hàng này là:",
+                answerOptions: [
+                    { text: "270.000.000 đồng", isCorrect: false },
+                    { text: "391.500.000 đồng", isCorrect: false },
+                    { text: "1.350.000.000 đồng", isCorrect: true, rationale: "Giá tính thuế lô hàng 3 tỷ. Thuế TTĐB = 3 tỷ * 45% = 1.350.000.000đ." },
+                    { text: "1.957.500.000 đồng", isCorrect: false }
+                ],
+                hint: "3 tỷ x 45%."
+            },
+            {
+                questionNumber: 33,
+                question: "Công ty Tuấn Phát tiêu thụ 2 chiếc xe với giá bán chưa bao gồm thuế GTGT là 957.000.000đ/chiếc. Thuế TTĐB 45%. Giá tính thuế tiêu thụ đặc biệt tại khâu bán ra của 1 chiếc xe này là:",
+                answerOptions: [
+                    { text: "660.000.000 đồng", isCorrect: true, rationale: "Giá tính thuế = 957 / 1.45 = 660.000.000đ." },
+                    { text: "1.320.000.000 đồng", isCorrect: false },
+                    { text: "957.000.000 đồng", isCorrect: false },
+                    { text: "1.914.000.000 đồng", isCorrect: false }
+                ],
+                hint: "Giá bán chưa VAT / 1.45."
+            },
+            {
+                questionNumber: 34,
+                question: "Công ty Tuấn Phát tiêu thụ 2 chiếc xe (giá tính thuế 660tr/chiếc). Thuế tiêu thụ đặc biệt tại khâu bán ra của 1 chiếc xe là:",
+                answerOptions: [
+                    { text: "594.000.000 đồng", isCorrect: false },
+                    { text: "297.000.000 đồng", isCorrect: true, rationale: "660tr * 45% = 297.000.000đ." },
+                    { text: "430.650.000 đồng", isCorrect: false },
+                    { text: "861.300.000 đồng", isCorrect: false }
+                ],
+                hint: "660tr x 45%."
+            },
+            {
+                questionNumber: 35,
+                question: "Công ty Tuấn Phát bán 2 chiếc xe. Thuế tiêu thụ đặc biệt phải nộp cho cơ quan thuế đối với hoạt động này (sau khi trừ thuế đã nộp ở khâu nhập khẩu) là:",
+                answerOptions: [
+                    { text: "594.000.000 đồng", isCorrect: false },
+                    { text: "297.000.000 đồng", isCorrect: false },
+                    { text: "54.000.000 đồng", isCorrect: true, rationale: "Đầu ra 2 xe: 297*2 = 594tr. Đầu vào đã nộp 2 xe: (600*45%)*2 = 270*2 = 540tr. Phải nộp = 594 - 540 = 54tr." },
+                    { text: "540.000.000 đồng", isCorrect: false }
+                ],
+                hint: "Thuế đầu ra - Thuế đã nộp khâu nhập khẩu."
+            },
+            {
+                questionNumber: 36,
+                question: "Hóa đơn karaoke: Tiền hát 1.800.000, hoa quả 550.000, đồ uống 2.200.000 (tất cả chưa VAT). Thuế suất TTĐB 30%. Giá tính thuế tiêu thụ đặc biệt là:",
+                answerOptions: [
+                    { text: "1.800.000 đồng", isCorrect: false },
+                    { text: "3.076.923 đồng", isCorrect: false },
+                    { text: "1.384.615 đồng", isCorrect: false },
+                    { text: "3.500.000 đồng", isCorrect: true, rationale: "Tổng doanh thu chịu thuế = 1.8 + 0.55 + 2.2 = 4.55tr. Giá tính thuế = 4.550.000 / 1.3 = 3.500.000đ." }
+                ],
+                hint: "Tính tổng tất cả các khoản thu rồi chia 1.3."
+            },
+            {
+                questionNumber: 37,
+                question: "Số tiền thuế tiêu thụ đặc biệt mà cơ sở kinh doanh karaoke phải kê khai trong trường hợp trên là:",
+                answerOptions: [
+                    { text: "540.000 đồng", isCorrect: false },
+                    { text: "1.050.000 đồng", isCorrect: true, rationale: "3.500.000 * 30% = 1.050.000đ." },
+                    { text: "1.365.000 đồng", isCorrect: false },
+                    { text: "1.200.000 đồng", isCorrect: false }
+                ],
+                hint: "3.5tr x 30%."
+            },
+            {
+                questionNumber: 38,
+                question: "Hàng hóa thuộc đối tượng chịu thuế tiêu thụ đặc biệt nếu bán theo phương thức trả chậm trả góp thì giá tính thuế được xác định bằng:",
+                answerOptions: [
+                    { text: "Giá tính thuế tiêu thụ đặc biệt của hàng hóa cùng loại bán theo phương thức trả tiền một lần, không bao gồm khoản lãi trả chậm, trả góp.", isCorrect: true, rationale: "Không tính lãi trả chậm vào giá tính thuế TTĐB." },
+                    { text: "Giá tính thuế tiêu thụ đặc biệt của hàng hóa cùng loại bán theo phương thức trả tiền một lần cộng (+) khoản lãi trả chậm, trả góp", isCorrect: false },
+                    { text: "Giá tính thuế tiêu thụ đặc biệt của hàng hóa cùng loại bán theo phương thức trả tiền một lần trừ (-) khoản lãi trả chậm, trả góp", isCorrect: false },
+                    { text: "Giá tính thuế tiêu thụ đặc biệt của hàng hóa cùng loại bán theo phương thức trả tiền một lần", isCorrect: false }
+                ],
+                hint: "Theo giá bán trả tiền một lần."
+            },
+            {
+                questionNumber: 39,
+                question: "Hàng hóa thuộc đối tượng chịu thuế tiêu thụ đặc biệt dùng để cho, biếu, tặng thì giá tính thuế tiêu thụ đặc biệt được xác định bằng:",
+                answerOptions: [
+                    { text: "0", isCorrect: false },
+                    { text: "Không tính thuế tiêu thụ đặc biệt", isCorrect: false },
+                    { text: "Giá tính thuế tiêu thụ đặc biệt của hàng hóa cùng loại hoặc tương đương tại thời điểm phát sinh hoạt động cho, biếu, tặng.", isCorrect: true, rationale: "Hàng biếu tặng vẫn phải tính thuế theo giá thị trường." },
+                    { text: "½ Giá tính thuế tiêu thụ đặc biệt của hàng hóa cùng loại hoặc tương đương tại thời điểm phát sinh hoạt động cho, biếu, tặng.", isCorrect: false }
+                ],
+                hint: "Tính theo giá hàng cùng loại."
+            },
+            {
+                questionNumber: 40,
+                question: "Cơ sở kinh doanh xuất khẩu mua hàng hóa thuộc đối tượng chịu thuế tiêu thụ đặc biệt của cơ sở sản xuất để xuất khẩu nhưng không xuất khẩu mà bán trong nước thì giá tính thuế tiêu thụ đặc biệt trong trường hợp này được xác định bằng:",
+                answerOptions: [
+                    { text: "0", isCorrect: false },
+                    { text: "Không phải kê khai nộp thuế tiêu thụ đặc biệt", isCorrect: false },
+                    { text: "Giá bán chưa bao gồm thuế GTGT", isCorrect: false },
+                    { text: "Giá tính thuế tiêu thụ đặc biệt của sản phẩm này bán tại thị trường nội địa", isCorrect: true, rationale: "Phải nộp thuế TTĐB như bán hàng nội địa bình thường." }
+                ],
+                hint: "Coi như tiêu thụ nội địa."
+            },
+            {
+                questionNumber: 41,
+                question: "Sân golf: Bán thẻ 600tr, Vé chơi 500tr, Ký quỹ 100tr. Thuế suất 20%. Số thuế tiêu thụ đặc biệt phải kê khai là:",
+                answerOptions: [
+                    { text: "100.000.000 đồng", isCorrect: false },
+                    { text: "200.000.000 đồng", isCorrect: true, rationale: "Doanh thu tính thuế gồm thẻ và vé và ký quỹ (nếu coi là doanh thu). Thông thường bài tập này tính tổng: 600+500+100=1200. Giá tính thuế = 1200/1.2 = 1000. Thuế = 200tr." },
+                    { text: "183.333.333 đồng", isCorrect: false },
+                    { text: "116.666.667 đồng", isCorrect: false }
+                ],
+                hint: "Tính trên tổng các khoản thu."
+            },
+            {
+                questionNumber: 42,
+                question: "Sân golf: Bán thẻ 600tr, Vé chơi 500tr, Ký quỹ 100tr, Trả lại ký quỹ 50tr. Số thuế tiêu thụ đặc biệt phải kê khai là:",
+                answerOptions: [
+                    { text: "100.000.000 đồng", isCorrect: false },
+                    { text: "200.000.000 đồng", isCorrect: false },
+                    { text: "191.666.667 đồng", isCorrect: true, rationale: "Tổng thu ròng = 600+500+100-50 = 1150tr. Giá tính thuế = 1150/1.2 = 958.33. Thuế = 191.66tr." },
+                    { text: "116.666.667 đồng", isCorrect: false }
+                ],
+                hint: "Trừ đi tiền ký quỹ trả lại."
+            },
+            {
+                questionNumber: 43,
+                question: "Sân golf: Thẻ 600tr, Vé 500tr, Ký quỹ 100tr, Bán đồ ăn 200tr. Số thuế tiêu thụ đặc biệt phải kê khai là:",
+                answerOptions: [
+                    { text: "200.000.000 đồng", isCorrect: true, rationale: "Đồ ăn không chịu thuế TTĐB. Chỉ tính trên doanh thu Golf (600+500+100=1200). Thuế = 200tr." },
+                    { text: "100.000.000 đồng", isCorrect: false },
+                    { text: "233.333.333 đồng", isCorrect: false },
+                    { text: "183.333.333 đồng", isCorrect: false }
+                ],
+                hint: "Loại trừ doanh thu ăn uống."
+            },
+            {
+                questionNumber: 44,
+                question: "Mát-xa: Doanh thu mát-xa 1 tỷ, tắm xông hơi 300tr. Thuế suất 30%. Số thuế tiêu thụ đặc biệt là:",
+                answerOptions: [
+                    { text: "230.769.230 đồng", isCorrect: false },
+                    { text: "300.000.000 đồng", isCorrect: true, rationale: "Cả mát-xa và xông hơi đều chịu thuế. Tổng 1.3 tỷ. Giá tính thuế = 1300/1.3 = 1000. Thuế = 300tr." },
+                    { text: "200.000.000 đồng", isCorrect: false },
+                    { text: "100.000.000 đồng", isCorrect: false }
+                ],
+                hint: "Cộng cả xông hơi."
+            },
+            {
+                questionNumber: 45,
+                question: "Mát-xa 1 tỷ, xông hơi 300tr, ăn uống 130tr. Số thuế tiêu thụ đặc biệt là:",
+                answerOptions: [
+                    { text: "230.769.230 đồng", isCorrect: false },
+                    { text: "300.000.000 đồng", isCorrect: true, rationale: "Ăn uống không chịu thuế TTĐB. Chỉ tính trên 1.3 tỷ. Thuế = 300tr." },
+                    { text: "330.000.000 đồng", isCorrect: false },
+                    { text: "260.769.230 đồng", isCorrect: false }
+                ],
+                hint: "Loại trừ ăn uống."
+            },
+            {
+                questionNumber: 46,
+                question: "Đặt cược: Bán vé 6 tỷ, trả thưởng 3.4 tỷ. Thuế suất 30%. Số thuế tiêu thụ đặc biệt là:",
+                answerOptions: [
+                    { text: "500.000.000 đồng", isCorrect: false },
+                    { text: "1.200.000.000 đồng", isCorrect: false },
+                    { text: "1.384.615.385 đồng", isCorrect: false },
+                    { text: "600.000.000 đồng", isCorrect: true, rationale: "Doanh thu tính thuế = Bán vé - Trả thưởng = 6 - 3.4 = 2.6 tỷ. Giá tính thuế = 2.6 / 1.3 = 2 tỷ. Thuế = 2 tỷ * 30% = 600tr." }
+                ],
+                hint: "Doanh thu trừ trả thưởng."
+            },
+            {
+                questionNumber: 47,
+                question: "Đặt cược: Bán vé 6 tỷ, trả thưởng 3.4 tỷ, vé tham quan 130tr. Số thuế tiêu thụ đặc biệt là:",
+                answerOptions: [
+                    { text: "600.000.000 đồng", isCorrect: false },
+                    { text: "1.200.000.000 đồng", isCorrect: false },
+                    { text: "1.384.615.385 đồng", isCorrect: false },
+                    { text: "630.000.000 đồng", isCorrect: true, rationale: "Vé tham quan cũng tính vào doanh thu chịu thuế (đối với dịch vụ giải trí có đặt cược). Tổng = 2.6 + 0.13 = 2.73 tỷ. Giá tính thuế = 2.73 / 1.3 = 2.1 tỷ. Thuế = 630tr." }
+                ],
+                hint: "Cộng thêm vé tham quan."
+            },
+            {
+                questionNumber: 48,
+                question: "Vũ trường: Vé vào cửa 1.4 tỷ, ăn uống 2.8 tỷ. Thuế suất 40%. Số thuế tiêu thụ đặc biệt là:",
+                answerOptions: [
+                    { text: "600.000.000 đồng", isCorrect: false },
+                    { text: "1.200.000.000 đồng", isCorrect: true, rationale: "Vũ trường chịu thuế trên toàn bộ doanh thu (kể cả ăn uống). Tổng = 1.4 + 2.8 = 4.2 tỷ. Giá tính thuế = 4.2 / 1.4 = 3 tỷ. Thuế = 1.2 tỷ." },
+                    { text: "400.000.000 đồng", isCorrect: false },
+                    { text: "800.000.000 đồng", isCorrect: false }
+                ],
+                hint: "Ăn uống trong vũ trường cũng chịu thuế."
+            },
+            {
+                questionNumber: 49,
+                question: "Nhập 1.000 chai rượu 300. Giá tính thuế NK 20USD. Thuế NK 30%. Tỷ giá 22.000. Giá tính thuế tiêu thụ đặc biệt là:",
+                answerOptions: [
+                    { text: "943.800.000 đồng", isCorrect: false },
+                    { text: "440.000.000 đồng", isCorrect: false },
+                    { text: "572.000.000 đồng", isCorrect: true, rationale: "Giá nhập = 1000 * 20 * 22000 = 440tr. Thuế NK = 440 * 30% = 132tr. Giá tính TTĐB = 440 + 132 = 572tr." },
+                    { text: "726.000.000 đồng", isCorrect: false }
+                ],
+                hint: "Giá nhập + Thuế nhập."
+            },
+            {
+                questionNumber: 50,
+                question: "Nhập 1.000 chai rượu 300 (như câu trên). Thuế suất TTĐB 65%. Thuế tiêu thụ đặc biệt phải nộp tại khâu nhập khẩu là:",
+                answerOptions: [
+                    { text: "613.470.000 đồng", isCorrect: false },
+                    { text: "371.800.000 đồng", isCorrect: true, rationale: "Giá tính thuế 572tr. Thuế = 572 * 65% = 371.8tr." },
+                    { text: "286.000.000 đồng", isCorrect: false },
+                    { text: "471.900.000 đồng", isCorrect: false }
+                ],
+                hint: "572tr x 65%."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let isAnswerChecked = false;
+
+        const quizContent = document.getElementById('quiz-content');
+        const resultsScreen = document.getElementById('results-screen');
+        const finalScoreText = document.getElementById('final-score');
+
+        // Hàm trộn ngẫu nhiên thứ tự các options
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function renderQuestion() {
+            if (currentQuestionIndex >= quizData.length) {
+                showResults();
+                return;
+            }
+
+            const currentQuestion = quizData[currentQuestionIndex];
+            isAnswerChecked = false;
+
+            // Đảm bảo các tùy chọn được trộn mỗi lần hiển thị
+            currentQuestion.shuffledOptions = shuffleArray([...currentQuestion.answerOptions]);
+
+            let optionsHtml = currentQuestion.shuffledOptions.map((option, index) => `
+                <button
+                    class="option-button w-full text-left p-4 mb-3 rounded-xl bg-white focus:outline-none"
+                    data-option-index="${index}"
+                    onclick="selectOption(this, ${index})"
+                    >
+                    <span class="font-bold text-gray-800">${String.fromCharCode(65 + index)}. </span>
+                    <span class="text-gray-700 font-medium">${option.text}</span>
+                </button>
+            `).join('');
+
+            quizContent.innerHTML = `
+                <div class="mb-8 p-4 bg-teal-50 rounded-xl border border-teal-200">
+                    <p class="text-md font-semibold text-teal-600 mb-3">Câu hỏi <span class="text-teal-800 font-extrabold">${currentQuestion.questionNumber}</span>/<span class="text-teal-800 font-extrabold">${quizData.length}</span></p>
+                    <h2 class="text-xl font-semibold text-gray-900 leading-relaxed">${currentQuestion.question}</h2>
+                </div>
+                <div id="options-container" class="space-y-4">
+                    ${optionsHtml}
+                </div>
+                <div id="feedback-area" class="mt-6 p-4 rounded-xl hidden transition-all duration-300">
+                    <p id="rationale-text" class="text-sm"></p>
+                    <p id="hint-text" class="text-xs text-gray-600 mt-2 italic">Gợi ý: ${currentQuestion.hint}</p>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between items-center mt-10 space-y-4 sm:space-y-0">
+                    <button id="check-button" class="btn-action w-full sm:w-auto px-6 py-3 btn-secondary text-white font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:shadow-none" onclick="checkAnswer()" disabled>
+                        Kiểm Tra
+                    </button>
+                    <div class="text-center text-md font-bold text-gray-600">
+                        Điểm hiện tại: <span id="current-score" class="text-teal-600 font-extrabold">${score}</span>/${quizData.length}
+                    </div>
+                    <button id="next-button" class="btn-action w-full sm:w-auto px-6 py-3 btn-primary text-white font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:shadow-none" onclick="nextQuestion()" disabled>
+                        Câu Tiếp Theo
+                    </button>
+                </div>
+            `;
+        }
+
+        function selectOption(button, optionIndex) {
+            if (isAnswerChecked) return;
+
+            // Xóa trạng thái chọn của tất cả các nút
+            document.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.remove('option-selected');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+
+            // Đặt trạng thái chọn cho nút hiện tại
+            button.classList.add('option-selected');
+            button.setAttribute('aria-pressed', 'true');
+
+            // Lưu trữ lựa chọn của người dùng
+            userAnswers[currentQuestionIndex] = optionIndex;
+
+            // Bật nút Kiểm Tra
+            document.getElementById('check-button').disabled = false;
+        }
+
+        function checkAnswer() {
+            if (isAnswerChecked) return;
+            isAnswerChecked = true;
+
+            const selectedOptionIndex = userAnswers[currentQuestionIndex];
+            const currentQuestion = quizData[currentQuestionIndex];
+            const feedbackArea = document.getElementById('feedback-area');
+            const rationaleText = document.getElementById('rationale-text');
+            const nextButton = document.getElementById('next-button');
+            const checkButton = document.getElementById('check-button');
+
+            const isCorrect = currentQuestion.shuffledOptions[selectedOptionIndex].isCorrect;
+
+            // Hiển thị kết quả và rationale
+            feedbackArea.classList.remove('hidden');
+            feedbackArea.classList.remove('bg-red-50', 'bg-green-50');
+            feedbackArea.classList.add(isCorrect ? 'bg-green-50' : 'bg-red-50');
+            
+            rationaleText.classList.remove('text-green-800', 'text-red-800');
+            rationaleText.classList.add(isCorrect ? 'text-green-800' : 'text-red-800');
+            rationaleText.innerHTML = `
+                <span class="font-bold">${isCorrect ? 'Chính xác! ' : 'Chưa đúng. '}</span>
+                ${currentQuestion.shuffledOptions.find(opt => opt.isCorrect).rationale || ""}
+            `;
+
+            // Cập nhật điểm
+            if (isCorrect) {
+                score++;
+                document.getElementById('current-score').textContent = score;
+            }
+
+            // Đánh dấu các tùy chọn
+            document.querySelectorAll('.option-button').forEach((btn, index) => {
+                const option = currentQuestion.shuffledOptions[index];
+                btn.disabled = true;
+                btn.classList.remove('option-selected', 'hover:bg-gray-100');
+
+                if (option.isCorrect) {
+                    btn.classList.add('option-correct');
+                } else if (index === selectedOptionIndex) {
+                    btn.classList.add('option-incorrect');
+                }
+            });
+
+            // Vô hiệu hóa nút Kiểm Tra và Bật nút Câu Tiếp Theo
+            checkButton.disabled = true;
+            nextButton.disabled = false;
+            nextButton.focus(); // Tập trung vào nút Tiếp theo để tiện thao tác
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuestion();
+        }
+
+        function showResults() {
+            quizContent.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreText.innerHTML = `Bạn đã hoàn thành bài thi với <span class="text-teal-700 font-black">${score}</span>/${quizData.length} câu trả lời đúng.`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            quizContent.classList.remove('hidden');
+            resultsScreen.classList.add('hidden');
+            renderQuestion();
+        }
+
+        // Bắt đầu quiz khi tải trang
+        window.onload = renderQuestion;
+    </script>
+</body>
+</html>
