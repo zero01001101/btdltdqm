@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Thuế Tiêu Thụ Đặc Biệt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Thiết lập font Inter cho giao diện */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdfa; /* Nền xanh nhạt hiện đại */
+        }
+        .quiz-card {
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.1), 0 8px 20px -5px rgba(0, 0, 0, 0.05); /* Đổ bóng sâu hơn */
+        }
+        .option-button {
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            border: 2px solid #e2e8f0; /* Border mềm mại */
+        }
+        .option-button:hover {
+            transform: translateY(-2px);
+            background-color: #f0f9ff; /* Rất nhẹ */
+            border-color: #06b6d4; /* Màu xanh ngọc nhẹ */
+        }
+        /* Hiệu ứng khi chọn */
+        .option-selected {
+            border-color: #06b6d4 !important; /* Xanh ngọc */
+            background-color: #e0f7fa !important;
+            box-shadow: 0 0 0 2px #67e8f9;
+        }
+        /* Hiệu ứng câu trả lời đúng/sai */
+        .option-correct {
+            background-color: #d1fae5 !important;
+            border-color: #059669 !important; /* Xanh lá đậm */
+            box-shadow: 0 0 0 2px #34d399 !important;
+        }
+        .option-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important; /* Đỏ */
+            box-shadow: 0 0 0 2px #fca5a5 !important;
+        }
+        .btn-action {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-primary {
+            background-color: #06b6d4; /* Màu xanh ngọc */
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: #0e7490;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(6, 182, 212, 0.5), 0 2px 4px -2px rgba(6, 182, 212, 0.5);
+        }
+        .btn-secondary {
+            background-color: #10b981; /* Màu xanh lá tươi */
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.5), 0 2px 4px -2px rgba(16, 185, 129, 0.5);
+        }
+        .disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8 flex justify-center items-start min-h-screen">
+
+    <div id="quiz-container" class="relative w-full max-w-3xl bg-white rounded-2xl p-6 sm:p-10 quiz-card transition-all duration-300">
+        <a href="index.html" class="absolute top-6 left-6 z-10">
+            <button class="flex items-center space-x-1 px-4 py-2 text-sm border border-gray-200 bg-gray-50 text-gray-700 font-semibold rounded-full shadow-sm hover:bg-gray-100 transition duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left">
+                    <path d="m12 19-7-7 7-7" />
+                    <path d="M19 12H5" />
+                </svg>
+                <span>Quay lại</span>
+            </button>
+        </a>
+        
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-8 text-center pt-8 sm:pt-4">Ôn Tập: Thuế Tiêu Thụ Đặc Biệt (50 Câu)</h1>
+        <div id="quiz-content">
+            </div>
+        <div id="results-screen" class="hidden text-center py-12">
+            <h2 class="text-4xl font-black text-teal-600 mb-4">Hoàn Thành!</h2>
+            <p id="final-score" class="text-2xl font-semibold text-gray-700 mb-8"></p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-6">
+                <button onclick="restartQuiz()" class="btn-action px-8 py-3 btn-secondary text-white font-bold rounded-xl shadow-lg">
+                    Làm Lại Bài Thi
+                </button>
+                <a href="index.html" class="inline-block">
+                    <button class="w-full sm:w-auto btn-action px-8 py-3 border border-gray-300 bg-white text-gray-700 font-bold rounded-xl shadow-lg hover:bg-gray-100">
+                        Về Trang Chính
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu quiz 50 câu từ file temp.docx về Thuế TTĐB
+        const quizData = [
+            {
+                questionNumber: 1,
+                question: "Hàng hóa nào sau đây chịu thuế nhập khẩu:",
+                answerOptions: [
+                    { text: "Hàng từ khu chế xuất bán sang khu chế xuất khác.", isCorrect: false },
+                    { text: "Hàng nhập khẩu từ nước ngoài vào khu chế xuất.", isCorrect: false },
+                    { text: "Hàng tạm nhập tái xuất để dự hội thảo.", isCorrect: false },
+                    { text: "Hàng từ khu chế xuất bán vào thị trường nội địa.", isCorrect: true, rationale: "Quan hệ giữa khu chế xuất và nội địa là quan hệ xuất nhập khẩu." }
+                ],
+                hint: "Xem xét quan hệ mua bán giữa các khu phi thuế quan và thị trường trong nước."
+            },
+            {
+                questionNumber: 2,
+                question: "Trong những phát biểu nào sau đây, phát biểu nào ĐÚNG? (i) Thuế XNK đánh vào các mặt hàng xuất nhập khẩu qua biên giới VN. (ii) Thuế XNK đánh vào các mặt hàng được phép xuất nhập khẩu qua biên giới VN. (iii) Thuế XNK đánh vào các mặt hàng đưa từ thị trường trong nước vào khu phi thuế quan. (iv) Thuế XNK đánh vào các mặt hàng đưa từ khu phi thuế quan ra thị trường nước ngoài.",
+                answerOptions: [
+                    { text: "(i)", isCorrect: false },
+                    { text: "(ii), (iii)", isCorrect: true, rationale: "Thuế XNK chỉ áp dụng cho hàng hóa ĐƯỢC PHÉP xuất nhập khẩu. Hàng từ nội địa vào khu phi thuế quan được coi là xuất khẩu." },
+                    { text: "(iv), (iii)", isCorrect: false },
+                    { text: "(ii)", isCorrect: false }
+                ],
+                hint: "Lưu ý tính hợp pháp của hàng hóa và ranh giới khu phi thuế quan."
+            },
+            {
+                questionNumber: 3,
+                question: "Trong những phát biểu nào sau đây, phát biểu nào ĐÚNG? (i) Mục tiêu của thuế XNK là thu ngân sách Nhà nước. (ii) Mục tiêu của thuế XNK là kiểm soát, điều tiết khối lượng và cơ cấu hàng XNK. (iii) Mục tiêu của thuế XNK là kiềm chế sản xuất trong nước.",
+                answerOptions: [
+                    { text: "(i)", isCorrect: false },
+                    { text: "(i), (ii)", isCorrect: true, rationale: "Thuế XNK nhằm thu ngân sách và bảo hộ/điều tiết sản xuất trong nước, không phải kìm hãm." },
+                    { text: "(i), (iii)", isCorrect: false },
+                    { text: "(iii)", isCorrect: false }
+                ],
+                hint: "Vai trò của thuế đối với nền kinh tế và ngân sách."
+            },
+            {
+                questionNumber: 4,
+                question: "Hàng hóa đưa từ thị trường trong nước vào khu phi thuế quan thuộc diện:",
+                answerOptions: [
+                    { text: "Chịu thuế xuất khẩu", isCorrect: true, rationale: "Đưa hàng từ nội địa vào khu phi thuế quan được xem là hành vi xuất khẩu." },
+                    { text: "Chịu thuế nhập khẩu", isCorrect: false },
+                    { text: "Chịu cả thuế xuất khẩu và thuế nhập khẩu", isCorrect: false },
+                    { text: "Không chịu thuế xuất nhập khẩu", isCorrect: false }
+                ],
+                hint: "Khu phi thuế quan được coi như nước ngoài về mặt thuế quan."
+            },
+            {
+                questionNumber: 5,
+                question: "Đối tượng nộp thuế xuất nhập khẩu là:",
+                answerOptions: [
+                    { text: "Tất cả các tổ chức, cá nhân xuất nhập khẩu hàng hóa thuộc đối tượng chịu thuế theo quy định qua biên giới Việt Nam", isCorrect: true, rationale: "Bao gồm chủ hàng, người ủy thác, người xuất nhập cảnh..." },
+                    { text: "Người tiêu dùng tại Việt Nam mua hàng nhập khẩu", isCorrect: false },
+                    { text: "Tổ chức ủy thác nhập khẩu hàng hóa thuộc đối tượng chịu thuế nhập khẩu theo quy định", isCorrect: false },
+                    { text: "Tất cả các tổ chức xuất nhập khẩu hàng hóa qua biên giới Việt Nam", isCorrect: false }
+                ],
+                hint: "Người có hành vi đưa hàng hóa chịu thuế qua biên giới."
+            },
+            {
+                questionNumber: 6,
+                question: "Các đối tượng nào sau đây thuộc đối tượng chịu thuế xuất nhập khẩu?",
+                answerOptions: [
+                    { text: "Hàng hóa viện trợ nhân đạo, viện trợ không hoàn lại", isCorrect: false },
+                    { text: "Hàng hóa chuyển khẩu theo quy định của Chính phủ Việt Nam", isCorrect: false },
+                    { text: "Hàng hóa từ khu phi thuế quan này sang khu phi thuế quan khác", isCorrect: false },
+                    { text: "Hàng hóa xuất khẩu từ thị trường trong nước vào doanh nghiệp chế xuất", isCorrect: true, rationale: "Đây là quan hệ xuất khẩu, thuộc đối tượng chịu thuế (nếu hàng hóa đó có thuế suất XK > 0)." }
+                ],
+                hint: "Các trường hợp khác đều thuộc diện không chịu thuế."
+            },
+            {
+                questionNumber: 7,
+                question: "Giá tính thuế xuất nhập khẩu được tính bằng:",
+                answerOptions: [
+                    { text: "Tiền đồng Việt Nam", isCorrect: true, rationale: "Thuế được nộp bằng đồng Việt Nam." },
+                    { text: "Tiền đồng Việt Nam hoặc ngoại tệ dùng để thanh toán trên hợp đồng của doanh nghiệp.", isCorrect: false },
+                    { text: "USD", isCorrect: false },
+                    { text: "Đồng tiền khác do doanh nghiệp ghi trong tờ khai hải quan", isCorrect: false }
+                ],
+                hint: "Đơn vị tiền tệ chính thức của quốc gia."
+            },
+            {
+                questionNumber: 8,
+                question: "Thuế nhập khẩu là:",
+                answerOptions: [
+                    { text: "Thuế trực thu", isCorrect: false },
+                    { text: "Thuế thu nhập", isCorrect: false },
+                    { text: "Thuế gián thu", isCorrect: true, rationale: "Thuế nhập khẩu cấu thành trong giá bán, người tiêu dùng gánh chịu." },
+                    { text: "Thuế tài sản", isCorrect: false }
+                ],
+                hint: "Người nộp thuế và người chịu thuế không là một."
+            },
+            {
+                questionNumber: 9,
+                question: "Trong những phát biểu sau đây, phát biểu nào KHÔNG ĐÚNG?",
+                answerOptions: [
+                    { text: "Thuế XNK là công cụ bảo hộ nền sản xuất trong nước", isCorrect: false },
+                    { text: "Thuế XNK là loại thuế trực thu", isCorrect: true, rationale: "Đây là phát biểu sai. Thuế XNK là thuế GIÁN THU." },
+                    { text: "Thuế XNK là loại thuế gắn liền với hoạt động ngoại thương.", isCorrect: false },
+                    { text: "Thuế XNK là công cụ quan trọng để Nhà nước kiểm soát hoạt động ngoại thương", isCorrect: false }
+                ],
+                hint: "Xác định bản chất của thuế XNK."
+            },
+            {
+                questionNumber: 10,
+                question: "Trong những phát biểu sau đây, phát biểu nào KHÔNG ĐÚNG?",
+                answerOptions: [
+                    { text: "Trị giá hải quan của hàng hóa nhập khẩu là giá thực tế phải trả tính đến cửa khẩu nhập đầu tiên", isCorrect: false },
+                    { text: "Giá thực tế phải trả của hàng nhập khẩu tính đến cửa khẩu nhập đầu tiên được xác định bằng cách áp dụng tuần tự 6 phương pháp và dừng ngay ở phương pháp xác định được trị giá hải quan.", isCorrect: false },
+                    { text: "Giá thực tế phải trả của hàng nhập khẩu tính đến cửa khẩu nhập đầu tiên được xác định bằng cách áp dụng tuần tự 4 phương pháp và dừng ngay ở phương pháp xác định được trị giá hải quan.", isCorrect: true, rationale: "Có 6 phương pháp xác định trị giá hải quan, không phải 4." },
+                    { text: "Một trong các phương pháp xác định trị giá hải quan của hàng nhập khẩu là phương pháp suy luận.", isCorrect: false }
+                ],
+                hint: "Số lượng phương pháp xác định trị giá hải quan."
+            },
+            {
+                questionNumber: 11,
+                question: "Một doanh nghiệp trong kỳ tính thuế đã nhập khẩu sợi từ một công ty của Nhật. Trị giá của sợi nhập khẩu tính đến cửa khẩu nhập đầu tiên là 200.000.000đ, thuế suất thuế nhập khẩu sợi là 25%, thuế suất thuế GTGT của sợi là 10%. Giá tính thuế GTGT hàng nhập khẩu của nghiệp vụ trên là:",
+                answerOptions: [
+                    { text: "300.000.000đ", isCorrect: false },
+                    { text: "250.000.000đ", isCorrect: true, rationale: "Thuế NK = 200tr * 25% = 50tr. Giá tính GTGT = Giá NK + Thuế NK = 200 + 50 = 250tr." },
+                    { text: "200.000.000đ", isCorrect: false },
+                    { text: "50.000.000đ", isCorrect: false }
+                ],
+                hint: "Giá tính GTGT = Giá CIF + Thuế NK."
+            },
+            {
+                questionNumber: 12,
+                question: "Một doanh nghiệp trong kỳ tính thuế đã nhập khẩu sợi từ một công ty của Nhật. Trị giá của sợi nhập khẩu tính đến cửa khẩu nhập đầu tiên là 200.000.000đ, thuế suất thuế nhập khẩu sợi là 25%, thuế suất thuế GTGT của sợi là 10%. Thuế GTGT doanh nghiệp phải nộp ở khâu nhập khẩu của nghiệp vụ trên là:",
+                answerOptions: [
+                    { text: "30.000.000đ", isCorrect: false },
+                    { text: "5.000.000đ", isCorrect: false },
+                    { text: "20.000.000đ", isCorrect: false },
+                    { text: "25.000.000đ", isCorrect: true, rationale: "Giá tính GTGT là 250tr. Thuế GTGT = 250tr * 10% = 25tr." }
+                ],
+                hint: "Kết quả câu trước nhân với thuế suất GTGT."
+            },
+            {
+                questionNumber: 13,
+                question: "Một doanh nghiệp nhập khẩu 1 lô hàng hóa: Giá mua hàng trên hóa đơn 1 tỷ đồng; Chi phí vận chuyển và bảo hiểm hàng tính đến cửa khẩu nhập 100 triệu đồng; Chi phí vận chuyển từ cửa khẩu nhập về kho 10 triệu đồng. Giá tính thuế nhập khẩu của lô hàng trên là:",
+                answerOptions: [
+                    { text: "1.100.000.000đ", isCorrect: true, rationale: "Giá tính thuế NK = Giá mua + CP vận chuyển/bảo hiểm ĐẾN cửa khẩu nhập = 1 tỷ + 100tr = 1.1 tỷ." },
+                    { text: "1.110.000.000đ", isCorrect: false },
+                    { text: "1.000.000.000đ", isCorrect: false },
+                    { text: "900.000.000đ", isCorrect: false }
+                ],
+                hint: "Không tính chi phí vận chuyển nội địa."
+            },
+            {
+                questionNumber: 14,
+                question: "Một doanh nghiệp nhập khẩu 1 lô hàng hóa (Dữ liệu như câu trên: Giá tính thuế 1.1 tỷ). Thuế suất thuế nhập khẩu của lô hàng trên là 30%. Tiền thuế nhập khẩu của lô hàng trên là:",
+                answerOptions: [
+                    { text: "300.000.000đ", isCorrect: false },
+                    { text: "333.000.000đ", isCorrect: false },
+                    { text: "330.000.000đ", isCorrect: true, rationale: "1.100.000.000 * 30% = 330.000.000đ." },
+                    { text: "270.000.000đ", isCorrect: false }
+                ],
+                hint: "Giá tính thuế x Thuế suất NK."
+            },
+            {
+                questionNumber: 15,
+                question: "Một doanh nghiệp nhập khẩu 1 lô hàng hóa (Giá tính thuế NK 1.1 tỷ, Thuế NK 330tr). Thuế suất thuế nhập khẩu 30%, thuế GTGT 10%. Giá tính thuế GTGT hàng nhập khẩu của lô hàng trên là:",
+                answerOptions: [
+                    { text: "1.000.000.000đ", isCorrect: false },
+                    { text: "1.100.000.000đ", isCorrect: false },
+                    { text: "1.430.000.000đ", isCorrect: true, rationale: "Giá tính GTGT = Giá tính NK (1.1 tỷ) + Thuế NK (330tr) = 1.430.000.000đ." },
+                    { text: "Số khác", isCorrect: false }
+                ],
+                hint: "Cộng dồn thuế nhập khẩu vào giá trị."
+            },
+            {
+                questionNumber: 16,
+                question: "Một doanh nghiệp nhập khẩu 1 lô hàng hóa (Giá tính GTGT 1.430 tỷ). Thuế suất thuế GTGT 10%. Tiền thuế GTGT phải nộp ở khâu nhập khẩu của lô hàng trên là:",
+                answerOptions: [
+                    { text: "100.000.000đ", isCorrect: false },
+                    { text: "110.000.000đ", isCorrect: false },
+                    { text: "143.000.000đ", isCorrect: true, rationale: "1.430 tỷ * 10% = 143 triệu đồng." },
+                    { text: "Số khác", isCorrect: false }
+                ],
+                hint: "1.430 tỷ x 10%."
+            },
+            {
+                questionNumber: 17,
+                question: "Doanh nghiệp X nhập khẩu 2.000 chai rượu ngoại, giá tính thuế nhập khẩu 150.000đ/chai. Trong quá trình làm thủ tục tại khu vực hải quan quản lý, số rượu này đã bị vỡ hoàn toàn 100 chai. Thuế nhập khẩu phải nộp sẽ được xác định trên số lượng chai rượu là:",
+                answerOptions: [
+                    { text: "2.000 chai", isCorrect: false },
+                    { text: "1.900 chai", isCorrect: true, rationale: "Hàng hóa bị hư hỏng, mất mát trong quá trình hải quan quản lý được giảm thuế tương ứng. Tính trên số lượng thực tế nhập: 2000 - 100 = 1900." },
+                    { text: "2.100 chai", isCorrect: false },
+                    { text: "Số khác", isCorrect: false }
+                ],
+                hint: "Trừ đi số lượng bị tổn thất."
+            },
+            {
+                questionNumber: 18,
+                question: "Doanh nghiệp X nhập khẩu 2.000 chai rượu ngoại, giá tính thuế 150.000đ/chai. Vỡ 100 chai tại hải quan. Thuế suất thuế nhập khẩu 40%. Số thuế nhập khẩu phải nộp là:",
+                answerOptions: [
+                    { text: "120.000.000đ", isCorrect: false },
+                    { text: "122.000.000đ", isCorrect: false },
+                    { text: "126.000.000", isCorrect: false },
+                    { text: "114.000.000đ", isCorrect: true, rationale: "1.900 chai * 150.000 * 40% = 114.000.000đ." }
+                ],
+                hint: "Tính trên 1.900 chai."
+            },
+            {
+                questionNumber: 19,
+                question: "Công ty Thành An xuất khẩu mặt hàng B cho một doanh nghiệp ở Trung Quốc với tổng trị giá là 5.000 triệu đồng (giá DAF Lạng Sơn). Thuế suất thuế xuất khẩu của mặt hàng B là 2%. Tiền thuế xuất khẩu của lô hàng trên là:",
+                answerOptions: [
+                    { text: "100.000.000đ", isCorrect: true, rationale: "Giá DAF là giá tính thuế XK. 5.000tr * 2% = 100 triệu." },
+                    { text: "10.000.000đ", isCorrect: false },
+                    { text: "110.000.000đ", isCorrect: false },
+                    { text: "Số khác", isCorrect: false }
+                ],
+                hint: "5 tỷ x 2%."
+            },
+            {
+                questionNumber: 20,
+                question: "Công ty Simex ủy thác nhập khẩu 6.500kg socola các loại, giá FOB 6USD/1kg. Chi phí vận chuyển và bảo hiểm quốc tế cho cả lô hàng là 4.800USD. Thuế suất thuế nhập khẩu Socola là 25%. Tỷ giá 20.000đ/USD. Thuế nhập khẩu phải nộp là:",
+                answerOptions: [
+                    { text: "195.000.000đ", isCorrect: false },
+                    { text: "219.000.000đ", isCorrect: true, rationale: "Tổng giá FOB = 6.500 * 6 = 39.000 USD. Giá CIF (Tính thuế) = 39.000 + 4.800 = 43.800 USD. Quy đổi: 43.800 * 20.000 = 876.000.000đ. Thuế NK = 876tr * 25% = 219.000.000đ." },
+                    { text: "87.000.000đ", isCorrect: false },
+                    { text: "Số khác", isCorrect: false }
+                ],
+                hint: "Tính tổng giá CIF rồi nhân thuế suất."
+            },
+            {
+                questionNumber: 21,
+                question: "Công ty Simex ủy thác nhập khẩu 6.500kg socola (như câu trên). Trong tháng công ty đã tiêu thụ 3.600kg. Thuế nhập khẩu phải nộp của lô hàng trên sẽ tính trên số lượng socola là:",
+                answerOptions: [
+                    { text: "6.500 kg", isCorrect: true, rationale: "Thuế NK tính trên toàn bộ lượng hàng nhập khẩu tại thời điểm thông quan, không phụ thuộc lượng tiêu thụ." },
+                    { text: "2.900 kg", isCorrect: false },
+                    { text: "3.600 kg", isCorrect: false },
+                    { text: "0 kg", isCorrect: false }
+                ],
+                hint: "Tính tại thời điểm nhập khẩu."
+            },
+            {
+                questionNumber: 22,
+                question: "Công ty Simex ủy thác nhập khẩu 6.500kg socola (như câu trên). Trong tháng tiêu thụ 3.600kg. Thuế GTGT hàng nhập khẩu phải nộp của lô hàng trên sẽ tính trên số lượng socola là:",
+                answerOptions: [
+                    { text: "2.900 kg", isCorrect: false },
+                    { text: "6.500 kg", isCorrect: true, rationale: "Tương tự thuế NK, thuế GTGT hàng NK tính trên toàn bộ lô hàng nhập khẩu." },
+                    { text: "3.600 kg", isCorrect: false },
+                    { text: "0 kg", isCorrect: false }
+                ],
+                hint: "Tính trên toàn bộ lô hàng."
+            },
+            {
+                questionNumber: 23,
+                question: "Công ty A mua 40 tấn hạt điều để xuất khẩu. Doanh nghiệp đã xuất khẩu toàn bộ số hàng này với giá FOB là: 22,8 triệu đồng /tấn. Thuế suất thuế xuất khẩu 2%, thuế GTGT 10%. Số thuế xuất khẩu của lô hàng trên là:",
+                answerOptions: [
+                    { text: "16.000.000đ", isCorrect: false },
+                    { text: "6.400.000đ", isCorrect: false },
+                    { text: "18.240.000đ", isCorrect: true, rationale: "Giá tính thuế XK là giá FOB. 40 tấn * 22,8tr = 912 triệu. Thuế XK = 912 * 2% = 18.240.000đ." },
+                    { text: "20.064.000đ", isCorrect: false }
+                ],
+                hint: "Tính trên giá FOB."
+            },
+            {
+                questionNumber: 24,
+                question: "Công ty A mua 40 tấn hạt điều để xuất khẩu. Doanh nghiệp đã xuất khẩu toàn bộ. Thuế suất thuế xuất khẩu 2%, thuế GTGT 10%. Số thuế GTGT đầu ra của lô hàng trên là:",
+                answerOptions: [
+                    { text: "80.000.000đ", isCorrect: false },
+                    { text: "91.200.000đ", isCorrect: false },
+                    { text: "0 đ", isCorrect: true, rationale: "Hàng xuất khẩu chịu thuế suất GTGT 0% => Số tiền thuế là 0đ." },
+                    { text: "Miễn thuế", isCorrect: false }
+                ],
+                hint: "Thuế suất 0%."
+            },
+            {
+                questionNumber: 25,
+                question: "Công ty VISCO nhập khẩu 15 tấn hóa chất, giá tính thuế nhập khẩu: 32 triệu đ/tấn. Thuế suất thuế nhập khẩu 15%. Thuế nhập khẩu của lô hóa chất trên là:",
+                answerOptions: [
+                    { text: "0đ", isCorrect: false },
+                    { text: "48.000.000đ", isCorrect: false },
+                    { text: "72.000.000đ", isCorrect: true, rationale: "15 tấn * 32tr * 15% = 480tr * 15% = 72.000.000đ." },
+                    { text: "Miễn thuế", isCorrect: false }
+                ],
+                hint: "480 triệu x 15%."
+            },
+            {
+                questionNumber: 26,
+                question: "Công ty VISCO nhập khẩu 15 tấn hóa chất (Giá tính thuế NK 480tr, Thuế NK 72tr). Thuế GTGT hàng nhập khẩu 10%. Thuế GTGT hàng nhập khẩu của lô hóa chất trên là:",
+                answerOptions: [
+                    { text: "0đ", isCorrect: false },
+                    { text: "Miễn thuế", isCorrect: false },
+                    { text: "48.000.000đ", isCorrect: false },
+                    { text: "55.200.000đ", isCorrect: true, rationale: "Giá tính GTGT = 480 + 72 = 552tr. Thuế GTGT = 552 * 10% = 55.200.000đ." }
+                ],
+                hint: "Tính thuế chồng thuế."
+            },
+            {
+                questionNumber: 27,
+                question: "Đối tượng nào sau đây không phải người nộp thuế nhập khẩu:",
+                answerOptions: [
+                    { text: "Chủ hàng hóa nhập khẩu", isCorrect: false },
+                    { text: "Người tiêu dùng mua hàng nhập khẩu", isCorrect: true, rationale: "Người tiêu dùng chịu thuế (gián thu) nhưng người nộp thuế cho cơ quan hải quan là nhà nhập khẩu." },
+                    { text: "Tổ chức nhận ủy thác nhập khẩu", isCorrect: false },
+                    { text: "Người được ủy quyền nộp thuế thay cho người nộp thuế nhập khẩu", isCorrect: false }
+                ],
+                hint: "Người chịu thuế khác người nộp thuế."
+            },
+            {
+                questionNumber: 28,
+                question: "Giá tính thuế GTGT đối với hàng hoá nhập khẩu là:",
+                answerOptions: [
+                    { text: "Giá nhập khẩu tại cửa khẩu + Thuế TTĐB (nếu có)", isCorrect: false },
+                    { text: "Giá hàng hoá nhập khẩu", isCorrect: false },
+                    { text: "Giá nhập khẩu tại cửa khẩu + Thuế nhập khẩu (nếu có) + Thuế TTĐB (nếu có)", isCorrect: true, rationale: "Công thức chuẩn: Giá tính GTGT = Giá NK + Thuế NK + Thuế TTĐB + Thuế BVMT (nếu có)." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Cộng dồn các loại thuế ở khâu nhập khẩu."
+            },
+            {
+                questionNumber: 29,
+                question: "Hàng hóa xuất khẩu ra nước ngoài là đối tượng chịu mức thuế suất thuế GTGT nào?",
+                answerOptions: [
+                    { text: "0%", isCorrect: true, rationale: "Để khuyến khích xuất khẩu." },
+                    { text: "2%", isCorrect: false },
+                    { text: "5%", isCorrect: false },
+                    { text: "Không thuộc diện chịu thuế", isCorrect: false }
+                ],
+                hint: "Mức ưu đãi nhất."
+            },
+            {
+                questionNumber: 30,
+                question: "Giá FOB (Free on board) và giá DAF (delivered at frontier) là giá:",
+                answerOptions: [
+                    { text: "Đã bao gồm phí vận tải quốc tế", isCorrect: false },
+                    { text: "Đã bao gồm phí bảo hiểm quốc tế", isCorrect: false },
+                    { text: "Chưa bao gồm phí vận tải và bảo hiểm quốc tế", isCorrect: true, rationale: "FOB và DAF chưa bao gồm I và F (người mua phải chịu)." },
+                    { text: "Đã bao gồm phí vận tải quốc tế nhưng chưa bao gồm phí bảo hiểm quốc tế", isCorrect: false }
+                ],
+                hint: "Trách nhiệm người bán dừng lại ở cửa khẩu xuất."
+            },
+            {
+                questionNumber: 31,
+                question: "Giá CIF (Cost insurance and freight) là giá:",
+                answerOptions: [
+                    { text: "Đã bao gồm phí vận tải quốc tế", isCorrect: false },
+                    { text: "Đã bao gồm phí bảo hiểm quốc tế", isCorrect: false },
+                    { text: "Chưa bao gồm phí vận tải và bảo hiểm quốc tế", isCorrect: false },
+                    { text: "Đã bao gồm phí vận tải và phí bảo hiểm quốc tế", isCorrect: true, rationale: "CIF = Cost + Insurance + Freight." }
+                ],
+                hint: "Bao gồm tất cả chi phí đến cảng nhập."
+            },
+            {
+                questionNumber: 32,
+                question: "Tại Việt Nam, trong quan hệ thương mại quốc tế, trị giá hải quan của hàng hóa nhập khẩu thường được xác định theo:",
+                answerOptions: [
+                    { text: "Giá FOB", isCorrect: false },
+                    { text: "Giá DAF", isCorrect: false },
+                    { text: "Giá CIF", isCorrect: true, rationale: "Giá tính thuế nhập khẩu là giá thực tế phải trả tính đến cửa khẩu nhập đầu tiên (tương đương CIF)." },
+                    { text: "Giá FOB và giá DAF", isCorrect: false }
+                ],
+                hint: "Tính đến cửa khẩu nhập."
+            },
+            {
+                questionNumber: 33,
+                question: "Nguyên tắc nào sau đây không phải nguyên tắc của việc ban hành biểu thuế, thuế suất thuế nhập khẩu:",
+                answerOptions: [
+                    { text: "Khuyến khích nhập khẩu mọi loại hàng hóa.", isCorrect: true, rationale: "Nhà nước chỉ khuyến khích nhập khẩu hàng thiết yếu/công nghệ cao, hạn chế hàng xa xỉ/trong nước đã làm được." },
+                    { text: "Áp dụng thống nhất mức thuế suất đối với hàng hóa có cùng bản chất...", isCorrect: false },
+                    { text: "Góp phần bình ổn thị trường và nguồn thu ngân sách nhà nước", isCorrect: false },
+                    { text: "Ưu tiên loại hàng hóa dịch vụ trong nước chưa đáp ứng nhu cầu", isCorrect: false }
+                ],
+                hint: "Chính sách bảo hộ mậu dịch."
+            },
+            {
+                questionNumber: 34,
+                question: "Đặc điểm nào sau đây không phải là đặc điểm của mức thuế suất thông thường sử dụng trong tính thuế hàng nhập khẩu:",
+                answerOptions: [
+                    { text: "Không có thỏa thuận về đối xử tối huệ quốc", isCorrect: false },
+                    { text: "Không có thỏa thuận ưu đãi đặc biệt", isCorrect: false },
+                    { text: "Lớn hơn mức thuế suất ưu đãi", isCorrect: false },
+                    { text: "Có thỏa thuận về đối xử tối huệ quốc", isCorrect: true, rationale: "Có thỏa thuận tối huệ quốc (MFN) thì áp dụng thuế suất Ưu đãi, không phải Thông thường." }
+                ],
+                hint: "Thuế suất thông thường áp dụng cho hàng không có MFN."
+            },
+            {
+                questionNumber: 35,
+                question: "Một lô hàng tiêu dùng nhập khẩu có giá tính thuế nhập khẩu là 8 tỷ đồng. Được miễn thuế nhập khẩu. Giá tính thuế GTGT của lô hàng này là:",
+                answerOptions: [
+                    { text: "8 tỷ đồng", isCorrect: true, rationale: "Do miễn thuế NK nên Giá tính GTGT = Giá NK + 0 = 8 tỷ." },
+                    { text: "8,4 tỷ đồng", isCorrect: false },
+                    { text: "7,6 tỷ đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Không cộng thuế NK."
+            },
+            {
+                questionNumber: 36,
+                question: "Khi xuất khẩu rượu, nhà sản xuất rượu phải nộp:",
+                answerOptions: [
+                    { text: "Thuế xuất khẩu", isCorrect: true, rationale: "Rượu xuất khẩu chịu thuế suất thuế XK (nếu có trong biểu thuế), thuế GTGT là 0%, không chịu thuế TTĐB." },
+                    { text: "Thuế xuất khẩu, thuế tiêu thụ đặc biệt", isCorrect: false },
+                    { text: "Thuế xuất khẩu, thuế tiêu thụ đặc biệt, thuế GTGT.", isCorrect: false },
+                    { text: "Miễn thuế", isCorrect: false }
+                ],
+                hint: "Không chịu thuế tiêu thụ đặc biệt khi xuất khẩu."
+            },
+            {
+                questionNumber: 37,
+                question: "Công ty XNK A trong tháng nhập khẩu rượu và bán số rượu nhập khẩu đó trên thị trường nội địa có lãi. Các loại thuế mà doanh nghiệp phải nộp khi kinh doanh hàng hóa trên là:",
+                answerOptions: [
+                    { text: "Thuế nhập khẩu, thuế GTGT, thuế thu nhập doanh nghiệp.", isCorrect: false },
+                    { text: "Thuế nhập khẩu, thuế tiêu thụ đặc biệt, thuế GTGT.", isCorrect: false },
+                    { text: "Thuế nhập khẩu, thuế tiêu thụ đặc biệt, thuế GTGT, thuế TNDN", isCorrect: true, rationale: "Bao gồm thuế ở khâu nhập khẩu (NK, TTĐB, GTGT) và thuế khi kinh doanh có lãi (TNDN)." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Bao gồm các loại thuế gián thu và trực thu."
+            },
+            {
+                questionNumber: 38,
+                question: "Công ty XNK A nhận ủy thác xuất khẩu lô hàng của cơ sở sản xuất B, theo quy định của luật thuế xuất nhập khẩu hiện hành; đối tượng nộp thuế xuất khẩu của lô hàng này là:",
+                answerOptions: [
+                    { text: "Cơ sở B vì đây là đơn vị chủ hàng", isCorrect: false },
+                    { text: "Công ty XNK A.", isCorrect: true, rationale: "Bên nhận ủy thác có trách nhiệm kê khai và nộp thuế." },
+                    { text: "Cả 2 đơn vị đều phải nộp thuế XNK", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Người đứng tên trên tờ khai hải quan."
+            },
+            {
+                questionNumber: 39,
+                question: "Một doanh nghiệp nhập khẩu ủy thác 1.000 chai rượu, giá bán tại cửa khẩu xuất: 500.000đ/chai; chi phí vận tải, bảo hiểm tính đến cửa khẩu nhập cho cả lô hàng là 200.000.000đ. Thuế suất thuế nhập khẩu rượu là 150%. Thuế NK phải nộp là:",
+                answerOptions: [
+                    { text: "1.025.000.000đ", isCorrect: false },
+                    { text: "1.050.000.000đ", isCorrect: true, rationale: "Giá FOB = 1000 * 500k = 500tr. Giá CIF (Tính thuế) = 500tr + 200tr = 700tr. Thuế NK = 700tr * 150% = 1.050.000.000đ." },
+                    { text: "1.000.000.000đ", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính trên giá CIF."
+            },
+            {
+                questionNumber: 40,
+                question: "Một doanh nghiệp nhập khẩu ủy thác (như câu trên). Giá tính thuế nhập khẩu của lô hàng trên là:",
+                answerOptions: [
+                    { text: "500.000.000đ", isCorrect: false },
+                    { text: "700.000.000đ", isCorrect: true, rationale: "Giá CIF = 500tr (tiền hàng) + 200tr (vận chuyển) = 700 triệu." },
+                    { text: "300.000.000đ", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Giá hàng + Phí vận chuyển."
+            },
+            {
+                questionNumber: 41,
+                question: "Nhập khẩu 500 tấn nguyên liệu A (5 tỷ) và hàng B (2.2 tỷ). Thuế suất A là 25%, B là 20%. Số thuế nhập khẩu phải nộp cho cả hai lô hàng là:",
+                answerOptions: [
+                    { text: "1.490 triệu đồng", isCorrect: false },
+                    { text: "1.690 triệu đồng", isCorrect: true, rationale: "Thuế A = 5000 * 25% = 1250. Thuế B = 2200 * 20% = 440. Tổng = 1690 triệu." },
+                    { text: "1.200 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính riêng từng loại rồi cộng lại."
+            },
+            {
+                questionNumber: 42,
+                question: "Nhập khẩu A (5 tỷ) và B (2.2 tỷ) như câu trên. Thuế suất A 25%, B 20%, GTGT 10%. Số thuế GTGT hàng nhập khẩu phải nộp cho cả hai lô hàng là:",
+                answerOptions: [
+                    { text: "888 triệu đồng", isCorrect: false },
+                    { text: "889 triệu đồng", isCorrect: true, rationale: "Giá tính GTGT A = 5000 + 1250 = 6250. Giá tính GTGT B = 2200 + 440 = 2640. Tổng giá tính = 8890. Thuế GTGT = 8890 * 10% = 889 triệu." },
+                    { text: "900 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính trên (Giá nhập + Thuế NK)."
+            },
+            {
+                questionNumber: 43,
+                question: "Xuất khẩu mặt hàng X giá 4.600 triệu đồng (DAF). Thuế suất thuế xuất khẩu 3%. Thuế xuất khẩu phải nộp là:",
+                answerOptions: [
+                    { text: "Miễn thuế", isCorrect: false },
+                    { text: "138 triệu đồng", isCorrect: true, rationale: "4.600 * 3% = 138 triệu." },
+                    { text: "460 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "4.6 tỷ x 3%."
+            },
+            {
+                questionNumber: 44,
+                question: "Xuất khẩu hàng X (như câu trên). Thuế GTGT đầu ra của lô hàng xuất khẩu trên là:",
+                answerOptions: [
+                    { text: "Miễn thuế", isCorrect: false },
+                    { text: "0 đồng", isCorrect: true, rationale: "Thuế suất GTGT xuất khẩu là 0%." },
+                    { text: "460 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Thuế suất 0%."
+            },
+            {
+                questionNumber: 45,
+                question: "Mua 430 tấn gạo để xuất khẩu. Xuất khẩu toàn bộ với giá FOB: 12,8 triệu đồng/tấn. Thuế suất thuế xuất khẩu gạo là 2%. Số thuế xuất khẩu phải nộp là:",
+                answerOptions: [
+                    { text: "100.000.000đ", isCorrect: false },
+                    { text: "110.000.000đ", isCorrect: false },
+                    { text: "110.080.000đ", isCorrect: true, rationale: "Tổng giá trị = 430 * 12,8tr = 5.504tr. Thuế XK = 5.504 * 2% = 110.080.000đ." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính trên giá FOB."
+            },
+            {
+                questionNumber: 46,
+                question: "Xuất khẩu gạo (như câu trên). Số thuế GTGT đầu ra của lô hàng xuất khẩu trên là:",
+                answerOptions: [
+                    { text: "Miễn thuế", isCorrect: false },
+                    { text: "0 đồng", isCorrect: true, rationale: "Hàng xuất khẩu chịu thuế GTGT 0%." },
+                    { text: "550.400.000đ", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Thuế suất 0%."
+            },
+            {
+                questionNumber: 47,
+                question: "Nhập khẩu thiết bị đồng bộ trong nước chưa sản xuất được dùng làm TSCĐ. Trị giá 2 triệu USD. Thuế suất thuế nhập khẩu 2%. Tỷ giá 20.000. Thuế nhập khẩu là:",
+                answerOptions: [
+                    { text: "800 triệu đồng", isCorrect: true, rationale: "2.000.000 * 20.000 = 40 tỷ. Thuế NK = 40 tỷ * 2% = 0.8 tỷ = 800 triệu." },
+                    { text: "850 triệu đồng", isCorrect: false },
+                    { text: "Miễn thuế", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Tính theo thuế suất đề bài cho."
+            },
+            {
+                questionNumber: 48,
+                question: "Nhập khẩu thiết bị (như câu trên). Giá tính thuế nhập khẩu là:",
+                answerOptions: [
+                    { text: "40 tỷ đồng", isCorrect: true, rationale: "2 triệu USD * 20.000 = 40 tỷ." },
+                    { text: "400 tỷ đồng", isCorrect: false },
+                    { text: "4 tỷ đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Nhân với tỷ giá."
+            },
+            {
+                questionNumber: 49,
+                question: "Nhập khẩu thiết bị (như câu trên). Giá tính thuế GTGT hàng nhập khẩu là:",
+                answerOptions: [
+                    { text: "4,8 tỷ đồng", isCorrect: false },
+                    { text: "40,8 tỷ đồng", isCorrect: true, rationale: "Giá tính GTGT = Giá NK (40 tỷ) + Thuế NK (0.8 tỷ) = 40.8 tỷ." },
+                    { text: "48 tỷ đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Cộng thuế nhập khẩu vào."
+            },
+            {
+                questionNumber: 50,
+                question: "Nhập khẩu thiết bị (như câu trên). Thuế GTGT hàng nhập khẩu là:",
+                answerOptions: [
+                    { text: "480 triệu đồng", isCorrect: false },
+                    { text: "4,08 tỷ đồng", isCorrect: true, rationale: "40.8 tỷ * 10% = 4.08 tỷ." },
+                    { text: "4,8 tỷ đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "40.8 tỷ x 10%."
+            },
+            {
+                questionNumber: 51,
+                question: "Nhập khẩu thiết bị (như câu trên). Công ty chưa nộp thuế khâu nhập khẩu. Thuế GTGT được khấu trừ là:",
+                answerOptions: [
+                    { text: "480 triệu đồng", isCorrect: false },
+                    { text: "4,08 tỷ đồng", isCorrect: false },
+                    { text: "4,8 tỷ đồng", isCorrect: false },
+                    { text: "Không kê khai", isCorrect: true, rationale: "Chưa nộp thuế GTGT khâu nhập khẩu thì chưa có chứng từ để kê khai khấu trừ." }
+                ],
+                hint: "Phải nộp thuế rồi mới được khấu trừ."
+            },
+            {
+                questionNumber: 52,
+                question: "Công ty Minh Thành giao ủy thác nhập khẩu 10 tấn hóa chất. Trị giá 2,7 tỷ đồng. Thuế suất thuế nhập khẩu 20%, thuế GTGT 10%. Công ty Minh Thành kê khai thuế GTGT hàng nhập khẩu được khấu trừ là:",
+                answerOptions: [
+                    { text: "324 triệu đồng", isCorrect: true, rationale: "Thuế NK = 2.7 * 20% = 0.54 tỷ. Giá tính GTGT = 2.7 + 0.54 = 3.24 tỷ. Thuế GTGT = 324 triệu. Bên ủy thác được khấu trừ." },
+                    { text: "270 triệu đồng", isCorrect: false },
+                    { text: "0 đồng", isCorrect: false },
+                    { text: "Không kê khai", isCorrect: false }
+                ],
+                hint: "Tính thuế chồng thuế."
+            },
+            {
+                questionNumber: 53,
+                question: "Công ty Minh Thành giao ủy thác nhập khẩu (như câu trên). Thuế GTGT hàng nhập khẩu là:",
+                answerOptions: [
+                    { text: "0 triệu đồng", isCorrect: false },
+                    { text: "270 triệu đồng", isCorrect: false },
+                    { text: "324 triệu đồng", isCorrect: true, rationale: "Như tính toán ở câu trên." },
+                    { text: "Không kê khai", isCorrect: false }
+                ],
+                hint: "Giá tính thuế x 10%."
+            },
+            {
+                questionNumber: 54,
+                question: "Công ty Minh Thành giao ủy thác nhập khẩu (như câu trên). Giá tính thuế GTGT hàng nhập khẩu là:",
+                answerOptions: [
+                    { text: "32,4 tỷ đồng", isCorrect: false },
+                    { text: "2,7 tỷ đồng", isCorrect: false },
+                    { text: "3,24 tỷ đồng", isCorrect: true, rationale: "2.7 tỷ + 0.54 tỷ thuế NK = 3.24 tỷ." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Cộng thuế NK vào giá trị lô hàng."
+            },
+            {
+                questionNumber: 55,
+                question: "Công ty Minh Thành giao ủy thác nhập khẩu (như câu trên). Giá tính thuế nhập khẩu là:",
+                answerOptions: [
+                    { text: "2,7 tỷ đồng", isCorrect: true, rationale: "Là giá CIF." },
+                    { text: "27 tỷ đồng", isCorrect: false },
+                    { text: "540 triệu đồng", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "Giá trị lô hàng chưa thuế."
+            },
+            {
+                questionNumber: 56,
+                question: "Công ty Minh Thành giao ủy thác nhập khẩu (như câu trên). Thuế nhập khẩu là:",
+                answerOptions: [
+                    { text: "2,7 tỷ đồng", isCorrect: false },
+                    { text: "27 tỷ đồng", isCorrect: false },
+                    { text: "540 triệu đồng", isCorrect: true, rationale: "2.7 tỷ * 20% = 540 triệu." },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
+                ],
+                hint: "2.7 tỷ x 20%."
+            },
+            {
+                questionNumber: 57,
+                question: "Công ty Minh Ngọc bán thuốc lá cho cơ sở kinh doanh để xuất khẩu 20.000 bao, giá 10.000đ/bao. Số thuế xuất khẩu mà công ty Minh Ngọc phải nộp là:",
+                answerOptions: [
+                    { text: "10 triệu đồng", isCorrect: false },
+                    { text: "11 triệu đồng", isCorrect: false },
+                    { text: "110 triệu đồng", isCorrect: false },
+                    { text: "Không phải nộp", isCorrect: true, rationale: "Công ty Minh Ngọc bán nội địa cho đơn vị khác, đơn vị kia mới xuất khẩu. Minh Ngọc không trực tiếp xuất khẩu nên không nộp thuế XK." }
+                ],
+                hint: "Người nộp thuế XK là người đứng tên tờ khai hải quan xuất khẩu."
+            },
+            {
+                questionNumber: 58,
+                question: "Công ty Minh Ngọc (như câu trên). Số thuế GTGT đầu ra mà công ty Minh Ngọc phải kê khai là:",
+                answerOptions: [
+                    { text: "20 triệu đồng", isCorrect: true, rationale: "Bán nội địa chịu thuế GTGT 10%. 20.000 * 10.000 * 10% = 20.000.000đ." },
+                    { text: "22 triệu đồng", isCorrect: false },
+                    { text: "0 đồng", isCorrect: false },
+                    { text: "Miễn thuế", isCorrect: false }
+                ],
+                hint: "Tính như bán hàng trong nước thông thường."
+            },
+            {
+                questionNumber: 59,
+                question: "Công ty Sintex bán rượu cho cơ sở kinh doanh xuất khẩu 10.000 chai. Số thuế xuất khẩu mà công ty Sintex phải nộp là:",
+                answerOptions: [
+                    { text: "37,5 triệu đồng", isCorrect: false },
+                    { text: "37 triệu đồng", isCorrect: false },
+                    { text: "18,75 triệu đồng", isCorrect: false },
+                    { text: "Không phải nộp", isCorrect: true, rationale: "Sintex bán nội địa, không trực tiếp xuất khẩu nên không nộp thuế XK." }
+                ],
+                hint: "Sintex không phải là người xuất khẩu."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let isAnswerChecked = false;
+
+        const quizContent = document.getElementById('quiz-content');
+        const resultsScreen = document.getElementById('results-screen');
+        const finalScoreText = document.getElementById('final-score');
+
+        // Hàm trộn ngẫu nhiên thứ tự các options
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function renderQuestion() {
+            if (currentQuestionIndex >= quizData.length) {
+                showResults();
+                return;
+            }
+
+            const currentQuestion = quizData[currentQuestionIndex];
+            isAnswerChecked = false;
+
+            // Đảm bảo các tùy chọn được trộn mỗi lần hiển thị
+            currentQuestion.shuffledOptions = shuffleArray([...currentQuestion.answerOptions]);
+
+            let optionsHtml = currentQuestion.shuffledOptions.map((option, index) => `
+                <button
+                    class="option-button w-full text-left p-4 mb-3 rounded-xl bg-white focus:outline-none"
+                    data-option-index="${index}"
+                    onclick="selectOption(this, ${index})"
+                    >
+                    <span class="font-bold text-gray-800">${String.fromCharCode(65 + index)}. </span>
+                    <span class="text-gray-700 font-medium">${option.text}</span>
+                </button>
+            `).join('');
+
+            quizContent.innerHTML = `
+                <div class="mb-8 p-4 bg-teal-50 rounded-xl border border-teal-200">
+                    <p class="text-md font-semibold text-teal-600 mb-3">Câu hỏi <span class="text-teal-800 font-extrabold">${currentQuestion.questionNumber}</span>/<span class="text-teal-800 font-extrabold">${quizData.length}</span></p>
+                    <h2 class="text-xl font-semibold text-gray-900 leading-relaxed">${currentQuestion.question}</h2>
+                </div>
+                <div id="options-container" class="space-y-4">
+                    ${optionsHtml}
+                </div>
+                <div id="feedback-area" class="mt-6 p-4 rounded-xl hidden transition-all duration-300">
+                    <p id="rationale-text" class="text-sm"></p>
+                    <p id="hint-text" class="text-xs text-gray-600 mt-2 italic">Gợi ý: ${currentQuestion.hint}</p>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between items-center mt-10 space-y-4 sm:space-y-0">
+                    <button id="check-button" class="btn-action w-full sm:w-auto px-6 py-3 btn-secondary text-white font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:shadow-none" onclick="checkAnswer()" disabled>
+                        Kiểm Tra
+                    </button>
+                    <div class="text-center text-md font-bold text-gray-600">
+                        Điểm hiện tại: <span id="current-score" class="text-teal-600 font-extrabold">${score}</span>/${quizData.length}
+                    </div>
+                    <button id="next-button" class="btn-action w-full sm:w-auto px-6 py-3 btn-primary text-white font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:shadow-none" onclick="nextQuestion()" disabled>
+                        Câu Tiếp Theo
+                    </button>
+                </div>
+            `;
+        }
+
+        function selectOption(button, optionIndex) {
+            if (isAnswerChecked) return;
+
+            // Xóa trạng thái chọn của tất cả các nút
+            document.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.remove('option-selected');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+
+            // Đặt trạng thái chọn cho nút hiện tại
+            button.classList.add('option-selected');
+            button.setAttribute('aria-pressed', 'true');
+
+            // Lưu trữ lựa chọn của người dùng
+            userAnswers[currentQuestionIndex] = optionIndex;
+
+            // Bật nút Kiểm Tra
+            document.getElementById('check-button').disabled = false;
+        }
+
+        function checkAnswer() {
+            if (isAnswerChecked) return;
+            isAnswerChecked = true;
+
+            const selectedOptionIndex = userAnswers[currentQuestionIndex];
+            const currentQuestion = quizData[currentQuestionIndex];
+            const feedbackArea = document.getElementById('feedback-area');
+            const rationaleText = document.getElementById('rationale-text');
+            const nextButton = document.getElementById('next-button');
+            const checkButton = document.getElementById('check-button');
+
+            const isCorrect = currentQuestion.shuffledOptions[selectedOptionIndex].isCorrect;
+
+            // Hiển thị kết quả và rationale
+            feedbackArea.classList.remove('hidden');
+            feedbackArea.classList.remove('bg-red-50', 'bg-green-50');
+            feedbackArea.classList.add(isCorrect ? 'bg-green-50' : 'bg-red-50');
+            
+            rationaleText.classList.remove('text-green-800', 'text-red-800');
+            rationaleText.classList.add(isCorrect ? 'text-green-800' : 'text-red-800');
+            rationaleText.innerHTML = `
+                <span class="font-bold">${isCorrect ? 'Chính xác! ' : 'Chưa đúng. '}</span>
+                ${currentQuestion.shuffledOptions.find(opt => opt.isCorrect).rationale || ""}
+            `;
+
+            // Cập nhật điểm
+            if (isCorrect) {
+                score++;
+                document.getElementById('current-score').textContent = score;
+            }
+
+            // Đánh dấu các tùy chọn
+            document.querySelectorAll('.option-button').forEach((btn, index) => {
+                const option = currentQuestion.shuffledOptions[index];
+                btn.disabled = true;
+                btn.classList.remove('option-selected', 'hover:bg-gray-100');
+
+                if (option.isCorrect) {
+                    btn.classList.add('option-correct');
+                } else if (index === selectedOptionIndex) {
+                    btn.classList.add('option-incorrect');
+                }
+            });
+
+            // Vô hiệu hóa nút Kiểm Tra và Bật nút Câu Tiếp Theo
+            checkButton.disabled = true;
+            nextButton.disabled = false;
+            nextButton.focus(); // Tập trung vào nút Tiếp theo để tiện thao tác
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuestion();
+        }
+
+        function showResults() {
+            quizContent.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreText.innerHTML = `Bạn đã hoàn thành bài thi với <span class="text-teal-700 font-black">${score}</span>/${quizData.length} câu trả lời đúng.`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            quizContent.classList.remove('hidden');
+            resultsScreen.classList.add('hidden');
+            renderQuestion();
+        }
+
+        // Bắt đầu quiz khi tải trang
+        window.onload = renderQuestion;
+    </script>
+</body>
+</html>
