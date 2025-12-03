@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chương Trình Trắc Nghiệm Thuế và Tài Chính</title>
+    <title>Chương Trình Trắc Nghiệm Thuế GTGT</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Thiết lập font Inter cho giao diện */
@@ -102,28 +102,28 @@
     </div>
 
     <script>
-        // Dữ liệu quiz 100 câu từ file docx
+        // Dữ liệu quiz 100 câu ĐÃ ĐƯỢC CHỈNH SỬA (Xóa A, B, C, D trong nội dung)
         const quizData = [
             {
                 questionNumber: 1,
                 question: "Đặc điểm nào dưới đây KHÔNG phải của thuế GTGT:",
                 answerOptions: [
-                    { text: "A. Gián thu", isCorrect: false },
-                    { text: "B. Đánh nhiều giai đoạn", isCorrect: false },
-                    { text: "C. Trùng lặp", isCorrect: true },
-                    { text: "D. Có tính trung lập kinh tế cao", isCorrect: false }
+                    { text: "Gián thu", isCorrect: false },
+                    { text: "Đánh nhiều giai đoạn", isCorrect: false },
+                    { text: "Trùng lặp", isCorrect: true },
+                    { text: "Có tính trung lập kinh tế cao", isCorrect: false }
                 ],
                 hint: "Xem lại đặc điểm cơ bản của thuế GTGT.",
-                rationale: "Đáp án đúng là: C. Trùng lặp"
+                rationale: "Đáp án đúng là: C. Trùng lặp (Thuế GTGT tránh trùng lắp, thuế doanh thu mới bị trùng lắp)"
             },
             {
                 questionNumber: 2,
                 question: "Đối tượng chịu thuế GTGT là:",
                 answerOptions: [
-                    { text: "A. HHDV sản xuất kinh doanh tại Việt Nam", isCorrect: false },
-                    { text: "B. HHDV mua của tổ chức, cá nhân nước ngoài", isCorrect: false },
-                    { text: "C. HHDV dùng cho sản xuất kinh doanh và tiêu dùng tại Việt Nam (bao gồm cả HHDV mua của tổ chức, cá nhân nước ngoài), trừ các đối tượng không thuộc diện chịu thuế GTGT", isCorrect: true },
-                    { text: "D. HHDV bán cho tổ chức cá nhân nước ngoài tiêu dùng tại Việt Nam.", isCorrect: false }
+                    { text: "HHDV sản xuất kinh doanh tại Việt Nam", isCorrect: false },
+                    { text: "HHDV mua của tổ chức, cá nhân nước ngoài", isCorrect: false },
+                    { text: "HHDV dùng cho sản xuất kinh doanh và tiêu dùng tại Việt Nam (bao gồm cả HHDV mua của tổ chức, cá nhân nước ngoài), trừ các đối tượng không thuộc diện chịu thuế GTGT", isCorrect: true },
+                    { text: "HHDV bán cho tổ chức cá nhân nước ngoài tiêu dùng tại Việt Nam.", isCorrect: false }
                 ],
                 hint: "Xem quy định về đối tượng chịu thuế.",
                 rationale: "Đáp án đúng là: C"
@@ -132,10 +132,10 @@
                 questionNumber: 3,
                 question: "Hàng hóa, dịch vụ nào sau đây thuộc đối tượng KHÔNG chịu thuế GTGT:",
                 answerOptions: [
-                    { text: "A. Hàng hóa xuất khẩu ra nước ngoài, kể cả ủy thác xuất khẩu", isCorrect: false },
-                    { text: "B. Hàng hóa gia công chuyển tiếp", isCorrect: false },
-                    { text: "C. Hàng hóa xuất khẩu tại chỗ", isCorrect: false },
-                    { text: "D. Sản phẩm muối được sản xuất từ nước biển, muối mỏ tự nhiên, muối tinh, muối i-ốt", isCorrect: true }
+                    { text: "Hàng hóa xuất khẩu ra nước ngoài, kể cả ủy thác xuất khẩu", isCorrect: false },
+                    { text: "Hàng hóa gia công chuyển tiếp", isCorrect: false },
+                    { text: "Hàng hóa xuất khẩu tại chỗ", isCorrect: false },
+                    { text: "Sản phẩm muối được sản xuất từ nước biển, muối mỏ tự nhiên, muối tinh, muối i-ốt", isCorrect: true }
                 ],
                 hint: "Xem danh mục đối tượng không chịu thuế.",
                 rationale: "Đáp án đúng là: D"
@@ -144,10 +144,10 @@
                 questionNumber: 4,
                 question: "Giá tính thuế GTGT đối với hàng hóa nhập khẩu là:",
                 answerOptions: [
-                    { text: "A. Giá bán chưa có thuế GTGT", isCorrect: false },
-                    { text: "B. Giá bán chưa có thuế GTGT, đã có thuế TTĐB", isCorrect: false },
-                    { text: "C. Giá nhập tại cửa khẩu cộng (+) với thuế nhập khẩu (nếu có), cộng (+) với thuế tiêu thụ đặc biệt (nếu có), cộng (+) với thuế bảo vệ môi trường (nếu có)", isCorrect: true },
-                    { text: "D. Giá bán chưa có thuế GTGT, đã có thuế nhập khẩu", isCorrect: false }
+                    { text: "Giá bán chưa có thuế GTGT", isCorrect: false },
+                    { text: "Giá bán chưa có thuế GTGT, đã có thuế TTĐB", isCorrect: false },
+                    { text: "Giá nhập tại cửa khẩu cộng (+) với thuế nhập khẩu (nếu có), cộng (+) với thuế tiêu thụ đặc biệt (nếu có), cộng (+) với thuế bảo vệ môi trường (nếu có)", isCorrect: true },
+                    { text: "Giá bán chưa có thuế GTGT, đã có thuế nhập khẩu", isCorrect: false }
                 ],
                 hint: "Công thức tính giá tính thuế hàng nhập khẩu.",
                 rationale: "Đáp án đúng là: C"
@@ -156,10 +156,10 @@
                 questionNumber: 5,
                 question: "Trường hợp xây dựng, lắp đặt CÓ bao thầu nguyên vật liệu, giá tính thuế GTGT là:",
                 answerOptions: [
-                    { text: "A. Giá trị xây dựng lắp đặt thực tế", isCorrect: false },
-                    { text: "B. Giá xây dựng lắp đặt không bao gồm giá trị nguyên vật liệu, chưa có thuế GTGT", isCorrect: false },
-                    { text: "C. Giá xây dựng, lắp đặt bao gồm cả giá trị nguyên vật liệu, chưa có thuế GTGT", isCorrect: true },
-                    { text: "D. Giá tính thuế hạng mục công trình hoặc giá trị khối lượng công việc hoàn thành bàn giao chưa có thuế GTGT", isCorrect: false }
+                    { text: "Giá trị xây dựng lắp đặt thực tế", isCorrect: false },
+                    { text: "Giá xây dựng lắp đặt không bao gồm giá trị nguyên vật liệu, chưa có thuế GTGT", isCorrect: false },
+                    { text: "Giá xây dựng, lắp đặt bao gồm cả giá trị nguyên vật liệu, chưa có thuế GTGT", isCorrect: true },
+                    { text: "Giá tính thuế hạng mục công trình hoặc giá trị khối lượng công việc hoàn thành bàn giao chưa có thuế GTGT", isCorrect: false }
                 ],
                 hint: "Xem quy định giá tính thuế hoạt động xây dựng.",
                 rationale: "Đáp án đúng là: C"
@@ -168,10 +168,10 @@
                 questionNumber: 6,
                 question: "Trường hợp xây dựng, lắp đặt KHÔNG bao thầu nguyên vật liệu, giá tính thuế GTGT là:",
                 answerOptions: [
-                    { text: "A. Giá trị xây dựng lắp đặt thực tế", isCorrect: false },
-                    { text: "B. Giá xây dựng lắp đặt không bao gồm giá trị nguyên vật liệu, chưa có thuế GTGT", isCorrect: true },
-                    { text: "C. Giá xây dựng, lắp đặt bao gồm cả giá trị nguyên vật liệu, chưa có thuế GTGT", isCorrect: false },
-                    { text: "D. Giá tính thuế hạng mục công trình hoặc giá trị khối lượng công việc hoàn thành bàn giao chưa có thuế GTGT", isCorrect: false }
+                    { text: "Giá trị xây dựng lắp đặt thực tế", isCorrect: false },
+                    { text: "Giá xây dựng lắp đặt không bao gồm giá trị nguyên vật liệu, chưa có thuế GTGT", isCorrect: true },
+                    { text: "Giá xây dựng, lắp đặt bao gồm cả giá trị nguyên vật liệu, chưa có thuế GTGT", isCorrect: false },
+                    { text: "Giá tính thuế hạng mục công trình hoặc giá trị khối lượng công việc hoàn thành bàn giao chưa có thuế GTGT", isCorrect: false }
                 ],
                 hint: "Xem quy định giá tính thuế hoạt động xây dựng.",
                 rationale: "Đáp án đúng là: B"
@@ -180,10 +180,10 @@
                 questionNumber: 7,
                 question: "Trường hợp xây dựng, lắp đặt thực hiện thanh toán theo hạng mục công trình hoặc giá trị khối lượng xây dựng, lắp đặt hoàn thành bàn giao, giá tính thuế GTGT là:",
                 answerOptions: [
-                    { text: "A. Giá trị xây dựng lắp đặt thực tế", isCorrect: false },
-                    { text: "B. Giá xây dựng lắp đặt không bao gồm giá trị nguyên vật liệu, chưa có thuế GTGT", isCorrect: false },
-                    { text: "C. Giá xây dựng, lắp đặt bao gồm cả giá trị nguyên vật liệu, chưa có thuế GTGT", isCorrect: false },
-                    { text: "D. Giá tính thuế hạng mục công trình hoặc giá trị khối lượng công việc hoàn thành bàn giao chưa có thuế GTGT", isCorrect: true }
+                    { text: "Giá trị xây dựng lắp đặt thực tế", isCorrect: false },
+                    { text: "Giá xây dựng lắp đặt không bao gồm giá trị nguyên vật liệu, chưa có thuế GTGT", isCorrect: false },
+                    { text: "Giá xây dựng, lắp đặt bao gồm cả giá trị nguyên vật liệu, chưa có thuế GTGT", isCorrect: false },
+                    { text: "Giá tính thuế hạng mục công trình hoặc giá trị khối lượng công việc hoàn thành bàn giao chưa có thuế GTGT", isCorrect: true }
                 ],
                 hint: "Xem quy định giá tính thuế hoạt động xây dựng.",
                 rationale: "Đáp án đúng là: D"
@@ -192,22 +192,22 @@
                 questionNumber: 8,
                 question: "Thuế suất 0% KHÔNG áp dụng đối với:",
                 answerOptions: [
-                    { text: "A. Hàng hóa xuất khẩu", isCorrect: false },
-                    { text: "B. Vận tải quốc tế", isCorrect: false },
-                    { text: "C. Hàng hóa bán cho doanh nghiệp khu chế xuất", isCorrect: false },
-                    { text: "D. Xe ô tô bán cho tổ chức, cá nhân trong khu phi thuế quan", isCorrect: true }
+                    { text: "Hàng hóa xuất khẩu", isCorrect: false },
+                    { text: "Vận tải quốc tế", isCorrect: false },
+                    { text: "Hàng hóa bán cho doanh nghiệp khu chế xuất", isCorrect: false },
+                    { text: "Xe ô tô bán cho tổ chức, cá nhân trong khu phi thuế quan", isCorrect: true }
                 ],
                 hint: "Xem các trường hợp ngoại lệ của thuế suất 0%.",
                 rationale: "Đáp án đúng là: D"
             },
             {
                 questionNumber: 9,
-                question: "Thuế suất 0% KHÔNG áp dụng đối với:",
+                question: "Thuế suất 0% KHÔNG áp dụng đối với trường hợp nào sau đây:",
                 answerOptions: [
-                    { text: "A. Hàng hóa xuất khẩu", isCorrect: false },
-                    { text: "B. Vận tải quốc tế", isCorrect: false },
-                    { text: "C. Hàng hóa bán cho doanh nghiệp khu chế xuất", isCorrect: false },
-                    { text: "D. Sản phẩm trồng trọt (bao gồm cả sản phẩm rừng trồng), chăn nuôi, thủy sản, hải sản nuôi trồng, đánh bắt chưa chế biến thành các sản phẩm khác hoặc chỉ qua sơ chế thông thường của tổ chức, cá nhân tự sản xuất, đánh bắt bán ra ở khâu nhập khẩu.", isCorrect: true }
+                    { text: "Hàng hóa xuất khẩu", isCorrect: false },
+                    { text: "Vận tải quốc tế", isCorrect: false },
+                    { text: "Hàng hóa bán cho doanh nghiệp khu chế xuất", isCorrect: false },
+                    { text: "Sản phẩm trồng trọt (bao gồm cả sản phẩm rừng trồng), chăn nuôi, thủy sản, hải sản nuôi trồng, đánh bắt chưa chế biến thành các sản phẩm khác hoặc chỉ qua sơ chế thông thường của tổ chức, cá nhân tự sản xuất, đánh bắt bán ra ở khâu nhập khẩu.", isCorrect: true }
                 ],
                 hint: "Phân biệt đối tượng 0% và không chịu thuế.",
                 rationale: "Đáp án đúng là: D"
@@ -216,10 +216,10 @@
                 questionNumber: 10,
                 question: "Loại cơ sở kinh doanh nào sau đây sử dụng hóa đơn GTGT khi bán hàng hóa, dịch vụ:",
                 answerOptions: [
-                    { text: "A. Cơ sở kinh doanh nộp thuế GTGT theo phương pháp trực tiếp.", isCorrect: false },
-                    { text: "B. Hộ kinh doanh nộp thuế khoán.", isCorrect: false },
-                    { text: "C. Cơ sở kinh doanh nộp thuế GTGT theo phương pháp khấu trừ.", isCorrect: true },
-                    { text: "D. Hộ kinh doanh buôn chuyến", isCorrect: false }
+                    { text: "Cơ sở kinh doanh nộp thuế GTGT theo phương pháp trực tiếp.", isCorrect: false },
+                    { text: "Hộ kinh doanh nộp thuế khoán.", isCorrect: false },
+                    { text: "Cơ sở kinh doanh nộp thuế GTGT theo phương pháp khấu trừ.", isCorrect: true },
+                    { text: "Hộ kinh doanh buôn chuyến", isCorrect: false }
                 ],
                 hint: "Chỉ đối tượng nộp theo phương pháp khấu trừ mới dùng hóa đơn GTGT.",
                 rationale: "Đáp án đúng là: C"
@@ -228,10 +228,10 @@
                 questionNumber: 11,
                 question: "Đối với hàng hóa khuyến mại không thu tiền theo chương trình khuyến mại đã đăng ký với Bộ công thương, giá tính thuế GTGT được xác định bằng:",
                 answerOptions: [
-                    { text: "A. Giá bán của sản phẩm cùng loại tương đương do doanh nghiệp bán ra.", isCorrect: false },
-                    { text: "B. 0", isCorrect: true },
-                    { text: "C. Giá mua vào của cơ sở thực hiện chương trình khuyến mại", isCorrect: false },
-                    { text: "D. Giá bán của sản phẩm cùng loại trên thị trường", isCorrect: false }
+                    { text: "Giá bán của sản phẩm cùng loại tương đương do doanh nghiệp bán ra.", isCorrect: false },
+                    { text: "0", isCorrect: true },
+                    { text: "Giá mua vào của cơ sở thực hiện chương trình khuyến mại", isCorrect: false },
+                    { text: "Giá bán của sản phẩm cùng loại trên thị trường", isCorrect: false }
                 ],
                 hint: "Xem quy định giá tính thuế hàng khuyến mại.",
                 rationale: "Đáp án đúng là: B"
@@ -240,10 +240,10 @@
                 questionNumber: 12,
                 question: "Trường hợp khuyến mại dưới hình thức giảm giá hàng bán theo chương trình khuyến mại đã đăng ký hoặc thông báo với Bộ công thương, giá tính thuế GTGT được xác định bằng:",
                 answerOptions: [
-                    { text: "A. Giá bán đã giảm chưa bao gồm thuế GTGT của cơ sở thực hiện chương trình khuyến mại", isCorrect: true },
-                    { text: "B. 0", isCorrect: false },
-                    { text: "C. Giá bán của sản phẩm tương đương cùng loại trên thị trường", isCorrect: false },
-                    { text: "D. Giá mua vào chưa bao gồm thuế GTGT của cơ sở thực hiện chương trình khuyến mại", isCorrect: false }
+                    { text: "Giá bán đã giảm chưa bao gồm thuế GTGT của cơ sở thực hiện chương trình khuyến mại", isCorrect: true },
+                    { text: "0", isCorrect: false },
+                    { text: "Giá bán của sản phẩm tương đương cùng loại trên thị trường", isCorrect: false },
+                    { text: "Giá mua vào chưa bao gồm thuế GTGT của cơ sở thực hiện chương trình khuyến mại", isCorrect: false }
                 ],
                 hint: "Tính trên giá thực tế thu được.",
                 rationale: "Đáp án đúng là: A"
@@ -252,10 +252,10 @@
                 questionNumber: 13,
                 question: "Trong trường hợp doanh nghiệp cung ứng hàng hóa thực hiện chiết khấu thương mại theo từng lần, giá tính thuế GTGT được xác định bằng:",
                 answerOptions: [
-                    { text: "A. Giá bán của sản phẩm hàng hóa đã chiết khấu chưa bao gồm thuế GTGT thể hiện trên hóa đơn GTGT", isCorrect: true },
-                    { text: "B. 0", isCorrect: false },
-                    { text: "C. Giá bán của sản phẩm tương đương cùng loại trên thị trường", isCorrect: false },
-                    { text: "D. Giá mua vào chưa bao gồm thuế GTGT của cơ sở bán ra.", isCorrect: false }
+                    { text: "Giá bán của sản phẩm hàng hóa đã chiết khấu chưa bao gồm thuế GTGT thể hiện trên hóa đơn GTGT", isCorrect: true },
+                    { text: "0", isCorrect: false },
+                    { text: "Giá bán của sản phẩm tương đương cùng loại trên thị trường", isCorrect: false },
+                    { text: "Giá mua vào chưa bao gồm thuế GTGT của cơ sở bán ra.", isCorrect: false }
                 ],
                 hint: "Chiết khấu thương mại được trừ trực tiếp.",
                 rationale: "Đáp án đúng là: A"
@@ -264,10 +264,10 @@
                 questionNumber: 14,
                 question: "Trong trường hợp doanh nghiệp cung ứng hàng hóa thực hiện chiết khấu thanh toán, giá tính thuế GTGT được xác định bằng:",
                 answerOptions: [
-                    { text: "A. Giá bán chưa bao gồm thuế GTGT của sản phẩm hàng hóa dịch vụ thể hiện trên hóa đơn GTGT, không giảm trừ khoản chiết khấu thanh toán", isCorrect: true },
-                    { text: "B. 0", isCorrect: false },
-                    { text: "C. Giá bán đã bao gồm thuế GTGT của sản phẩm hàng hóa dịch vụ thể hiện trên hóa đơn GTGT, không giảm trừ khoản chiết khấu", isCorrect: false },
-                    { text: "D. Giá mua vào chưa bao gồm thuế GTGT của cơ sở thực hiện chương trình khuyến mại", isCorrect: false }
+                    { text: "Giá bán chưa bao gồm thuế GTGT của sản phẩm hàng hóa dịch vụ thể hiện trên hóa đơn GTGT, không giảm trừ khoản chiết khấu thanh toán", isCorrect: true },
+                    { text: "0", isCorrect: false },
+                    { text: "Giá bán đã bao gồm thuế GTGT của sản phẩm hàng hóa dịch vụ thể hiện trên hóa đơn GTGT, không giảm trừ khoản chiết khấu", isCorrect: false },
+                    { text: "Giá mua vào chưa bao gồm thuế GTGT của cơ sở thực hiện chương trình khuyến mại", isCorrect: false }
                 ],
                 hint: "Chiết khấu thanh toán là chi phí tài chính.",
                 rationale: "Đáp án đúng là: A"
@@ -276,10 +276,10 @@
                 questionNumber: 15,
                 question: "Trường hợp khuyến mại bán hàng, cung ứng dịch vụ có kèm theo phiếu mua hàng, phiếu sử dụng dịch vụ thì:",
                 answerOptions: [
-                    { text: "A. Phải kê khai, tính thuế GTGT đối với phiếu mua hàng, phiếu sử dụng dịch vụ tặng kèm như hóa đơn GTGT.", isCorrect: false },
-                    { text: "B. Không phải kê khai, tính thuế GTGT đối với phiếu mua hàng, phiếu sử dụng dịch vụ tặng kèm", isCorrect: true },
-                    { text: "C. Thuế GTGT phải nộp của phiếu mua hàng, phiếu sử dụng dịch vụ được xác định bằng 0", isCorrect: false },
-                    { text: "D. Không có trường hợp nào nêu trên", isCorrect: false }
+                    { text: "Phải kê khai, tính thuế GTGT đối với phiếu mua hàng, phiếu sử dụng dịch vụ tặng kèm như hóa đơn GTGT.", isCorrect: false },
+                    { text: "Không phải kê khai, tính thuế GTGT đối với phiếu mua hàng, phiếu sử dụng dịch vụ tặng kèm", isCorrect: true },
+                    { text: "Thuế GTGT phải nộp của phiếu mua hàng, phiếu sử dụng dịch vụ được xác định bằng 0", isCorrect: false },
+                    { text: "Không có trường hợp nào nêu trên", isCorrect: false }
                 ],
                 hint: "Phiếu mua hàng là chứng từ có giá, không phải hàng hóa.",
                 rationale: "Đáp án đúng là: B"
@@ -288,10 +288,10 @@
                 questionNumber: 16,
                 question: "Trường hợp hàng hóa bán theo phương thức trả chậm, trả góp; giá tính thuế là:",
                 answerOptions: [
-                    { text: "A. Giá bán bao gồm cả tiền lãi trả chậm trả góp chưa bao gồm thuế GTGT của hàng hóa đó.", isCorrect: false },
-                    { text: "B. Giá bán theo phương thức trả tiền một lần chưa có thuế GTGT của hàng hàng hóa đó, không bao gồm khoản lãi trả chậm trả góp.", isCorrect: true },
-                    { text: "C. Giá bán theo phương thức trả tiền một lần đã có thuế GTGT của hàng hàng hóa đó, không bao gồm khoản lãi trả chậm trả góp.", isCorrect: false },
-                    { text: "D. Giá bán đã bao gồm thuế GTGT và tiền lãi trả chậm, trả góp của hàng hóa đó.", isCorrect: false }
+                    { text: "Giá bán bao gồm cả tiền lãi trả chậm trả góp chưa bao gồm thuế GTGT của hàng hóa đó.", isCorrect: false },
+                    { text: "Giá bán theo phương thức trả tiền một lần chưa có thuế GTGT của hàng hàng hóa đó, không bao gồm khoản lãi trả chậm trả góp.", isCorrect: true },
+                    { text: "Giá bán theo phương thức trả tiền một lần đã có thuế GTGT của hàng hàng hóa đó, không bao gồm khoản lãi trả chậm trả góp.", isCorrect: false },
+                    { text: "Giá bán đã bao gồm thuế GTGT và tiền lãi trả chậm, trả góp của hàng hóa đó.", isCorrect: false }
                 ],
                 hint: "Lãi trả chậm là doanh thu tài chính.",
                 rationale: "Đáp án đúng là: B"
@@ -300,10 +300,10 @@
                 questionNumber: 17,
                 question: "Số thuế GTGT phải nộp theo phương pháp khấu trừ được xác định bằng:",
                 answerOptions: [
-                    { text: "A. Số thuế GTGT đầu ra trừ (-) số thuế GTGT đầu vào được khấu trừ.", isCorrect: true },
-                    { text: "B. Tổng số thuế GTGT đầu ra", isCorrect: false },
-                    { text: "C. Số thuế GTGT đầu ra trừ (-) số thuế GTGT đầu vào.", isCorrect: false },
-                    { text: "D. Giá tính thuế GTGT của hàng hóa, dịch vụ chịu thuế bán ra nhân (x) với thuế suất thuế GTGT của hàng hóa, dịch vụ đó.", isCorrect: false }
+                    { text: "Số thuế GTGT đầu ra trừ (-) số thuế GTGT đầu vào được khấu trừ.", isCorrect: true },
+                    { text: "Tổng số thuế GTGT đầu ra", isCorrect: false },
+                    { text: "Số thuế GTGT đầu ra trừ (-) số thuế GTGT đầu vào.", isCorrect: false },
+                    { text: "Giá tính thuế GTGT của hàng hóa, dịch vụ chịu thuế bán ra nhân (x) với thuế suất thuế GTGT của hàng hóa, dịch vụ đó.", isCorrect: false }
                 ],
                 hint: "Công thức cơ bản của phương pháp khấu trừ.",
                 rationale: "Đáp án đúng là: A"
@@ -312,10 +312,10 @@
                 questionNumber: 18,
                 question: "Phương pháp khấu trừ thuế áp dụng với đối tượng nào sau đây:",
                 answerOptions: [
-                    { text: "A. Cá nhân, hộ kinh doanh không thực hiện hoặc thực hiện không đầy đủ chế độ kế toán, hóa đơn chứng từ theo quy định của pháp luật.", isCorrect: false },
-                    { text: "B. Tổ chức, cá nhân nước ngoài kinh doanh không theo Luật Đầu tư và các tổ chức khác không thực hiện hoặc thực hiện không đầy đủ chế độ kế toán, hóa đơn, chứng từ theo quy định của pháp luật", isCorrect: false },
-                    { text: "C. Cơ sở kinh doanh vàng bạc, đá quý, ngoại tệ.", isCorrect: false },
-                    { text: "D. Cơ sở kinh doanh đang hoạt động có doanh thu hàng năm từ bán hàng hóa, cung ứng dịch vụ từ một tỷ đồng trở lên và thực hiện đầy đủ chế độ kế toán, hóa đơn, chứng từ theo quy định của pháp luật về kế toán, hóa đơn, chứng từ.", isCorrect: true }
+                    { text: "Cá nhân, hộ kinh doanh không thực hiện hoặc thực hiện không đầy đủ chế độ kế toán, hóa đơn chứng từ theo quy định của pháp luật.", isCorrect: false },
+                    { text: "Tổ chức, cá nhân nước ngoài kinh doanh không theo Luật Đầu tư và các tổ chức khác không thực hiện hoặc thực hiện không đầy đủ chế độ kế toán, hóa đơn, chứng từ theo quy định của pháp luật", isCorrect: false },
+                    { text: "Cơ sở kinh doanh vàng bạc, đá quý, ngoại tệ.", isCorrect: false },
+                    { text: "Cơ sở kinh doanh đang hoạt động có doanh thu hàng năm từ bán hàng hóa, cung ứng dịch vụ từ một tỷ đồng trở lên và thực hiện đầy đủ chế độ kế toán, hóa đơn, chứng từ theo quy định của pháp luật về kế toán, hóa đơn, chứng từ.", isCorrect: true }
                 ],
                 hint: "Điều kiện doanh thu 1 tỷ trở lên.",
                 rationale: "Đáp án đúng là: D"
@@ -324,10 +324,10 @@
                 questionNumber: 19,
                 question: "DN A có hóa đơn GTGT mua vào lập ngày 15/3/N. Trong kỳ kê khai thuế tháng 3/N, DN A bỏ sót không kê khai hóa đơn này. Thời hạn kê khai, khấu trừ bổ sung chậm nhất là vào kỳ kê khai nào?",
                 answerOptions: [
-                    { text: "A. Tháng 4/N.", isCorrect: false },
-                    { text: "B. Tháng 6/N", isCorrect: false },
-                    { text: "C. Tháng 9/N", isCorrect: false },
-                    { text: "D. Trước thời điểm cơ quan thuế vào kiểm tra, thanh tra, quyết toán thuế của DN.", isCorrect: true }
+                    { text: "Tháng 4/N.", isCorrect: false },
+                    { text: "Tháng 6/N", isCorrect: false },
+                    { text: "Tháng 9/N", isCorrect: false },
+                    { text: "Trước thời điểm cơ quan thuế vào kiểm tra, thanh tra, quyết toán thuế của DN.", isCorrect: true }
                 ],
                 hint: "Quy định về kê khai bổ sung.",
                 rationale: "Đáp án đúng là: D"
@@ -336,10 +336,10 @@
                 questionNumber: 20,
                 question: "Trường hợp nào sau đây không được coi là thanh toán qua ngân hàng để được khấu trừ thuế GTGT đầu vào đối với HHDV mua vào có giá trị từ 20 triệu đồng trở lên:",
                 answerOptions: [
-                    { text: "A. Đối trừ công nợ giữa hai bên", isCorrect: false },
-                    { text: "B. Thanh toán ủy quyền qua bên thứ 3 thanh toán qua ngân hàng", isCorrect: false },
-                    { text: "C. Chứng từ nộp tiền mặt vào tài khoản bên bán.", isCorrect: true },
-                    { text: "D. Ủy nhiệm chi thanh toán tiền hàng cho bên bán.", isCorrect: false }
+                    { text: "Đối trừ công nợ giữa hai bên", isCorrect: false },
+                    { text: "Thanh toán ủy quyền qua bên thứ 3 thanh toán qua ngân hàng", isCorrect: false },
+                    { text: "Chứng từ nộp tiền mặt vào tài khoản bên bán.", isCorrect: true },
+                    { text: "Ủy nhiệm chi thanh toán tiền hàng cho bên bán.", isCorrect: false }
                 ],
                 hint: "Nộp tiền mặt vào tài khoản không được coi là thanh toán không dùng tiền mặt.",
                 rationale: "Đáp án đúng là: C"
@@ -348,10 +348,10 @@
                 questionNumber: 21,
                 question: "Số thuế giá trị gia tăng phải nộp của doanh nghiệp kinh doanh vàng, bạc, đá quý được xác định bằng:",
                 answerOptions: [
-                    { text: "A. Số thuế GTGT đầu ra trừ (-) số thuế GTGT đầu vào được khấu trừ", isCorrect: false },
-                    { text: "B. Giá trị gia tăng của vàng, bạc, đá quý bán ra nhân (x) thuế suất thuế GTGT của hoạt động kinh doanh vàng, bạc, đá quý", isCorrect: true },
-                    { text: "C. Giá thanh toán của vàng, bạc đá quý bán ra trừ (-) Giá thanh toán của vàng, bạc, đá quý mua vào tương ứng", isCorrect: false },
-                    { text: "D. Doanh thu của vàng, bạc đá quý bán ra nhân (x) 10%", isCorrect: false }
+                    { text: "Số thuế GTGT đầu ra trừ (-) số thuế GTGT đầu vào được khấu trừ", isCorrect: false },
+                    { text: "Giá trị gia tăng của vàng, bạc, đá quý bán ra nhân (x) thuế suất thuế GTGT của hoạt động kinh doanh vàng, bạc, đá quý", isCorrect: true },
+                    { text: "Giá thanh toán của vàng, bạc đá quý bán ra trừ (-) Giá thanh toán của vàng, bạc, đá quý mua vào tương ứng", isCorrect: false },
+                    { text: "Doanh thu của vàng, bạc đá quý bán ra nhân (x) 10%", isCorrect: false }
                 ],
                 hint: "Phương pháp trực tiếp trên GTGT.",
                 rationale: "Đáp án đúng là: B"
@@ -360,10 +360,10 @@
                 questionNumber: 22,
                 question: "Số thuế giá trị gia tăng phải nộp của doanh nghiệp kê khai nộp thuế GTGT theo phương pháp trực tiếp ngoại trừ hoạt động kinh doanh vàng, bạc, đá quý, ngoại tệ được xác định bằng:",
                 answerOptions: [
-                    { text: "A. Doanh thu bán ra nhân (x) tỷ lệ % áp dụng theo quy định.", isCorrect: true },
-                    { text: "B. Thuế giá trị gia tăng đầu ra – Thuế giá trị gia tăng đầu vào được khấu trừ", isCorrect: false },
-                    { text: "C. Doanh thu bán ra nhân (x) 10%", isCorrect: false },
-                    { text: "D. Doanh thu bán ra (x) 5%.", isCorrect: false }
+                    { text: "Doanh thu bán ra nhân (x) tỷ lệ % áp dụng theo quy định.", isCorrect: true },
+                    { text: "Thuế giá trị gia tăng đầu ra – Thuế giá trị gia tăng đầu vào được khấu trừ", isCorrect: false },
+                    { text: "Doanh thu bán ra nhân (x) 10%", isCorrect: false },
+                    { text: "Doanh thu bán ra (x) 5%.", isCorrect: false }
                 ],
                 hint: "Phương pháp trực tiếp trên doanh thu.",
                 rationale: "Đáp án đúng là: A"
@@ -372,10 +372,10 @@
                 questionNumber: 23,
                 question: "Tỷ lệ % để tính thuế giá trị gia tăng trên doanh thu theo phương pháp trực tiếp đối với hoạt động phân phối, cung cấp hàng hóa được quy định là:",
                 answerOptions: [
-                    { text: "A. 1%", isCorrect: true },
-                    { text: "B. 2%", isCorrect: false },
-                    { text: "C. 3%", isCorrect: false },
-                    { text: "D. 5%", isCorrect: false }
+                    { text: "1%", isCorrect: true },
+                    { text: "2%", isCorrect: false },
+                    { text: "3%", isCorrect: false },
+                    { text: "5%", isCorrect: false }
                 ],
                 hint: "Thương mại, phân phối.",
                 rationale: "Đáp án đúng là: A"
@@ -384,10 +384,10 @@
                 questionNumber: 24,
                 question: "Tỷ lệ % để tính thuế giá trị gia tăng trên doanh thu theo phương pháp trực tiếp đối với hoạt động dịch vụ được quy định là:",
                 answerOptions: [
-                    { text: "A. 1%", isCorrect: false },
-                    { text: "B. 2%", isCorrect: false },
-                    { text: "C. 3%", isCorrect: false },
-                    { text: "D. 5%", isCorrect: true }
+                    { text: "1%", isCorrect: false },
+                    { text: "2%", isCorrect: false },
+                    { text: "3%", isCorrect: false },
+                    { text: "5%", isCorrect: true }
                 ],
                 hint: "Dịch vụ, xây dựng không bao thầu NVL.",
                 rationale: "Đáp án đúng là: D"
@@ -396,10 +396,10 @@
                 questionNumber: 25,
                 question: "Tỷ lệ % để tính thuế giá trị gia tăng trên doanh thu theo phương pháp trực tiếp đối với hoạt động sản xuất được quy định là:",
                 answerOptions: [
-                    { text: "A. 1%", isCorrect: false },
-                    { text: "B. 2%", isCorrect: false },
-                    { text: "C. 3%", isCorrect: true },
-                    { text: "D. 5%", isCorrect: false }
+                    { text: "1%", isCorrect: false },
+                    { text: "2%", isCorrect: false },
+                    { text: "3%", isCorrect: true },
+                    { text: "5%", isCorrect: false }
                 ],
                 hint: "Sản xuất, vận tải, dịch vụ gắn với hàng hóa.",
                 rationale: "Đáp án đúng là: C"
@@ -408,10 +408,10 @@
                 questionNumber: 26,
                 question: "Tỷ lệ % để tính thuế giá trị gia tăng trên doanh thu theo phương pháp trực tiếp đối với hoạt động xây dựng không bao thầu nguyên vật liệu được quy định là:",
                 answerOptions: [
-                    { text: "A. 1%", isCorrect: false },
-                    { text: "B. 2%", isCorrect: false },
-                    { text: "C. 3%", isCorrect: false },
-                    { text: "D. 5%", isCorrect: true }
+                    { text: "1%", isCorrect: false },
+                    { text: "2%", isCorrect: false },
+                    { text: "3%", isCorrect: false },
+                    { text: "5%", isCorrect: true }
                 ],
                 hint: "Xây dựng không bao thầu NVL.",
                 rationale: "Đáp án đúng là: D"
@@ -420,10 +420,10 @@
                 questionNumber: 27,
                 question: "Tỷ lệ % để tính thuế giá trị gia tăng trên doanh thu theo phương pháp trực tiếp đối với hoạt động xây dựng có bao thầu nguyên vật liệu được quy định là:",
                 answerOptions: [
-                    { text: "A. 1%", isCorrect: false },
-                    { text: "B. 2%", isCorrect: false },
-                    { text: "C. 3%", isCorrect: true },
-                    { text: "D. 5%", isCorrect: false }
+                    { text: "1%", isCorrect: false },
+                    { text: "2%", isCorrect: false },
+                    { text: "3%", isCorrect: true },
+                    { text: "5%", isCorrect: false }
                 ],
                 hint: "Xây dựng có bao thầu NVL.",
                 rationale: "Đáp án đúng là: C"
@@ -432,10 +432,10 @@
                 questionNumber: 28,
                 question: "Tỷ lệ % để tính thuế giá trị gia tăng trên doanh thu theo phương pháp trực tiếp đối với hoạt động vận tải được quy định là:",
                 answerOptions: [
-                    { text: "A. 1%", isCorrect: false },
-                    { text: "B. 2%", isCorrect: false },
-                    { text: "C. 3%", isCorrect: true },
-                    { text: "D. 5%", isCorrect: false }
+                    { text: "1%", isCorrect: false },
+                    { text: "2%", isCorrect: false },
+                    { text: "3%", isCorrect: true },
+                    { text: "5%", isCorrect: false }
                 ],
                 hint: "Hoạt động vận tải.",
                 rationale: "Đáp án đúng là: C"
@@ -444,10 +444,10 @@
                 questionNumber: 29,
                 question: "Tỷ lệ % để tính thuế giá trị gia tăng trên doanh thu theo phương pháp trực tiếp đối với hoạt động dịch vụ có gắn với cung ứng hàng hóa được quy định là:",
                 answerOptions: [
-                    { text: "A. 1%", isCorrect: false },
-                    { text: "B. 2%", isCorrect: false },
-                    { text: "C. 3%", isCorrect: true },
-                    { text: "D. 5%", isCorrect: false }
+                    { text: "1%", isCorrect: false },
+                    { text: "2%", isCorrect: false },
+                    { text: "3%", isCorrect: true },
+                    { text: "5%", isCorrect: false }
                 ],
                 hint: "Dịch vụ gắn với hàng hóa.",
                 rationale: "Đáp án đúng là: C"
@@ -456,10 +456,10 @@
                 questionNumber: 30,
                 question: "Một nhà hàng kinh doanh đồ ăn kê khai nộp thuế GTGT theo phương pháp trực tiếp. Tỷ lệ % trên doanh thu áp dụng để tính thuế GTGT đối với nhà hàng này là:",
                 answerOptions: [
-                    { text: "A. 1%", isCorrect: false },
-                    { text: "B. 2%", isCorrect: false },
-                    { text: "C. 3%", isCorrect: true },
-                    { text: "D. 5%", isCorrect: false }
+                    { text: "1%", isCorrect: false },
+                    { text: "2%", isCorrect: false },
+                    { text: "3%", isCorrect: true },
+                    { text: "5%", isCorrect: false }
                 ],
                 hint: "Kinh doanh ăn uống.",
                 rationale: "Đáp án đúng là: C"
@@ -468,10 +468,10 @@
                 questionNumber: 31,
                 question: "Lô hàng xe máy dung tích 110cm3 được nhập khẩu từ nước ngoài vào Việt Nam. Giá nhập chưa bao gồm chi phí vận tải theo hợp đồng ngoại thương là 9 tỷ đồng. Giá tính thuế nhập khẩu là 10 tỷ đồng. Mặt hàng này chịu thuế nhập khẩu với thuế suất là 20%. Giá tính thuế GTGT của lô hàng này là bao nhiêu:",
                 answerOptions: [
-                    { text: "A. 9 tỷ đồng", isCorrect: false },
-                    { text: "B. 10 tỷ đồng", isCorrect: false },
-                    { text: "C. 10,8 tỷ đồng", isCorrect: false },
-                    { text: "D. 12 tỷ đồng", isCorrect: true }
+                    { text: "9 tỷ đồng", isCorrect: false },
+                    { text: "10 tỷ đồng", isCorrect: false },
+                    { text: "10,8 tỷ đồng", isCorrect: false },
+                    { text: "12 tỷ đồng", isCorrect: true }
                 ],
                 hint: "Giá tính thuế GTGT = Giá tính thuế NK + Thuế NK.",
                 rationale: "Đáp án đúng là: D"
@@ -480,10 +480,10 @@
                 questionNumber: 32,
                 question: "Lô hàng tiêu dùng nhập khẩu có giá tính thuế nhập khẩu là 10 tỷ đồng, thuộc diện áp dụng thuế suất thuế nhập khẩu là 5%. Tuy nhiên sau khi xem xét hồ sơ của đơn vị nhập khẩu, cơ quan hải quan đã ra quyết định miễn thuế nhập khẩu đối với lô hàng này. Giá tính thuế GTGT của lô hàng này là:",
                 answerOptions: [
-                    { text: "A. 10 tỷ đồng", isCorrect: true },
-                    { text: "B. 9,5 tỷ đồng", isCorrect: false },
-                    { text: "C. 10,5 tỷ đồng", isCorrect: false },
-                    { text: "D. 9,75 tỷ đồng", isCorrect: false }
+                    { text: "10 tỷ đồng", isCorrect: true },
+                    { text: "9,5 tỷ đồng", isCorrect: false },
+                    { text: "10,5 tỷ đồng", isCorrect: false },
+                    { text: "9,75 tỷ đồng", isCorrect: false }
                 ],
                 hint: "Được miễn thuế NK.",
                 rationale: "Đáp án đúng là: A"
@@ -492,10 +492,10 @@
                 questionNumber: 33,
                 question: "Một doanh nghiệp xuất kho 100 sản phẩm để tặng cho khách hàng dùng thử không thu tiền theo chương trình khuyến mại đã đăng ký với Bộ công thương. Chi phí để sản xuất ra 1 sản phẩm loại này là 100.000đ/sp. Giá bán chưa thuế GTGT trong trường hợp thương mại bình thường là 120.000đ/sp. Giá xuất khẩu sản phẩm tại cửa khẩu xuất là 125.000đ/sp. Trong trường hợp này, giá tính thuế GTGT của 100 sản phẩm khuyến mại này là:",
                 answerOptions: [
-                    { text: "A. 100.000đ/sp", isCorrect: false },
-                    { text: "B. 0 đ/sp", isCorrect: true },
-                    { text: "C. 120.000đ/sp", isCorrect: false },
-                    { text: "D. 125.000đ/sp", isCorrect: false }
+                    { text: "100.000đ/sp", isCorrect: false },
+                    { text: "0 đ/sp", isCorrect: true },
+                    { text: "120.000đ/sp", isCorrect: false },
+                    { text: "125.000đ/sp", isCorrect: false }
                 ],
                 hint: "Hàng khuyến mại đúng quy định.",
                 rationale: "Đáp án đúng là: B"
@@ -504,10 +504,10 @@
                 questionNumber: 34,
                 question: "Công ty Canifa triển khai chương trình khuyến mại mua 1 tặng 1 cho khách hàng nhân kỷ niệm ngày lễ tình nhân 14/2 theo chương trình khuyến mại đã được đăng ký với Bộ công thương. Khách hàng A mua 1 áo len có giá bán chưa bao gồm thuế 400.000đ và 1 chân váy có giá bán chưa bao gồm thuế GTGT là 350.000đ. Nhân viên bán hàng cho biết khách hàng sẽ được tặng sản phẩm có giá bán thấp hơn. Thuế suất thuế GTGT của sản phẩm may mặc là 10%. Vậy số tiền thuế GTGT khách hàng A phải thanh toán là:",
                 answerOptions: [
-                    { text: "A. 75.000 đ", isCorrect: false },
-                    { text: "B. 35.000 đ", isCorrect: false },
-                    { text: "C. 40.000 đ", isCorrect: true },
-                    { text: "D. 0 đ", isCorrect: false }
+                    { text: "75.000 đ", isCorrect: false },
+                    { text: "35.000 đ", isCorrect: false },
+                    { text: "40.000 đ", isCorrect: true },
+                    { text: "0 đ", isCorrect: false }
                 ],
                 hint: "Tính thuế trên sản phẩm phải trả tiền.",
                 rationale: "Đáp án đúng là: C"
@@ -516,10 +516,10 @@
                 questionNumber: 35,
                 question: "Công ty A mua 1 lô hàng của công ty B với giá chưa bao gồm thuế giá trị gia tăng là 500.000.000đ, thuế suất thuế GTGT của mặt hàng này là 10%. Do công ty A thanh toán sớm nên được hưởng chiết khấu thanh toán 2%. Số thuế GTGT công ty A phải trả khi mua lô hàng trên là (Công ty B kê khai nộp thuế GTGT theo phương pháp khấu trừ):",
                 answerOptions: [
-                    { text: "A. 49.000.000 đ", isCorrect: false },
-                    { text: "B. 50.000.000 đ", isCorrect: true },
-                    { text: "C. 51.000.000 đ", isCorrect: false },
-                    { text: "D. 48.000.0000 đ", isCorrect: false }
+                    { text: "49.000.000 đ", isCorrect: false },
+                    { text: "50.000.000 đ", isCorrect: true },
+                    { text: "51.000.000 đ", isCorrect: false },
+                    { text: "48.000.0000 đ", isCorrect: false }
                 ],
                 hint: "Chiết khấu thanh toán không giảm trừ doanh thu tính thuế.",
                 rationale: "Đáp án đúng là: B"
@@ -528,10 +528,10 @@
                 questionNumber: 36,
                 question: "Công ty X mua 1 lô hàng của công ty Y với giá chưa bao gồm thuế giá trị gia tăng là 1.000.000.000đ, thuế suất thuế GTGT của mặt hàng này là 10%. Do công ty A mua với số lượng lớn nên được hưởng chiết khấu thương mại là 3%. Số thuế GTGT công ty A phải trả khi mua lô hàng trên là (Công ty B kê khai nộp thuế GTGT theo phương pháp khấu trừ):",
                 answerOptions: [
-                    { text: "A. 100.000.000đ", isCorrect: false },
-                    { text: "B. 95.000.000 đ", isCorrect: false },
-                    { text: "C. 97.000.000 đ", isCorrect: true },
-                    { text: "D. 98.000.0000 đ", isCorrect: false }
+                    { text: "100.000.000đ", isCorrect: false },
+                    { text: "95.000.000 đ", isCorrect: false },
+                    { text: "97.000.000 đ", isCorrect: true },
+                    { text: "98.000.0000 đ", isCorrect: false }
                 ],
                 hint: "Trừ chiết khấu thương mại.",
                 rationale: "Đáp án đúng là: C"
@@ -540,10 +540,10 @@
                 questionNumber: 37,
                 question: "Nhân dịp 8/3, Khách sạn H có chương trình khuyến mại tặng Voucher cho khách hàng sử dụng dịch vụ ăn uống, chương trình khuyến mại đã được đăng ký với Bộ công thương. Gia đình anh An dùng bữa tối tại đây, trên hóa đơn GTGT khách sạn xuất ra, số tiền ăn chưa bao gồm thuế GTGT của gia đình anh là 2.500.000đ và anh được tặng voucher có trị giá 500.000đ cho bữa ăn lần sau. Thuế suất thuế GTGT của hoạt động ăn uống là 10%. Vậy số tiền thuế GTGT mà anh An phải thanh toán cho bữa ăn này là:",
                 answerOptions: [
-                    { text: "A. 250.000đ", isCorrect: true },
-                    { text: "B. 300.000đ", isCorrect: false },
-                    { text: "C. 200.000đ", isCorrect: false },
-                    { text: "D. 275.000", isCorrect: false }
+                    { text: "250.000đ", isCorrect: true },
+                    { text: "300.000đ", isCorrect: false },
+                    { text: "200.000đ", isCorrect: false },
+                    { text: "275.000", isCorrect: false }
                 ],
                 hint: "Tính trên dịch vụ thực tế sử dụng.",
                 rationale: "Đáp án đúng là: A"
@@ -552,10 +552,10 @@
                 questionNumber: 38,
                 question: "Nhân dịp Tết trung thu, công ty bánh kẹo Hải Hà Tokobuki tặng cho mỗi nhân viên của mình một hộp bánh với giá bán niêm yết chưa bao gồm thuế GTGT là 300.000đ. Thuế suất thuế GTGT của mặt hàng bánh kẹo là 10%. Số nhân viên được nhận bánh là 500 người. Công ty Hải Hà kê khai nộp thuế GTGT theo phương pháp khấu trừ. Số thuế GTGT công ty Hải Hà Tokobuki phải kê khai đối với số bánh tặng cho nhân viên của mình là:",
                 answerOptions: [
-                    { text: "A. 0 đ", isCorrect: false },
-                    { text: "B. 15.000.000 đ", isCorrect: true },
-                    { text: "C. 30.000.000 đ", isCorrect: false },
-                    { text: "D. 1.500.000đ", isCorrect: false }
+                    { text: "0 đ", isCorrect: false },
+                    { text: "15.000.000 đ", isCorrect: true },
+                    { text: "30.000.000 đ", isCorrect: false },
+                    { text: "1.500.000đ", isCorrect: false }
                 ],
                 hint: "Biếu tặng phải tính thuế đầu ra.",
                 rationale: "Đáp án đúng là: B"
@@ -564,10 +564,10 @@
                 questionNumber: 39,
                 question: "Siêu thị bigC chạy chương trình khuyến mại giảm giá sữa Vinamilk. Giá bán niêm yết 1 thùng sữa chưa bao gồm thuế GTGT là 600.000đ/thùng, giá bán khuyến mại là 500.000đ/thùng. Anh Minh mua 2 thùng sữa này. Thuế suất thuế GTGT của sữa là 10%. Số thuế GTGT anh Minh phải thanh toán thể hiện trên hóa đơn GTGT là:",
                 answerOptions: [
-                    { text: "A. 120.000 đ", isCorrect: false },
-                    { text: "B. 100.000đ", isCorrect: true },
-                    { text: "C. 110.000 đ", isCorrect: false },
-                    { text: "D. 115.000đ", isCorrect: false }
+                    { text: "120.000 đ", isCorrect: false },
+                    { text: "100.000đ", isCorrect: true },
+                    { text: "110.000 đ", isCorrect: false },
+                    { text: "115.000đ", isCorrect: false }
                 ],
                 hint: "Tính trên giá thực tế thanh toán.",
                 rationale: "Đáp án đúng là: B"
@@ -576,10 +576,10 @@
                 questionNumber: 40,
                 question: "Công ty kinh doanh vàng, bạc, đá quý Minh Anh có tài liệu mua vào bán ra trong tháng 8/N như sau: Giá thanh toán của vàng trang sức bán ra trong tháng là 5.000 trđ, giá thanh toán của số vàng trang sức này khi mua vào là 4.200 trđ; giá thanh toán của vàng thỏi nguyên chất bán là 10.000 trđ, giá thanh toán của số vàng thỏi này khi mua vào là 9.000trđ. Thuế suất thuế GTGT của vàng, bạc, đá quý là 10%. Số thuế GTGT công ty Minh Anh phải kê khai trong tháng 8/N là:",
                 answerOptions: [
-                    { text: "A. 80 triệu đồng", isCorrect: true },
-                    { text: "B. 180 triệu đồng", isCorrect: false },
-                    { text: "C. 100 triệu đồng", isCorrect: false },
-                    { text: "D. 280 triệu đồng", isCorrect: false }
+                    { text: "80 triệu đồng", isCorrect: true },
+                    { text: "180 triệu đồng", isCorrect: false },
+                    { text: "100 triệu đồng", isCorrect: false },
+                    { text: "280 triệu đồng", isCorrect: false }
                 ],
                 hint: "Tính trên giá trị gia tăng.",
                 rationale: "Đáp án đúng là: A"
@@ -588,10 +588,10 @@
                 questionNumber: 41,
                 question: "Công ty K sản xuất kinh doanh mặt hàng A thuộc đối tượng chịu thuế GTGT thuế suất 10%, kê khai thuế giá trị gia tăng theo phương pháp khấu trừ, trong kỳ tính thuế có tình hình sau: + Thuế GTGT của hàng hóa tồn kho kỳ trước là 20 triệu đồng. + Thuế GTGT ghi trên hóa đơn mua hàng phát sinh trong kỳ đủ điều kiện khấu trừ là 150 triệu đồng; trong đó số hàng hóa chưa xuất dùng trong kỳ có số thuế GTGT là 30 triệu đồng. Tổng số thuế GTGT đầu vào được khấu trừ trong kỳ là:",
                 answerOptions: [
-                    { text: "A. 170 triệu đồng", isCorrect: false },
-                    { text: "B. 150 triệu đồng", isCorrect: true },
-                    { text: "C. 120 triệu đồng", isCorrect: false },
-                    { text: "D. 140 triệu đồng", isCorrect: false }
+                    { text: "170 triệu đồng", isCorrect: false },
+                    { text: "150 triệu đồng", isCorrect: true },
+                    { text: "120 triệu đồng", isCorrect: false },
+                    { text: "140 triệu đồng", isCorrect: false }
                 ],
                 hint: "Khấu trừ khi mua, không chờ xuất dùng.",
                 rationale: "Đáp án đúng là: B"
@@ -600,10 +600,10 @@
                 questionNumber: 42,
                 question: "Công ty M kinh doanh mặt hàng B thuộc đối tượng chịu thuế GTGT thuế suất 5%, kê khai thuế giá trị gia tăng theo phương pháp khấu trừ, trong kỳ tính thuế có tình hình sau: + Giá trị hàng hóa tồn kho đầu kỳ chưa bao gồm thuế GTGT là 500 triệu đồng. + Giá trị hàng hóa mua vào trong kỳ chưa bao gồm thuế GTGT là 1.000 triệu đồng + Giá trị hàng hóa tồn kho cuối kỳ chưa bao gồm thuế GTGT là 300 triệu đồng. Hàng hóa mua vào đủ điều kiện được khấu trừ toàn bộ. Vậy số thuế GTGT được khấu trừ trong kỳ của công ty M là:",
                 answerOptions: [
-                    { text: "A. 150 triệu đồng", isCorrect: false },
-                    { text: "B. 75 triệu đồng", isCorrect: false },
-                    { text: "C. 120 triệu đồng", isCorrect: false },
-                    { text: "D. 50 triệu đồng", isCorrect: true }
+                    { text: "150 triệu đồng", isCorrect: false },
+                    { text: "75 triệu đồng", isCorrect: false },
+                    { text: "120 triệu đồng", isCorrect: false },
+                    { text: "50 triệu đồng", isCorrect: true }
                 ],
                 hint: "Tính trên hàng mua vào trong kỳ.",
                 rationale: "Đáp án đúng là: D"
@@ -612,10 +612,10 @@
                 questionNumber: 43,
                 question: "Công ty M kinh doanh mặt hàng B thuộc đối tượng chịu thuế GTGT thuế suất 10%, kê khai thuế giá trị gia tăng theo phương pháp khấu trừ, trong kỳ tính thuế có tình hình sau: + Giá trị hàng hóa tồn kho đầu kỳ chưa bao gồm thuế GTGT là 500 triệu đồng. + Giá trị hàng hóa mua vào trong kỳ chưa bao gồm thuế GTGT là 1.000 triệu đồng. + Giá trị hàng hóa tồn kho cuối kỳ chưa bao gồm thuế GTGT là 300 triệu đồng. Trong số hàng hóa mua về có 50 triệu đồng tiền hàng thể hiện trên 1 hóa đơn GTGT công ty thanh toán bằng tiền mặt. Vậy số thuế GTGT được khấu trừ trong kỳ của công ty M là:",
                 answerOptions: [
-                    { text: "A. 150 triệu đồng", isCorrect: false },
-                    { text: "B. 95 triệu đồng", isCorrect: true },
-                    { text: "C. 100 triệu đồng", isCorrect: false },
-                    { text: "D. 105 triệu đồng", isCorrect: false }
+                    { text: "150 triệu đồng", isCorrect: false },
+                    { text: "95 triệu đồng", isCorrect: true },
+                    { text: "100 triệu đồng", isCorrect: false },
+                    { text: "105 triệu đồng", isCorrect: false }
                 ],
                 hint: "Loại trừ phần thanh toán tiền mặt > 20 triệu.",
                 rationale: "Đáp án đúng là: B"
@@ -624,10 +624,10 @@
                 questionNumber: 44,
                 question: "Công ty ANX chuyên sản xuất kinh doanh hàng tiêu dùng thuộc đối tượng áp dụng thuế suất thuế GTGT 10%, kê khai nộp thuế GTGT theo phương pháp trực tiếp, kỳ kê khai theo quý. + Số liệu về doanh thu bán ra trong quý 1/N như sau:  Tháng 1/N: 100 triệu đồng; Tháng 2/N: 150 triệu đồng; Tháng 3/N: 85 triệu đồng. + Tỷ lệ % để tính thuế GTGT trên doanh thu được quy định đối với hoạt động sản xuất là 3%. Số thuế GTGT công ty ANX phải nộp trong quý 1/N là:",
                 answerOptions: [
-                    { text: "A. 33,5 triệu đồng", isCorrect: false },
-                    { text: "B. 16,75 triệu đồng", isCorrect: false },
-                    { text: "C. 10,05 triệu đồng", isCorrect: true },
-                    { text: "D. 6,7 triệu đồng", isCorrect: false }
+                    { text: "33,5 triệu đồng", isCorrect: false },
+                    { text: "16,75 triệu đồng", isCorrect: false },
+                    { text: "10,05 triệu đồng", isCorrect: true },
+                    { text: "6,7 triệu đồng", isCorrect: false }
                 ],
                 hint: "Tổng doanh thu x tỷ lệ.",
                 rationale: "Đáp án đúng là: C"
@@ -636,10 +636,10 @@
                 questionNumber: 45,
                 question: "Công ty vận tải P kê khai nộp thuế GTGT theo phương pháp trực tiếp, kỳ kê khai theo quý. + Số liệu về doanh thu bán hàng trong quý 2/N như sau: Tháng 4: 75 triệu đồng; Tháng 5: 80 triệu đồng; Tháng 6: 90 triệu đồng. + Tỷ lệ % để tính thuế GTGT trên doanh thu được quy định đối với hoạt động vận tải là 3%. Số thuế GTGT công ty phải nộp trong quý 2/N là:",
                 answerOptions: [
-                    { text: "A. 12,25 triệu đồng", isCorrect: false },
-                    { text: "B. 7,35 triệu đồng", isCorrect: true },
-                    { text: "C. 4,9 triệu đồng", isCorrect: false },
-                    { text: "D. 2,45 triệu đồng", isCorrect: false }
+                    { text: "12,25 triệu đồng", isCorrect: false },
+                    { text: "7,35 triệu đồng", isCorrect: true },
+                    { text: "4,9 triệu đồng", isCorrect: false },
+                    { text: "2,45 triệu đồng", isCorrect: false }
                 ],
                 hint: "Tổng doanh thu x tỷ lệ.",
                 rationale: "Đáp án đúng là: B"
@@ -648,10 +648,10 @@
                 questionNumber: 46,
                 question: "Công ty tư vấn tài chính K hoạt động trong lĩnh vực tư vấn thuế, tài chính, kế toán kê khai nộp thuế GTGT theo phương pháp trực tiếp, kỳ kê khai theo quý. + Số liệu về doanh thu cung cấp dịch vụ trong quý 3/N như sau: Tháng 7: 105 triệu đồng; Tháng 8: 95 triệu đồng; Tháng 9: 110 triệu đồng. + Tỷ lệ % để tính thuế GTGT trên doanh thu được quy định đối với hoạt động dịch vụ là 5%. Số thuế GTGT công ty phải nộp trong quý 3/N là:",
                 answerOptions: [
-                    { text: "A. 9,3 triệu đồng", isCorrect: false },
-                    { text: "B. 6,2 triệu đồng", isCorrect: false },
-                    { text: "C. 15,5 triệu đồng", isCorrect: true },
-                    { text: "D. 3,1 triệu đồng", isCorrect: false }
+                    { text: "9,3 triệu đồng", isCorrect: false },
+                    { text: "6,2 triệu đồng", isCorrect: false },
+                    { text: "15,5 triệu đồng", isCorrect: true },
+                    { text: "3,1 triệu đồng", isCorrect: false }
                 ],
                 hint: "Tổng doanh thu x tỷ lệ.",
                 rationale: "Đáp án đúng là: C"
@@ -660,10 +660,10 @@
                 questionNumber: 47,
                 question: "Công ty đào tạo TMC hoạt động trong lĩnh vực đào tạo ngoại ngữ và kinh doanh thiết bị, giáo cụ học tập. Công ty kê khai nộp thuế GTGT theo phương pháp trực tiếp, kỳ kê khai theo quý. + Số liệu về doanh thu hoạt động đào tạo trong quý 1/N như sau: Tháng 1: 200 triệu; tháng 2: 150 triệu; tháng 3: 250 triệu. + Số liệu về doanh thu hoạt động kinh doanh thiết bị, giáo cụ học tập trong quý 1 là: Tháng 1: 50 triệu; Tháng 2: 60 triệu; Tháng 3: 70 triệu. + Tỷ lệ % để tính thuế GTGT trên doanh thu được quy định đối với hoạt động phân phối sản phẩm là 1%; hoạt động đào tạo không thuộc đối tượng chịu thuế GTGT Số thuế GTGT công ty TMC phải nộp trong quý 1/N là:",
                 answerOptions: [
-                    { text: "A. 1,8 triệu đồng", isCorrect: true },
-                    { text: "B. 3,6 triệu đồng", isCorrect: false },
-                    { text: "C. 5,4 triệu đồng", isCorrect: false },
-                    { text: "D. 9 triệu đồng", isCorrect: false }
+                    { text: "1,8 triệu đồng", isCorrect: true },
+                    { text: "3,6 triệu đồng", isCorrect: false },
+                    { text: "5,4 triệu đồng", isCorrect: false },
+                    { text: "9 triệu đồng", isCorrect: false }
                 ],
                 hint: "Loại trừ doanh thu không chịu thuế.",
                 rationale: "Đáp án đúng là: A"
@@ -672,10 +672,10 @@
                 questionNumber: 48,
                 question: "Công ty KPM hoạt động trong lĩnh vực tư vấn du lịch kê khai nộp thuế GTGT theo phương pháp trực tiếp, kỳ kê khai theo quý. + Quý 3/N số liệu về doanh thu dịch vụ tư vấn du lịch như sau: tháng 7: 90 triệu đồng; tháng 8: 110 triệu động; tháng 9: 120 triệu đồng. + Tỷ lệ % để tính thuế GTGT trên doanh thu được quy định đối với hoạt động dịch vụ là 5% Số thuế GTGT công ty KPM phải nộp trong quý 3 là",
                 answerOptions: [
-                    { text: "A. 3,2 triệu đồng", isCorrect: false },
-                    { text: "B. 6,4 triệu đồng", isCorrect: false },
-                    { text: "C. 16 triệu đồng", isCorrect: true },
-                    { text: "D. 9,4 triệu đồng", isCorrect: false }
+                    { text: "3,2 triệu đồng", isCorrect: false },
+                    { text: "6,4 triệu đồng", isCorrect: false },
+                    { text: "16 triệu đồng", isCorrect: true },
+                    { text: "9,4 triệu đồng", isCorrect: false }
                 ],
                 hint: "Tổng doanh thu x tỷ lệ.",
                 rationale: "Đáp án đúng là: C"
@@ -684,10 +684,10 @@
                 questionNumber: 49,
                 question: "Công ty KPM hoạt động trong lĩnh vực vận tải. Công ty KPM kê khai nộp thuế GTGT theo phương pháp trực tiếp, kỳ kê khai theo quý. + Quý 3/N số liệu về doanh thu hoạt động vận tải như sau : tháng 8: 105 triệu đồng; tháng 9: 80 triệu đồng; tháng 10: 85 triệu đồng. + Tỷ lệ % để tính thuế GTGT trên doanh thu được quy định đối với hoạt động vận tải là 3%. Số thuế GTGT công ty KPM phải nộp trong quý 3 là:",
                 answerOptions: [
-                    { text: "A. 2,7 triệu đồng", isCorrect: false },
-                    { text: "B. 5,4 triệu đồng", isCorrect: false },
-                    { text: "C. 8,1 triệu đồng", isCorrect: true },
-                    { text: "D. 13,5 triệu đồng", isCorrect: false }
+                    { text: "2,7 triệu đồng", isCorrect: false },
+                    { text: "5,4 triệu đồng", isCorrect: false },
+                    { text: "8,1 triệu đồng", isCorrect: true },
+                    { text: "13,5 triệu đồng", isCorrect: false }
                 ],
                 hint: "Tổng doanh thu x tỷ lệ.",
                 rationale: "Đáp án đúng là: C"
@@ -696,10 +696,10 @@
                 questionNumber: 50,
                 question: "Công ty KPM hoạt động trong lĩnh vực tư vấn du lịch và vận tải. Công ty KPM kê khai nộp thuế GTGT theo phương pháp trực tiếp, kỳ kê khai theo quý. Trong quý 3/N: + Số liệu về doanh thu dịch vụ tư vấn du lịch như sau: Tháng 7: 90 triệu đồng; Tháng 8: 110 triệu động; Tháng 9: 120 triệu đồng. + Số liệu về doanh thu hoạt động vận tải là: Tháng 8: 105 triệu đồng; Tháng 9: 80 triệu đồng; Tháng 10: 85 triệu đồng. Tỷ lệ % để tính thuế GTGT trên doanh thu được quy định đối với hoạt động tư vấn du lịch là 5% và hoạt động vận tải là 3%. Số thuế GTGT công ty KPM phải nộp trong quý 3 là:",
                 answerOptions: [
-                    { text: "A. 17,7 triệu đồng", isCorrect: false },
-                    { text: "B. 24,1 triệu đồng", isCorrect: true },
-                    { text: "C. 29,5 triệu đồng", isCorrect: false },
-                    { text: "D. 23,1 triệu đồng", isCorrect: false }
+                    { text: "17,7 triệu đồng", isCorrect: false },
+                    { text: "24,1 triệu đồng", isCorrect: true },
+                    { text: "29,5 triệu đồng", isCorrect: false },
+                    { text: "23,1 triệu đồng", isCorrect: false }
                 ],
                 hint: "Tính riêng từng mảng.",
                 rationale: "Đáp án đúng là: B"
@@ -708,10 +708,10 @@
                 questionNumber: 51,
                 question: "Anh Hoàng Anh đi siêu thị mua một số mặt hàng như sau: Tiền thực phẩm tươi sống chưa bao gồm thuế GTGT: 350.000đ; bột giặt: 130.000đ; sữa bột: 550.000đ; quần áo: 1.200.000đ. + Thuế suất thuế GTGT của thực phẩm tươi sống ở khâu kinh doanh thương mại là 5%. + Thuế suất thuế GTGT của bột giặt, sữa bột và quần áo là 10%. Số thuế GTGT anh Hoàng Anh phải trả thể hiện trên hóa đơn GTGT là:",
                 answerOptions: [
-                    { text: "A. 111.500 đồng", isCorrect: false },
-                    { text: "B. 223.000 đồng", isCorrect: false },
-                    { text: "C. 205.500 đồng", isCorrect: true },
-                    { text: "D. 199.000 đồng", isCorrect: false }
+                    { text: "111.500 đồng", isCorrect: false },
+                    { text: "223.000 đồng", isCorrect: false },
+                    { text: "205.500 đồng", isCorrect: true },
+                    { text: "199.000 đồng", isCorrect: false }
                 ],
                 hint: "Phân loại thuế suất.",
                 rationale: "Đáp án đúng là: C"
@@ -720,10 +720,10 @@
                 questionNumber: 52,
                 question: "Công ty HMN mua một số hàng hóa sau để thực hiện chương trình từ thiện: Mì tôm: 3.000.000đ; quần áo: 5.000.000đ; bàn ghế, đồ dùng học tập: 25.000.000đ. Chương trình từ thiện được thực hiện thông qua Hội chữ thập đỏ của địa phương, có giấy chứng nhận từ thiện. Số thuế GTGT công ty HMN phải trả cho số hàng từ thiện trên là:",
                 answerOptions: [
-                    { text: "A. 0 đồng", isCorrect: true },
-                    { text: "B. 3.300.000 đồng", isCorrect: false },
-                    { text: "C. 1.650.000 đồng", isCorrect: false },
-                    { text: "D. 2.050.000 đồng", isCorrect: false }
+                    { text: "0 đồng", isCorrect: true },
+                    { text: "3.300.000 đồng", isCorrect: false },
+                    { text: "1.650.000 đồng", isCorrect: false },
+                    { text: "2.050.000 đồng", isCorrect: false }
                 ],
                 hint: "Hàng từ thiện nhân đạo.",
                 rationale: "Đáp án đúng là: A"
@@ -732,10 +732,10 @@
                 questionNumber: 53,
                 question: "Cơ sở kinh doanh nào dưới đây trong kỳ tính thuế có hàng hóa, dịch vụ xuất khẩu được xét hoàn thuế:",
                 answerOptions: [
-                    { text: "A. Cơ sở kinh doanh trong kỳ có hàng hóa, dịch vụ xuất khẩu; nếu thuế GTGT đầu vào của hàng hóa xuất khẩu phát sinh trong kỳ chưa được khấu trừ từ 100 triệu đồng trở lên thì được xét hoàn thuế", isCorrect: false },
-                    { text: "B. Cơ sở kinh doanh trong kỳ có hàng hóa, dịch vụ xuất khẩu; nếu thuế GTGT đầu vào của hàng hóa xuất khẩu phát sinh trong kỳ chưa được khấu trừ từ 150 triệu đồng trở lên thì được xét hoàn thuế", isCorrect: false },
-                    { text: "C. Cơ sở kinh doanh trong kỳ có hàng hóa, dịch vụ xuất khẩu; nếu thuế GTGT đầu vào của hàng hóa xuất khẩu phát sinh trong kỳ chưa được khấu trừ từ 200 triệu đồng trở lên thì được xét hoàn thuế", isCorrect: false },
-                    { text: "D. Cơ sở kinh doanh hàng hóa xuất khẩu (không có hoạt động bán hàng nội địa); nếu thuế GTGT đầu vào của hàng hóa xuất khẩu phát sinh trong kỳ chưa được khấu trừ từ 300 triệu đồng trở lên thì được xét hoàn thuế", isCorrect: true }
+                    { text: "Cơ sở kinh doanh trong kỳ có hàng hóa, dịch vụ xuất khẩu; nếu thuế GTGT đầu vào của hàng hóa xuất khẩu phát sinh trong kỳ chưa được khấu trừ từ 100 triệu đồng trở lên thì được xét hoàn thuế", isCorrect: false },
+                    { text: "Cơ sở kinh doanh trong kỳ có hàng hóa, dịch vụ xuất khẩu; nếu thuế GTGT đầu vào của hàng hóa xuất khẩu phát sinh trong kỳ chưa được khấu trừ từ 150 triệu đồng trở lên thì được xét hoàn thuế", isCorrect: false },
+                    { text: "Cơ sở kinh doanh trong kỳ có hàng hóa, dịch vụ xuất khẩu; nếu thuế GTGT đầu vào của hàng hóa xuất khẩu phát sinh trong kỳ chưa được khấu trừ từ 200 triệu đồng trở lên thì được xét hoàn thuế", isCorrect: false },
+                    { text: "Cơ sở kinh doanh hàng hóa xuất khẩu (không có hoạt động bán hàng nội địa); nếu thuế GTGT đầu vào của hàng hóa xuất khẩu phát sinh trong kỳ chưa được khấu trừ từ 300 triệu đồng trở lên thì được xét hoàn thuế", isCorrect: true }
                 ],
                 hint: "Mốc hoàn thuế.",
                 rationale: "Đáp án đúng là: D"
@@ -744,10 +744,10 @@
                 questionNumber: 54,
                 question: "Một công ty du lịch ở Hà Nội đưa khách đi thăm quan Singapore theo giá chưa bao gồm thuế GTGT là 5 triệu đồng/khách. Tiền vé máy bay khứ hồi chưa bao gồm thuế GTGT là 2 triệu đồng/khách. Chi phí ăn ở đi lại tại Singapore chưa bao gồm thuế GTGT là 0,8 triệu đồng/khách. Thuế suất thuế GTGT của hoạt động du lịch là 10%. Giá tính thuế GTGT trong trường hợp này là:",
                 answerOptions: [
-                    { text: "A. 5 triệu đồng/khách", isCorrect: false },
-                    { text: "B. 3 triệu đồng/khách", isCorrect: false },
-                    { text: "C. 2,2 triệu đồng/khách", isCorrect: true },
-                    { text: "D. 2 triệu đồng/khách", isCorrect: false }
+                    { text: "5 triệu đồng/khách", isCorrect: false },
+                    { text: "3 triệu đồng/khách", isCorrect: false },
+                    { text: "2,2 triệu đồng/khách", isCorrect: true },
+                    { text: "2 triệu đồng/khách", isCorrect: false }
                 ],
                 hint: "Trừ chi phí phát sinh ở nước ngoài.",
                 rationale: "Đáp án đúng là: C"
@@ -756,10 +756,10 @@
                 questionNumber: 55,
                 question: "Công ty Cổ phần Minh Ánh kinh doanh dịch vụ internet. Công ty kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. Số liệu liên quan đến thuế GTGT trong tháng 5/N của công ty như sau: + Doanh thu bán hàng chưa bao gồm thuế GTGT trong tháng là 5.000 triệu đồng. + Giá trị hàng hóa dịch vụ mua vào chưa bao gồm thuế GTGT: 1.200 triệu đồng; trong đó có 200 triệu đồng chỉ có hóa đơn bán hàng. + Hàng hóa mua vào còn lại đủ điều kiện khấu trừ thuế GTGT. + Thuế suất thuế GTGT của hoạt động kinh doanh internet là 10%. + Hàng hóa, dịch vụ mua vào đều có thuế suất thuế GTGT là 10%. Thuế GTGT phải nộp trong tháng 5/N của công ty là:",
                 answerOptions: [
-                    { text: "A. 400 triệu đồng", isCorrect: true },
-                    { text: "B. 380 triệu đồng", isCorrect: false },
-                    { text: "C. 360 triệu đồng", isCorrect: false },
-                    { text: "D. 300 triệu đồng", isCorrect: false }
+                    { text: "400 triệu đồng", isCorrect: true },
+                    { text: "380 triệu đồng", isCorrect: false },
+                    { text: "360 triệu đồng", isCorrect: false },
+                    { text: "300 triệu đồng", isCorrect: false }
                 ],
                 hint: "Hóa đơn bán hàng không được khấu trừ.",
                 rationale: "Đáp án đúng là: A"
@@ -768,10 +768,10 @@
                 questionNumber: 56,
                 question: "Công ty TNHH Quang Minh hoạt động trong lĩnh vực kinh doanh vật liệu xây dựng, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 10/N, giá trị hàng hóa mua vào chưa bao gồm thuế GTGT của công ty là 2.000 triệu đồng; trong đó có 50 triệu là hàng hóa không thuộc đối tượng chịu thuế GTGT, 100 triệu tiền hàng không có hóa đơn GTGT. + Số lượng hàng hóa mua vào còn lại đều có hóa đơn GTGT và thanh toán qua ngân hàng. + Hàng hóa mua vào đều thuộc đối tượng áp dụng thuế suất thuế GTGT 10%. Số thuế GTGT đầu vào đủ điều kiện khấu trừ của công ty tháng 10/N là:",
                 answerOptions: [
-                    { text: "A. 190 triệu đồng", isCorrect: false },
-                    { text: "B. 185 triệu đồng", isCorrect: true },
-                    { text: "C. 195 triệu đồng", isCorrect: false },
-                    { text: "D. 200 triệu đồng", isCorrect: false }
+                    { text: "190 triệu đồng", isCorrect: false },
+                    { text: "185 triệu đồng", isCorrect: true },
+                    { text: "195 triệu đồng", isCorrect: false },
+                    { text: "200 triệu đồng", isCorrect: false }
                 ],
                 hint: "Loại trừ phần không đủ điều kiện.",
                 rationale: "Đáp án đúng là: B"
@@ -780,10 +780,10 @@
                 questionNumber: 57,
                 question: "Công ty Ngân Hà buôn bán thiết bị điện tử, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 8/N, giá trị hàng hóa mua vào chưa bao gồm thuế GTGT của công ty là 600 triệu đồng; trong đó có 200 triệu đồng là hàng hóa thuộc đối tượng áp dụng thuế suất 5%, còn lại thuộc đối tượng áp dụng thuế suất 10%. + Hàng hóa mua vào đều có hóa đơn chứng từ đầy đủ và đều thanh toán qua ngân hàng. Số thuế GTGT đầu vào đủ điều kiện khấu trừ của công ty tháng 8/N là:",
                 answerOptions: [
-                    { text: "A. 60 triệu đồng", isCorrect: false },
-                    { text: "B. 50 triệu đồng", isCorrect: true },
-                    { text: "C. 40 triệu đồng", isCorrect: false },
-                    { text: "D. 35 triệu đồng", isCorrect: false }
+                    { text: "60 triệu đồng", isCorrect: false },
+                    { text: "50 triệu đồng", isCorrect: true },
+                    { text: "40 triệu đồng", isCorrect: false },
+                    { text: "35 triệu đồng", isCorrect: false }
                 ],
                 hint: "Tính tổng thuế từng loại.",
                 rationale: "Đáp án đúng là: B"
@@ -792,10 +792,10 @@
                 questionNumber: 58,
                 question: "Công ty Cổ phần Hoàng Hải chuyên kinh doanh hàng gia dụng, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 9/N, giá trị hàng hàng mua vào chưa bao gồm thuế GTGT của công ty là 800 triệu đồng; trong đó 1 hóa đơn GTGT có giá trị hàng mua chưa bao gồm thuế GTGT 60 triệu đồng có chứng từ thanh toán là phiếu chi, còn lại đều thanh toán qua ngân hàng. + Hàng hóa mua về thuộc đối tượng áp dụng thuế suất 10% và có hóa đơn chứng từ đầy đủ. Số thuế GTGT đầu vào đủ điều kiện khấu trừ của công ty tháng 9/N là:",
                 answerOptions: [
-                    { text: "A. 80 triệu đồng", isCorrect: false },
-                    { text: "B. 78 triệu đồng", isCorrect: false },
-                    { text: "C. 75 triệu đồng", isCorrect: false },
-                    { text: "D. 74 triệu đồng", isCorrect: true }
+                    { text: "80 triệu đồng", isCorrect: false },
+                    { text: "78 triệu đồng", isCorrect: false },
+                    { text: "75 triệu đồng", isCorrect: false },
+                    { text: "74 triệu đồng", isCorrect: true }
                 ],
                 hint: "Loại phần thanh toán tiền mặt > 20 triệu.",
                 rationale: "Đáp án đúng là: D"
@@ -804,10 +804,10 @@
                 questionNumber: 59,
                 question: "Công ty TNHH Đức Vinh sản xuất và kinh doanh quần áo trẻ em, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo quý. Số liệu về hàng hóa dịch vụ mua vào của công ty trong quý 1/N như sau: + Tháng 1: giá trị hàng hóa dịch vụ mua vào là 600 triệu đồng, trong đó có 50 triệu đồng là tiền vải mua của các tiểu thương ở chợ, không có hóa đơn giá trị gia tăng, 10 triệu đồng tiền phụ kiện chỉ có hóa đơn bán hàng. + Tháng 2: giá trị hàng hóa mua vào là 300 triệu đồng, trong đó có 60 triệu đồng tiền hàng thể hiện trên 1 hóa đơn GTGT không có chứng từ thanh toán không dùng tiền mặt. + Tháng 3: giá trị hàng hóa mua vào là 500 triệu đồng, trong đó có 80 triệu đồng tiền hàng có hóa đơn bị tẩy xóa chưa kịp xử lý. Số hàng hóa còn lại đều có hóa đơn GTGT hợp pháp, thanh toán qua ngân hàng. Hàng hóa dịch vụ mua vào đều thuộc đối tượng áp dụng thuế suất thuế GTGT là 10%. Số thuế GTGT đầu vào đủ điều kiện được khấu trừ của công ty Đức Vinh trong quý 1/N là:",
                 answerOptions: [
-                    { text: "A. 140 triệu đồng", isCorrect: false },
-                    { text: "B. 120 triệu đồng", isCorrect: true },
-                    { text: "C. 134 triệu đồng", isCorrect: false },
-                    { text: "D. 128 triệu đồng", isCorrect: false }
+                    { text: "140 triệu đồng", isCorrect: false },
+                    { text: "120 triệu đồng", isCorrect: true },
+                    { text: "134 triệu đồng", isCorrect: false },
+                    { text: "128 triệu đồng", isCorrect: false }
                 ],
                 hint: "Loại trừ các khoản không hợp lệ.",
                 rationale: "Đáp án đúng là: B"
@@ -816,10 +816,10 @@
                 questionNumber: 60,
                 question: "Công ty Cổ phần Hải Nam sản xuất và kinh doanh thiết bị văn phòng, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo quý. Số liệu về hàng hóa dịch vụ mua vào của công ty trong quý 1/N như sau: + Tháng 1: giá trị hàng hóa dịch vụ mua vào là 1.200 triệu đồng, trong đó có 100 triệu đồng không có hóa đơn giá trị gia tăng. + Tháng 2: giá trị hàng hóa mua vào là 800 triệu đồng, trong đó có 60 triệu đồng tiền hàng thể hiện trên 1 hóa đơn GTGT không có chứng từ thanh toán không dùng tiền mặt. + Tháng 3: giá trị hàng mua vào là 1.000 triệu đồng, trong đó có 150 triệu đồng tiền hàng có hóa đơn bị tẩy xóa chưa kịp xử lý. Số hàng hóa còn lại đều có hóa đơn GTGT hợp pháp, thanh toán qua ngân hàng. + Hàng hóa dịch vụ mua vào đều thuộc đối tượng áp dụng thuế suất thuế GTGT là 10%. Số thuế GTGT đầu vào đủ điều kiện được khấu trừ của công ty Đức Vinh trong quý 1/N là:",
                 answerOptions: [
-                    { text: "A. 200 triệu đồng", isCorrect: false },
-                    { text: "B. 194 triệu đồng", isCorrect: false },
-                    { text: "C. 269 triệu đồng", isCorrect: true },
-                    { text: "D. 279 triệu đồng", isCorrect: false }
+                    { text: "200 triệu đồng", isCorrect: false },
+                    { text: "194 triệu đồng", isCorrect: false },
+                    { text: "269 triệu đồng", isCorrect: true },
+                    { text: "279 triệu đồng", isCorrect: false }
                 ],
                 hint: "Loại trừ các khoản không hợp lệ.",
                 rationale: "Đáp án đúng là: C"
@@ -828,10 +828,10 @@
                 questionNumber: 61,
                 question: "Công ty Cổ phần Minh Ánh sản xuất và kinh doanh văn phòng phẩm, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo quý. Số liệu về hàng hóa dịch vụ mua vào của công ty trong quý 2/N như sau: + Tháng 4: giá trị hàng hóa dịch vụ mua vào là 800 triệu đồng. + Tháng 5: giá trị hàng hóa mua vào là 500 triệu đồng, trong đó có 60 triệu đồng tiền hàng thể hiện trên 1 hóa đơn GTGT không có chứng từ thanh toán không dùng tiền mặt. + Tháng 6: giá trị hàng mua vào là 450 triệu đồng, trong đó có 150 triệu đồng tiền hàng có hóa đơn bị tẩy xóa chưa kịp xử lý. + Số hàng hóa còn lại đều có hóa đơn GTGT hợp pháp, thanh toán qua ngân hàng. + Hàng hóa dịch vụ mua vào đều thuộc đối tượng áp dụng thuế suất thuế GTGT là 10%. Số thuế GTGT đầu vào đủ điều kiện được khấu trừ của công ty Đức Vinh trong quý 1/N là:",
                 answerOptions: [
-                    { text: "A. 175 triệu đồng", isCorrect: false },
-                    { text: "B. 154 triệu đồng", isCorrect: true },
-                    { text: "C. 160 triệu đồng", isCorrect: false },
-                    { text: "D. 169 triệu đồng", isCorrect: false }
+                    { text: "175 triệu đồng", isCorrect: false },
+                    { text: "154 triệu đồng", isCorrect: true },
+                    { text: "160 triệu đồng", isCorrect: false },
+                    { text: "169 triệu đồng", isCorrect: false }
                 ],
                 hint: "Loại trừ các khoản không hợp lệ.",
                 rationale: "Đáp án đúng là: B"
@@ -840,10 +840,10 @@
                 questionNumber: 62,
                 question: "Công ty Cổ phần Tú Oanh kinh doanh trong lĩnh vực bất động sản, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 9/N công ty có mua 1 chiếc xe ô tô 5 chỗ hiệu Toyota có giá mua chưa bao gồm thuế GTGT là 2.500 triệu đồng phục vụ cho hoạt động sản xuất kinh doanh, thuế suất thuế GTGT của oto 10%. Chiếc ô tô mua về có hóa đơn GTGT hợp pháp, thanh toán qua ngân hàng. Số thuế GTGT đầu vào của ô tô được khấu trừ là:",
                 answerOptions: [
-                    { text: "A. 250 triệu đồng", isCorrect: false },
-                    { text: "B. 160 triệu đồng", isCorrect: true },
-                    { text: "C. 90 triệu đồng", isCorrect: false },
-                    { text: "D. 200 triệu đồng", isCorrect: false }
+                    { text: "250 triệu đồng", isCorrect: false },
+                    { text: "160 triệu đồng", isCorrect: true },
+                    { text: "90 triệu đồng", isCorrect: false },
+                    { text: "200 triệu đồng", isCorrect: false }
                 ],
                 hint: "Xe dưới 9 chỗ bị khống chế nguyên giá 1,6 tỷ.",
                 rationale: "Đáp án đúng là: B"
@@ -852,10 +852,10 @@
                 questionNumber: 63,
                 question: "Công ty TNHH Kim Ngân kinh doanh trong lĩnh vực du lịch, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 12/N công ty có mua 1 chiếc xe ô tô hiệu Toyota 5 chỗ có giá mua chưa bao gồm thuế GTGT là 3.500 triệu đồng phục vụ cho hoạt động cho thuê xe, thuế suất thuế GTGT của oto là 10%. Chiếc ô tô mua về có hóa đơn GTGT hợp pháp, thanh toán qua ngân hàng. Số thuế GTGT đầu vào của oto được khấu trừ là:",
                 answerOptions: [
-                    { text: "A. 350 triệu đồng", isCorrect: true },
-                    { text: "B. 160 triệu đồng", isCorrect: false },
-                    { text: "C. 190 triệu đồng", isCorrect: false },
-                    { text: "D. 250 triệu đồng", isCorrect: false }
+                    { text: "350 triệu đồng", isCorrect: true },
+                    { text: "160 triệu đồng", isCorrect: false },
+                    { text: "190 triệu đồng", isCorrect: false },
+                    { text: "250 triệu đồng", isCorrect: false }
                 ],
                 hint: "Doanh nghiệp du lịch không bị khống chế.",
                 rationale: "Đáp án đúng là: A"
@@ -864,10 +864,10 @@
                 questionNumber: 64,
                 question: "Công ty TNHH Hải Âu kinh doanh trong lĩnh vực vận tải, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. Tháng 3/N công ty có mua 1 chiếc xe ô tô hiệu Mercedes 5 chỗ có giá mua chưa bao gồm thuế GTGT là 3.000 triệu đồng phục vụ cho hoạt động cho thuê xe đám cưới, thuế suất thuế GTGT của ô tô là 10%. Chiếc ô tô mua về có hóa đơn GTGT hợp pháp, thanh toán qua ngân hàng. Số thuế GTGT đầu vào của ô tô được khấu trừ là:",
                 answerOptions: [
-                    { text: "A. 160 triệu đồng", isCorrect: false },
-                    { text: "B. 300 triệu đồng", isCorrect: true },
-                    { text: "C. 150 triệu đồng", isCorrect: false },
-                    { text: "D. 200 triệu đồng", isCorrect: false }
+                    { text: "160 triệu đồng", isCorrect: false },
+                    { text: "300 triệu đồng", isCorrect: true },
+                    { text: "150 triệu đồng", isCorrect: false },
+                    { text: "200 triệu đồng", isCorrect: false }
                 ],
                 hint: "Doanh nghiệp vận tải không bị khống chế.",
                 rationale: "Đáp án đúng là: B"
@@ -876,10 +876,10 @@
                 questionNumber: 65,
                 question: "Công ty TNHH Hà Anh kinh doanh trong lĩnh vực khách sạn và nhà nghỉ, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. Tháng 3/N công ty có mua 1 chiếc xe ô tô hiệu Meredes 7 chỗ có giá mua chưa bao gồm thuế GTGT là 3.800 triệu đồng phục vụ cho hoạt động cho thuê xe đám cưới, thuế suất thuế GTGT của ô tô là 10%. Chiếc ô tô mua về có hóa đơn GTGT hợp pháp, thanh toán qua ngân hàng. Số thuế GTGT đầu vào của ô tô được khấu trừ là:",
                 answerOptions: [
-                    { text: "A. 160 triệu đồng", isCorrect: false },
-                    { text: "B. 190 triệu đồng", isCorrect: false },
-                    { text: "C. 380 triệu đồng", isCorrect: true },
-                    { text: "D. 250 triệu đồng", isCorrect: false }
+                    { text: "160 triệu đồng", isCorrect: false },
+                    { text: "190 triệu đồng", isCorrect: false },
+                    { text: "380 triệu đồng", isCorrect: true },
+                    { text: "250 triệu đồng", isCorrect: false }
                 ],
                 hint: "Doanh nghiệp khách sạn không bị khống chế.",
                 rationale: "Đáp án đúng là: C"
@@ -888,10 +888,10 @@
                 questionNumber: 66,
                 question: "Công ty Cổ phần Mai Anh kinh doanh trong lĩnh vực thời trang, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. Tháng 3/N công ty có mua 1 chiếc xe ô tô hiệu Mercedes 5 chỗ có giá mua chưa bao gồm thuế GTGT là 3.200 triệu đồng và 1 chiếc xe 16 chỗ hiệu Hyundai có giá mua chưa bao gồm thuế GTGT là 1.500 triệu đồng, thuế suất thuế GTGT của ô tô là 10%. Cả 2 chiếc xe mua về đều phục vụ cho hoạt động sản xuất kinh doanh và có hóa đơn GTGT đầy đủ, hợp pháp, thanh toán qua ngân hàng. Số thuế GTGT đầu vào của ô tô được khấu trừ là:",
                 answerOptions: [
-                    { text: "A. 320 triệu đồng", isCorrect: false },
-                    { text: "B. 470 triệu đồng", isCorrect: false },
-                    { text: "C. 310 triệu đồng", isCorrect: true },
-                    { text: "D. 160 triệu đồng", isCorrect: false }
+                    { text: "320 triệu đồng", isCorrect: false },
+                    { text: "470 triệu đồng", isCorrect: false },
+                    { text: "310 triệu đồng", isCorrect: true },
+                    { text: "160 triệu đồng", isCorrect: false }
                 ],
                 hint: "Xe 5 chỗ bị khống chế, xe 16 chỗ không bị.",
                 rationale: "Đáp án đúng là: C"
@@ -900,10 +900,10 @@
                 questionNumber: 67,
                 question: "Công ty Cổ phần Đức Anh hoạt động trong lĩnh vực du lịch, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 8/N công ty có mua 1 chiếc xe ô tô hiệu Mercedes 5 chỗ có giá mua chưa bao gồm thuế GTGT là 2.800 triệu đồng và 1 chiếc xe 16 chỗ hiệu Hyundai có giá mua chưa bao gồm thuế GTGT là 2.000 triệu đồng, thuế suất thuế GTGT của ô tô là 10%. Cả 2 chiếc xe mua về đều phục vụ cho hoạt động sản xuất kinh doanh và có hóa đơn GTGT đầy đủ, hợp pháp, thanh toán qua ngân hàng. Số thuế GTGT đầu vào của ô tô được khấu trừ là:",
                 answerOptions: [
-                    { text: "A. 480 triệu đồng", isCorrect: true },
-                    { text: "B. 280 triệu đồng", isCorrect: false },
-                    { text: "C. 320 triệu đồng", isCorrect: false },
-                    { text: "D. 360 triệu đồng", isCorrect: false }
+                    { text: "480 triệu đồng", isCorrect: true },
+                    { text: "280 triệu đồng", isCorrect: false },
+                    { text: "320 triệu đồng", isCorrect: false },
+                    { text: "360 triệu đồng", isCorrect: false }
                 ],
                 hint: "Ngành du lịch được khấu trừ toàn bộ.",
                 rationale: "Đáp án đúng là: A"
@@ -912,10 +912,10 @@
                 questionNumber: 68,
                 question: "Công ty Cổ phần Thế Minh hoạt động trong lĩnh vực kinh doanh nhà hàng khách sạn, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 11/N công ty có mua 1 chiếc xe ô tô hiệu Mercedes 5 chỗ có giá mua chưa bao gồm thuế GTGT là 3.200 triệu đồng và 1 chiếc xe 16 chỗ hiệu Hyundai có giá mua chưa bao gồm thuế GTGT là 2.200 triệu đồng, thuế suất thuế GTGT của ô tô là 10%. Cả 2 chiếc xe mua về đều phục vụ cho hoạt động sản xuất kinh doanh và có hóa đơn GTGT đầy đủ, hợp pháp, thanh toán qua ngân hàng. Số thuế GTGT đầu vào của ô tô được khấu trừ là:",
                 answerOptions: [
-                    { text: "A. 380 triệu đồng", isCorrect: false },
-                    { text: "B. 540 triệu đồng", isCorrect: true },
-                    { text: "C. 480 triệu đồng", isCorrect: false },
-                    { text: "D. 320 triệu đồng", isCorrect: false }
+                    { text: "380 triệu đồng", isCorrect: false },
+                    { text: "540 triệu đồng", isCorrect: true },
+                    { text: "480 triệu đồng", isCorrect: false },
+                    { text: "320 triệu đồng", isCorrect: false }
                 ],
                 hint: "Ngành khách sạn được khấu trừ toàn bộ.",
                 rationale: "Đáp án đúng là: B"
@@ -924,10 +924,10 @@
                 questionNumber: 69,
                 question: "Công ty Cổ phần Mai Linh hoạt động trong lĩnh vực kinh doanh vận tải, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 6/N công ty có mua 1 chiếc xe ô tô hiệu Toyota 5 chỗ có giá mua chưa bao gồm thuế GTGT là 2.200 triệu đồng và 1 chiếc xe 16 chỗ hiệu Hyundai có giá mua chưa bao gồm thuế GTGT là 2.500 triệu đồng, thuế suất thuế GTGT của ô tô là 10%. Cả 2 chiếc xe mua về đều phục vụ cho hoạt động sản xuất kinh doanh và có hóa đơn GTGT đầy đủ, hợp pháp, thanh toán qua ngân hàng. Số thuế GTGT đầu vào của ô tô được khấu trừ là:",
                 answerOptions: [
-                    { text: "A. 320 triệu đồng", isCorrect: false },
-                    { text: "B. 410 triệu đồng", isCorrect: false },
-                    { text: "C. 470 triệu đồng", isCorrect: true },
-                    { text: "D. 390 triệu đồng", isCorrect: false }
+                    { text: "320 triệu đồng", isCorrect: false },
+                    { text: "410 triệu đồng", isCorrect: false },
+                    { text: "470 triệu đồng", isCorrect: true },
+                    { text: "390 triệu đồng", isCorrect: false }
                 ],
                 hint: "Ngành vận tải được khấu trừ toàn bộ.",
                 rationale: "Đáp án đúng là: C"
@@ -936,10 +936,10 @@
                 questionNumber: 70,
                 question: "Công ty Cổ phần Thế Minh hoạt động trong lĩnh vực đầu tư kinh doanh bất động sản, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 11/N công ty có mua 1 chiếc xe ô tô hiệu Mercedes 5 chỗ có giá mua chưa bao gồm thuế GTGT là 5.600 triệu đồng phục vụ đưa đón lãnh đạo doanh nghiệp đi làm việc và đi công tác và 1 chiếc xe 45 chỗ hiệu Hyundai có giá mua chưa bao gồm thuế GTGT là 4.500 triệu đồng phục vụ đưa đón cán bộ công nhân viên đi làm, thuế suất thuế GTGT của ô tô là 10%. Cả 2 chiếc xe mua về đều có hóa đơn GTGT đầy đủ, hợp pháp, thanh toán qua ngân hàng. Số thuế GTGT đầu vào của ô tô được khấu trừ là:",
                 answerOptions: [
-                    { text: "A. 610 triệu đồng", isCorrect: true },
-                    { text: "B. 1.010 triệu đồng", isCorrect: false },
-                    { text: "C. 720 triệu đồng", isCorrect: false },
-                    { text: "D. 320 triệu đồng", isCorrect: false }
+                    { text: "610 triệu đồng", isCorrect: true },
+                    { text: "1.010 triệu đồng", isCorrect: false },
+                    { text: "720 triệu đồng", isCorrect: false },
+                    { text: "320 triệu đồng", isCorrect: false }
                 ],
                 hint: "Xe 5 chỗ bị khống chế, xe 45 chỗ không bị.",
                 rationale: "Đáp án đúng là: A"
@@ -948,10 +948,10 @@
                 questionNumber: 71,
                 question: "Công ty TNHH Anh Tuấn hoạt động trong lĩnh vực buôn bán đồ gia dụng kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 1/N doanh thu bán hàng chưa bao gồm thuế GTGT là 800 triệu đồng, trong đó có một đơn hàng 200 triệu đồng công ty chiết khấu thanh toán cho khách hàng 2%. Hàng hóa công ty kinh doanh đều thuộc đối tượng áp dụng mức thuế suất thuế GTGT 10%. Thuế GTGT đầu ra công ty phải kê khai trong tháng 1/N là:",
                 answerOptions: [
-                    { text: "A. 79,6 triệu đồng", isCorrect: false },
-                    { text: "B. 80 triệu đồng", isCorrect: true },
-                    { text: "C. 60 triệu đồng", isCorrect: false },
-                    { text: "D. 50 triệu đồng", isCorrect: false }
+                    { text: "79,6 triệu đồng", isCorrect: false },
+                    { text: "80 triệu đồng", isCorrect: true },
+                    { text: "60 triệu đồng", isCorrect: false },
+                    { text: "50 triệu đồng", isCorrect: false }
                 ],
                 hint: "Chiết khấu thanh toán không giảm trừ doanh thu.",
                 rationale: "Đáp án đúng là: B"
@@ -960,10 +960,10 @@
                 questionNumber: 72,
                 question: "Công ty TNHH Tuấn Anh hoạt động trong lĩnh vực kinh doanh vật liệu xây dựng, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 2/N doanh thu bán hàng chưa bao gồm thuế GTGT là 2.500 triệu đồng, trong đó có một đơn hàng 1.000 triệu đồng công ty chiết khấu thương mại cho khách hàng 5%. Hàng hóa công ty kinh doanh đều thuộc đối tượng áp dụng mức thuế suất thuế GTGT 10%. Thuế GTGT đầu ra công ty phải kê khai trong tháng 2/N là:",
                 answerOptions: [
-                    { text: "A. 250 triệu đồng", isCorrect: false },
-                    { text: "B. 150 triệu đồng", isCorrect: false },
-                    { text: "C. 245 triệu đồng", isCorrect: true },
-                    { text: "D. 200 triệu đồng.", isCorrect: false }
+                    { text: "250 triệu đồng", isCorrect: false },
+                    { text: "150 triệu đồng", isCorrect: false },
+                    { text: "245 triệu đồng", isCorrect: true },
+                    { text: "200 triệu đồng.", isCorrect: false }
                 ],
                 hint: "Chiết khấu thương mại được giảm trừ.",
                 rationale: "Đáp án đúng là: C"
@@ -972,10 +972,10 @@
                 questionNumber: 73,
                 question: "Công ty TNHH Mai Anh hoạt động trong lĩnh vực sản xuất và kinh doanh phụ tùng xe máy, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng + Tháng 3/N doanh thu bán hàng chưa bao gồm thuế GTGT là 1.500 triệu đồng, trong đó có một đơn hàng 500 triệu đồng công ty chiết khấu thương mại cho khách hàng 3%, một đơn hàng 200 triệu đồng chiết khấu thanh toán cho khách hàng 2%. + Hàng hóa công ty kinh doanh đều thuộc đối tượng áp dụng mức thuế suất thuế GTGT 10%. Thuế GTGT đầu ra công ty phải kê khai trong tháng 3/N là:",
                 answerOptions: [
-                    { text: "A. 150 triệu đồng", isCorrect: false },
-                    { text: "B. 148,5 triệu đồng", isCorrect: true },
-                    { text: "C. 149,6 triệu đồng", isCorrect: false },
-                    { text: "D. 148,1 triệu đồng", isCorrect: false }
+                    { text: "150 triệu đồng", isCorrect: false },
+                    { text: "148,5 triệu đồng", isCorrect: true },
+                    { text: "149,6 triệu đồng", isCorrect: false },
+                    { text: "148,1 triệu đồng", isCorrect: false }
                 ],
                 hint: "Chỉ trừ chiết khấu thương mại.",
                 rationale: "Đáp án đúng là: B"
@@ -984,10 +984,10 @@
                 questionNumber: 74,
                 question: "Công ty TNHH Hùng Minh hoạt động trong lĩnh vực sản xuất và kinh doanh đồ chơi trẻ em thông minh, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 3/N doanh thu bán hàng chưa bao gồm thuế GTGT là 600 triệu đồng, trong đó giá trị hàng hóa bán cho doanh nghiệp kê khai nộp thuế theo phương pháp trực tiếp là 200 triệu đồng. + Hàng hóa công ty kinh doanh đều thuộc đối tượng áp dụng mức thuế suất thuế GTGT 5%. Thuế GTGT đầu ra công ty phải kê khai trong tháng 3/N là:",
                 answerOptions: [
-                    { text: "A. 30 triệu đồng", isCorrect: true },
-                    { text: "B. 20 triệu đồng", isCorrect: false },
-                    { text: "C. 10 triệu đồng", isCorrect: false },
-                    { text: "D. 15 triệu đồng", isCorrect: false }
+                    { text: "30 triệu đồng", isCorrect: true },
+                    { text: "20 triệu đồng", isCorrect: false },
+                    { text: "10 triệu đồng", isCorrect: false },
+                    { text: "15 triệu đồng", isCorrect: false }
                 ],
                 hint: "Tính trên toàn bộ doanh thu.",
                 rationale: "Đáp án đúng là: A"
@@ -996,10 +996,10 @@
                 questionNumber: 75,
                 question: "Công ty TNHH Hùng Minh hoạt động trong lĩnh vực sản xuất và kinh doanh đồ chơi trẻ em thông minh, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 6/N doanh thu bán hàng chưa bao gồm thuế GTGT là 900 triệu đồng. Ngoài ra nhân dịp tết thiếu nhi 1/6, công ty tặng cho con của cán bộ công nhân viên mỗi cháu 1 bộ đồ chơi thông minh, tổng giá trị tiền hàng mang tặng chưa bao gồm thuế GTGT là 50 triệu đồng. + Hàng hóa công ty kinh doanh đều thuộc đối tượng áp dụng mức thuế suất thuế GTGT 5%. Thuế GTGT đầu ra công ty phải kê khai trong tháng 6/N là:",
                 answerOptions: [
-                    { text: "A. 90 triệu đồng", isCorrect: false },
-                    { text: "B. 45 triệu đồng", isCorrect: false },
-                    { text: "C. 47,5 triệu đồng", isCorrect: true },
-                    { text: "D. 42,5 triệu đồng", isCorrect: false }
+                    { text: "90 triệu đồng", isCorrect: false },
+                    { text: "45 triệu đồng", isCorrect: false },
+                    { text: "47,5 triệu đồng", isCorrect: true },
+                    { text: "42,5 triệu đồng", isCorrect: false }
                 ],
                 hint: "Cộng cả hàng biếu tặng.",
                 rationale: "Đáp án đúng là: C"
@@ -1008,10 +1008,10 @@
                 questionNumber: 76,
                 question: "Công ty Cổ phần Hoàng Anh hoạt động trong lĩnh vực sản xuất và kinh doanh đồ gỗ, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 6/N doanh thu bán hàng chưa bao gồm thuế GTGT là 1.200 triệu đồng. Trong đó có 2 bộ bàn ghế bán cho khách lẻ thanh toán bằng tiền mặt, 1 bộ có giá chưa bao gồm thuế GTGT là 20 triệu đồng, 1 bộ có giá chưa bao gồm thuế GTGT là 25 triệu đồng. + Số còn lại đều thanh toán qua ngân hàng. + Hàng hóa công ty kinh doanh thuộc đối tượng áp dụng mức thuế suất thuế GTGT 10%. Thuế GTGT đầu ra công ty phải kê khai trong tháng 6/N là:",
                 answerOptions: [
-                    { text: "A. 120 triệu đồng", isCorrect: true },
-                    { text: "B. 115,5 triệu đồng", isCorrect: false },
-                    { text: "C. 118 triệu đồng", isCorrect: false },
-                    { text: "D. 117,5 triệu đồng", isCorrect: false }
+                    { text: "120 triệu đồng", isCorrect: true },
+                    { text: "115,5 triệu đồng", isCorrect: false },
+                    { text: "118 triệu đồng", isCorrect: false },
+                    { text: "117,5 triệu đồng", isCorrect: false }
                 ],
                 hint: "Đầu ra tính hết, không trừ tiền mặt.",
                 rationale: "Đáp án đúng là: A"
@@ -1020,10 +1020,10 @@
                 questionNumber: 77,
                 question: "Công ty Xuất nhập khẩu Hoàng Hải  hoạt động trong lĩnh vực sản xuất và kinh doanh đồ gỗ, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 8/N, doanh thu hoạt động bán hàng nội địa chưa bao gồm thuế GTGT là 1.200 triệu đồng, doanh thu hoạt động xuất khẩu hàng hóa là 2.000 triệu đồng. + Hàng hóa công ty kinh doanh thuộc đối tượng áp dụng mức thuế suất thuế GTGT 10%. Thuế GTGT đầu ra công ty phải kê khai trong tháng 8/N là:",
                 answerOptions: [
-                    { text: "A. 320 triệu đồng", isCorrect: false },
-                    { text: "B. 120 triệu đồng", isCorrect: true },
-                    { text: "C. 200 triệu đồng", isCorrect: false },
-                    { text: "D. 220 triệu đồng", isCorrect: false }
+                    { text: "320 triệu đồng", isCorrect: false },
+                    { text: "120 triệu đồng", isCorrect: true },
+                    { text: "200 triệu đồng", isCorrect: false },
+                    { text: "220 triệu đồng", isCorrect: false }
                 ],
                 hint: "Xuất khẩu 0%.",
                 rationale: "Đáp án đúng là: B"
@@ -1032,10 +1032,10 @@
                 questionNumber: 78,
                 question: "Công ty Xuất nhập khẩu Hoàng Hải  hoạt động trong lĩnh vực sản xuất và kinh doanh đồ gỗ, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 8/N, doanh thu hoạt động bán hàng nội địa chưa bao gồm thuế GTGT là 1.200 triệu đồng, doanh thu hoạt động xuất khẩu hàng hóa là 2.000 triệu đồng. + Thuế GTGT đầu vào được khấu trừ trong tháng 8/N của công ty được xác định là 100 triệu đồng. + Hàng hóa công ty kinh doanh thuộc đối tượng áp dụng mức thuế suất thuế GTGT 10%. Thuế GTGT công ty phải nộp trong tháng 8/N là:",
                 answerOptions: [
-                    { text: "A. 220 triệu đồng", isCorrect: false },
-                    { text: "B. 20 triệu đồng", isCorrect: true },
-                    { text: "C. 100 triệu đồng", isCorrect: false },
-                    { text: "D. 120 triệu đồng", isCorrect: false }
+                    { text: "220 triệu đồng", isCorrect: false },
+                    { text: "20 triệu đồng", isCorrect: true },
+                    { text: "100 triệu đồng", isCorrect: false },
+                    { text: "120 triệu đồng", isCorrect: false }
                 ],
                 hint: "Đầu ra - Đầu vào.",
                 rationale: "Đáp án đúng là: B"
@@ -1044,10 +1044,10 @@
                 questionNumber: 79,
                 question: "Công ty Xuất nhập khẩu Phương Ánh hoạt động trong lĩnh vực sản xuất và kinh doanh đồ da, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 8/N, doanh thu hoạt động bán hàng nội địa chưa bao gồm thuế GTGT là 1.500 triệu đồng, doanh thu hàng hóa trực tiếp xuất khẩu hàng hóa là 1.000 triệu đồng, doanh thu hàng hóa bán cho doanh nghiệp chế xuất là 500 triệu đồng. + Hàng hóa công ty kinh doanh thuộc đối tượng áp dụng mức thuế suất thuế GTGT 10%. Thuế GTGT đầu ra công ty phải kê khai trong tháng 8/N là:",
                 answerOptions: [
-                    { text: "A. 300 triệu đồng", isCorrect: false },
-                    { text: "B. 250 triệu đồng", isCorrect: false },
-                    { text: "C. 150 triệu đồng", isCorrect: true },
-                    { text: "D. 200 triệu đồng", isCorrect: false }
+                    { text: "300 triệu đồng", isCorrect: false },
+                    { text: "250 triệu đồng", isCorrect: false },
+                    { text: "150 triệu đồng", isCorrect: true },
+                    { text: "200 triệu đồng", isCorrect: false }
                 ],
                 hint: "Khu chế xuất 0%.",
                 rationale: "Đáp án đúng là: C"
@@ -1056,10 +1056,10 @@
                 questionNumber: 80,
                 question: "Công ty Xuất nhập khẩu Phương Ánh hoạt động trong lĩnh vực sản xuất và kinh doanh đồ da, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. . + Tháng 8/N, doanh thu hoạt động bán hàng nội địa chưa bao gồm thuế GTGT là 1.500 triệu đồng, doanh thu hàng hóa trực tiếp xuất khẩu hàng hóa là 1.000 triệu đồng, doanh thu hàng hóa bán cho doanh nghiệp chế xuất là 500 triệu đồng. + Thuế GTGT đầu vào được khấu trừ của công ty được xác định là 120 triệu đồng. + Hàng hóa công ty kinh doanh thuộc đối tượng áp dụng mức thuế suất thuế GTGT 10%. Thuế GTGT công ty phải nộp trong tháng 8/N là:",
                 answerOptions: [
-                    { text: "A. 180 triệu đồng", isCorrect: false },
-                    { text: "B. 130 triệu đồng", isCorrect: false },
-                    { text: "C. 30 triệu đồng", isCorrect: true },
-                    { text: "D. 80 triệu đồng", isCorrect: false }
+                    { text: "180 triệu đồng", isCorrect: false },
+                    { text: "130 triệu đồng", isCorrect: false },
+                    { text: "30 triệu đồng", isCorrect: true },
+                    { text: "80 triệu đồng", isCorrect: false }
                 ],
                 hint: "150 - 120.",
                 rationale: "Đáp án đúng là: C"
@@ -1068,10 +1068,10 @@
                 questionNumber: 81,
                 question: "Công ty Thiết bị y tế Hùng Mạnh hoạt động trong lĩnh vực sản xuất và kinh thiết bị y tế, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 10/N, doanh thu hàng hóa bán ra trong nước chưa bao gồm thuế GTGT là 1.500 triệu đồng. + Hàng hóa dịch vụ mua vào chưa bao gồm thuế GTGT là 600 triệu đồng, trong đó có 100 triệu là tiền hàng hóa không thuộc đối tượng chịu thuế GTGT. + Thiết bị y tế thuộc đối tượng áp dụng thuế suất thuế GTGT 5%. + Hàng hóa mua vào có hóa đơn chứng từ đầy đủ, có chứng từ thanh toán qua ngân hàng và cũng thuộc đối tượng áp dụng thuế suất 5%. Vậy số thuế GTGT công ty phải nộp trong tháng 10/N là:",
                 answerOptions: [
-                    { text: "A. 75 triệu đồng", isCorrect: false },
-                    { text: "B. 50 triệu đồng", isCorrect: true },
-                    { text: "C. 45 triệu đồng", isCorrect: false },
-                    { text: "D. 60 triệu đồng", isCorrect: false }
+                    { text: "75 triệu đồng", isCorrect: false },
+                    { text: "50 triệu đồng", isCorrect: true },
+                    { text: "45 triệu đồng", isCorrect: false },
+                    { text: "60 triệu đồng", isCorrect: false }
                 ],
                 hint: "Thuế suất 5%.",
                 rationale: "Đáp án đúng là: B"
@@ -1080,10 +1080,10 @@
                 questionNumber: 82,
                 question: "Công ty Thiết bị y tế Hùng Mạnh hoạt động trong lĩnh vực sản xuất và kinh doanh thiết bị y tế, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 10/N, doanh thu hàng hóa bán ra trong nước chưa bao gồm thuế GTGT là 1.500 triệu đồng. Doanh thu hoạt động xuất khẩu là 1.000 triệu đồng. + Hàng hóa dịch vụ mua vào chưa bao gồm thuế GTGT là 800 triệu đồng. + Thiết bị y tế thuộc đối tượng áp dụng thuế suất thuế GTGT 5%. + Hàng hóa mua về có hóa đơn chứng từ đầy đủ, có chứng từ thanh toán qua ngân hàng và cũng thuộc đối tượng áp dụng thuế suất 5%. Vậy số thuế GTGT công ty phải nộp trong tháng 10/N là:",
                 answerOptions: [
-                    { text: "A. 35 triệu đồng", isCorrect: true },
-                    { text: "B. 85 triệu đồng", isCorrect: false },
-                    { text: "C. 25 triệu đồng", isCorrect: false },
-                    { text: "D. 75 triệu đồng", isCorrect: false }
+                    { text: "35 triệu đồng", isCorrect: true },
+                    { text: "85 triệu đồng", isCorrect: false },
+                    { text: "25 triệu đồng", isCorrect: false },
+                    { text: "75 triệu đồng", isCorrect: false }
                 ],
                 hint: "Xuất khẩu 0%.",
                 rationale: "Đáp án đúng là: A"
@@ -1092,10 +1092,10 @@
                 questionNumber: 83,
                 question: "Công ty Thiết bị y tế Hùng Mạnh hoạt động trong lĩnh vực sản xuất và kinh doanh thiết bị y tế, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 10/N, doanh thu hàng hóa bán ra trong nước chưa bao gồm thuế GTGT là 1.500 triệu đồng. Doanh thu hoạt động xuất khẩu là 1.000 triệu đồng. + Đồng thời công ty có tặng bệnh viện Đống Đa một số thiết bị y tế với tổng số tiền chưa bao gồm thuế GTGT là 200 triệu đồng nhân dịp kỷ niệm 50 năm thành lập bệnh viện. + Thiết bị y tế thuộc đối tượng áp dụng thuế suất thuế GTGT 5%. Số thuế GTGT đầu ra công ty phải kê khai trong tháng 10/N là:",
                 answerOptions: [
-                    { text: "A. 150 triệu đồng", isCorrect: false },
-                    { text: "B. 250 triệu đồng", isCorrect: false },
-                    { text: "C. 170 triệu đồng", isCorrect: false },
-                    { text: "D. 85 triệu đồng", isCorrect: true }
+                    { text: "150 triệu đồng", isCorrect: false },
+                    { text: "250 triệu đồng", isCorrect: false },
+                    { text: "170 triệu đồng", isCorrect: false },
+                    { text: "85 triệu đồng", isCorrect: true }
                 ],
                 hint: "Cộng cả hàng biếu tặng.",
                 rationale: "Đáp án đúng là: D"
@@ -1104,10 +1104,10 @@
                 questionNumber: 84,
                 question: "Công ty cổ phần Đức Anh chuyên sản xuất và kinh doanh thiết bị giáo dục, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo quý. + Quý 1/N doanh thu bán hàng chưa bao gồm thuế GTGT của công ty như sau: Tháng 1: 160 triệu đồng; Tháng 2: 120 triệu đồng; Tháng 3: 90 triệu đồng. + Hàng hóa dịch vụ mua vào chưa bao gồm thuế GTGT trong quý 1 như sau: Tháng 1: 80 triệu đồng; tháng 2: 60 triệu đồng; tháng 3: 50 triệu đồng. + Thuế suất thuế GTGT của thiết bị giáo dục là 5%. + Hàng hóa dịch vụ mua vào đều thuộc đối tượng áp dụng thuế suất thuế GTGT là 5%. + Hàng hóa dịch vụ mua vào có hóa đơn chứng từ đầy đủ và có chứng từ thanh toán qua ngân hàng. Vậy số thuế GTGT công ty Đức Anh phải nộp trong quý 1/N là:",
                 answerOptions: [
-                    { text: "A. 18 triệu đồng", isCorrect: false },
-                    { text: "B. 9 triệu đồng", isCorrect: true },
-                    { text: "C. 11,5 triệu đồng", isCorrect: false },
-                    { text: "D. 12 triệu đồng", isCorrect: false }
+                    { text: "18 triệu đồng", isCorrect: false },
+                    { text: "9 triệu đồng", isCorrect: true },
+                    { text: "11,5 triệu đồng", isCorrect: false },
+                    { text: "12 triệu đồng", isCorrect: false }
                 ],
                 hint: "Tính tổng quý.",
                 rationale: "Đáp án đúng là: B"
@@ -1116,10 +1116,10 @@
                 questionNumber: 85,
                 question: "Công ty cổ phần Đức Anh chuyên sản xuất và kinh doanh thiết bị giáo dục, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo quý. + Quý 1/N doanh thu bán hàng chưa bao gồm thuế GTGT của công ty như sau: Tháng 1: 160 triệu đồng; Tháng 2: 120 triệu đồng; Tháng 3: 90 triệu đồng. + Hàng hóa dịch vụ mua vào chưa bao gồm thuế GTGT trong quý 1 như sau: Tháng 1: 80 triệu đồng; tháng 2: 60 triệu đồng; tháng 3: 50 triệu đồng. + Thuế suất thuế GTGT của thiết bị giáo dục là 5%. + Hàng hóa dịch vụ mua vào cũng đều thuộc đối tượng áp dụng thuế suất thuế GTGT là 5%. Trong số hàng hóa mua về có 10 triệu tiền hàng mua của cá nhân nên không có hóa đơn GTGT. Số còn lại có hóa đơn chứng từ đầy đủ, hóa đơn trên 20 triệu đều thực hiện thanh toán qua ngân hàng. Vậy số thuế GTGT công ty Đức Anh phải nộp trong quý 1/N là:",
                 answerOptions: [
-                    { text: "A. 19 triệu đồng", isCorrect: false },
-                    { text: "B. 9,5 triệu đồng", isCorrect: true },
-                    { text: "C. 160 triệu đồng", isCorrect: false },
-                    { text: "D. 8 triệu đồng", isCorrect: false }
+                    { text: "19 triệu đồng", isCorrect: false },
+                    { text: "9,5 triệu đồng", isCorrect: true },
+                    { text: "160 triệu đồng", isCorrect: false },
+                    { text: "8 triệu đồng", isCorrect: false }
                 ],
                 hint: "Loại trừ phần không hóa đơn.",
                 rationale: "Đáp án đúng là: B"
@@ -1128,10 +1128,10 @@
                 questionNumber: 86,
                 question: "Công ty cổ phần Thái Tuấn chuyên sản xuất và kinh doanh chăn ga gối đệm, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 9/N, tổng giá trị hàng hóa dịch vụ mua vào chưa bao gồm thuế GTGT là 900 triệu đồng. Công ty mới thực hiện thanh toán số tiền là 500 triệu đồng bằng hình thức chuyển khoản, số tiền hàng còn lại chưa thanh toán nhưng đều đã có hóa đơn GTGT, người bán chấp nhận cho công ty Thái Tuấn thanh toán trong vòng 2 tháng. + Số thuế GTGT đầu vào công ty được khấu trừ trong tháng 9/N là:",
                 answerOptions: [
-                    { text: "A. 90 triệu đồng", isCorrect: false },
-                    { text: "B. 50 triệu đồng", isCorrect: true },
-                    { text: "C. 80 triệu đồng", isCorrect: false },
-                    { text: "D. 60 triệu đồng", isCorrect: false }
+                    { text: "90 triệu đồng", isCorrect: false },
+                    { text: "50 triệu đồng", isCorrect: true },
+                    { text: "80 triệu đồng", isCorrect: false },
+                    { text: "60 triệu đồng", isCorrect: false }
                 ],
                 hint: "Theo đáp án đề bài (thực tế đã trả).",
                 rationale: "Đáp án đúng là: B"
@@ -1140,10 +1140,10 @@
                 questionNumber: 87,
                 question: "Công ty cổ phần Thái Tuấn chuyên sản xuất và kinh doanh chăn ga gối đệm, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 9/N, tổng giá trị hàng hóa dịch vụ mua vào chưa bao gồm thuế GTGT là 900 triệu đồng. Tuy nhiên ngày 26/9 khi kiểm kê hàng hóa, bộ phận thủ kho phát hiện ra lô hàng mua về ngày 20/9/N bị lỗi phải trả lại toàn bộ. Tổng giá trị hàng hóa bị trả lại chưa bao gồm thuế GTGT là 100 triệu đồng. Công ty Thái Tuấn thực hiện xuất hóa đơn ngược lại cho bên bán. Vậy số thuế GTGT đầu vào công ty được khấu trừ trong tháng 9/N là:",
                 answerOptions: [
-                    { text: "A. 90 triệu đồng", isCorrect: false },
-                    { text: "B. 50 triệu đồng", isCorrect: false },
-                    { text: "C. 80 triệu đồng", isCorrect: true },
-                    { text: "D. 60 triệu đồng", isCorrect: false }
+                    { text: "90 triệu đồng", isCorrect: false },
+                    { text: "50 triệu đồng", isCorrect: false },
+                    { text: "80 triệu đồng", isCorrect: true },
+                    { text: "60 triệu đồng", isCorrect: false }
                 ],
                 hint: "Trừ hàng trả lại.",
                 rationale: "Đáp án đúng là: C"
@@ -1152,10 +1152,10 @@
                 questionNumber: 88,
                 question: "Công ty cổ phần Thái Tuấn chuyên sản xuất và kinh doanh chăn ga gối đệm, kê khai nộp thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 9/N, tổng giá trị hàng hóa dịch vụ mua vào chưa bao gồm thuế GTGT là 900 triệu đồng, trong đó có đơn hàng 100 triệu đồng chỉ có hóa đơn bán hàng, còn lại có hóa đơn GTGT. + Đồng thời, kế toán công ty phát hiện ra 1 hóa đơn GTGT mua vào tháng 8/N bị bỏ sót chưa kê khai, số tiền chưa bao gồm thuế GTGT trên hóa đơn là 100 triệu đồng. + Hàng hóa dịch vụ mua vào đều thanh toán qua ngân hàng. + Thuế suất thuế GTGT của hàng hóa dịch vụ mua vào là 10%. Vậy số thuế GTGT đầu vào công ty được khấu trừ trong tháng 9/N là:",
                 answerOptions: [
-                    { text: "A. 90 triệu đồng", isCorrect: true },
-                    { text: "B. 80 triệu đồng", isCorrect: false },
-                    { text: "C. 100 triệu đồng", isCorrect: false },
-                    { text: "D. 70 triệu đồng", isCorrect: false }
+                    { text: "90 triệu đồng", isCorrect: true },
+                    { text: "80 triệu đồng", isCorrect: false },
+                    { text: "100 triệu đồng", isCorrect: false },
+                    { text: "70 triệu đồng", isCorrect: false }
                 ],
                 hint: "Cộng hóa đơn bỏ sót.",
                 rationale: "Đáp án đúng là: A"
@@ -1164,10 +1164,10 @@
                 questionNumber: 89,
                 question: "Công ty xuất nhập khẩu Minh Hằng chuyên kinh doanh mỹ phẩm nhập khẩu. Ngày  5/10/N công ty nhập một lô hàng mỹ phẩm từ Pháp có trị giá nhập khẩu được xác định tại cửa khẩu Hải Phòng là 25.000 USD. Thuế suất thuế nhập khẩu của dòng mỹ phẩm này là 20%. Thuế suất thuế GTGT của mỹ phẩm là 10%. Tỷ giá tính thuế USD/VNĐ được xác định cho lô hàng nhập khẩu này là 22.000VNĐ/ 1USD. Số thuế GTGT công ty phải nộp khi nhập lô hàng này về là:",
                 answerOptions: [
-                    { text: "A. 55 triệu đồng", isCorrect: false },
-                    { text: "B. 66 triệu đồng", isCorrect: true },
-                    { text: "C. 77 triệu đồng", isCorrect: false },
-                    { text: "D. 88 triệu đồng", isCorrect: false }
+                    { text: "55 triệu đồng", isCorrect: false },
+                    { text: "66 triệu đồng", isCorrect: true },
+                    { text: "77 triệu đồng", isCorrect: false },
+                    { text: "88 triệu đồng", isCorrect: false }
                 ],
                 hint: "Tính thuế chồng thuế.",
                 rationale: "Đáp án đúng là: B"
@@ -1176,10 +1176,10 @@
                 questionNumber: 90,
                 question: "Công ty xuất nhập khẩu Minh Hằng chuyên kinh doanh mỹ phẩm nhập khẩu. Ngày  8/10/N công ty nhập một lô hàng mỹ phẩm từ  Đức có trị giá là 25.000 USD, chi phí bảo hiểm và vận chuyển tới cảng Hải Phòng được xác định là 5.000USD. Thuế suất thuế nhập khẩu của dòng mỹ phẩm này là 20%. Thuế suất thuế GTGT của mỹ phẩm là 10%. Tỷ giá tính thuế USD/VNĐ được xác định cho lô hàng nhập khẩu này là 22.500VNĐ/ 1USD. Số thuế GTGT công ty phải nộp khi nhập lô hàng này về là:",
                 answerOptions: [
-                    { text: "A. 67,5 triệu đồng", isCorrect: false },
-                    { text: "B. 81 triệu đồng", isCorrect: true },
-                    { text: "C. 89,1 triệu đồng", isCorrect: false },
-                    { text: "D. 90 triệu đồng", isCorrect: false }
+                    { text: "67,5 triệu đồng", isCorrect: false },
+                    { text: "81 triệu đồng", isCorrect: true },
+                    { text: "89,1 triệu đồng", isCorrect: false },
+                    { text: "90 triệu đồng", isCorrect: false }
                 ],
                 hint: "Cộng phí vận chuyển.",
                 rationale: "Đáp án đúng là: B"
@@ -1188,10 +1188,10 @@
                 questionNumber: 91,
                 question: "Trong kỳ tính thuế, một công ty TNHH kinh doanh hàng hóa chịu thuế GTGT kê khai nộp thuế GTGT theo phương pháp khấu trừ có tài liệu sau: + Nhận thông báo nộp thuế GTGT cho một lô hàng nhập khẩu 70 triệu đồng. + Nộp thuế GTGT cho lô hàng nhập khẩu tháng trước 110 triệu đồng. + Mua 1 lô hàng của công ty TNHH kê khai nộp thuế GTGT theo phương pháp trực tiếp, tổng số tiền trên hóa đơn bán hàng là 150 triệu đồng. + Thuế GTGT đầu vào của hàng hóa dịch vụ khác đủ điều kiện được khấu trừ là 120 triệu đồng. Thuế GTGT đầu vào được khấu trừ trong kỳ là:",
                 answerOptions: [
-                    { text: "A. 180 triệu đồng", isCorrect: false },
-                    { text: "B. 300 triệu đồng", isCorrect: false },
-                    { text: "C. 230 triệu đồng", isCorrect: true },
-                    { text: "D. 315 triệu đồng", isCorrect: false }
+                    { text: "180 triệu đồng", isCorrect: false },
+                    { text: "300 triệu đồng", isCorrect: false },
+                    { text: "230 triệu đồng", isCorrect: true },
+                    { text: "315 triệu đồng", isCorrect: false }
                 ],
                 hint: "Khấu trừ thuế NK đã nộp.",
                 rationale: "Đáp án đúng là: C"
@@ -1200,10 +1200,10 @@
                 questionNumber: 92,
                 question: "Một công ty cổ phần kê khai nộp thuế GTGT theo phương pháp khấu trừ. Trong kỳ tính thuế có tình hình sau: + Doanh thu bán bàn ghế gỗ trong nước chưa thuế GTGT là 500 triệu đồng. + Xuất khẩu một lô hàng bàn ghế gỗ với giá FOB là 400 triệu đồng. + Thuế GTGT đầu vào phục vụ cho sản xuất kinh doanh hàng hóa được khấu trừ là 80 triệu đồng. + Hàng xuất khẩu của doanh nghiệp đủ điều kiện khấu trừ theo quy định. + Thuế suất thuế GTGT của mặt hàng mà doanh nghiệp kinh doanh là 10%. Thuế GTGT doanh nghiệp này phải nộp trong kỳ là:",
                 answerOptions: [
-                    { text: "A. 10 triệu đồng", isCorrect: false },
-                    { text: "B. -30 triệu đồng", isCorrect: true },
-                    { text: "C. -40 triệu đồng", isCorrect: false },
-                    { text: "D. 90 triệu đồng", isCorrect: false }
+                    { text: "10 triệu đồng", isCorrect: false },
+                    { text: "-30 triệu đồng", isCorrect: true },
+                    { text: "-40 triệu đồng", isCorrect: false },
+                    { text: "90 triệu đồng", isCorrect: false }
                 ],
                 hint: "Đầu ra - Đầu vào.",
                 rationale: "Đáp án đúng là: B"
@@ -1212,10 +1212,10 @@
                 questionNumber: 93,
                 question: "Trong kỳ tính thuế một công ty cổ phần sản xuất hàng hóa chịu thuế GTGT có tài liệu sau: + Chứng từ nộp thuế GTGT thay cho phía nước ngoài 40 triệu đồng (Nhà thầu nước ngoài không có tư cách pháp nhân ở Việt Nam) + Mua hàng có hóa đơn GTGT, thuế GTGT của số hóa đơn này là 30 triệu đồng; trong đó có 1 hóa đơn ghi thiếu mã số thuế của người bán, số thuế GTGT của hóa đơn này là 5 triệu đồng. + Hàng hóa dịch vụ mua vào đều thanh toán qua ngân hàng. + Công ty kê khai nộp thuế GTGT theo phương pháp khấu trừ. Tổng số thuế GTGT đầu vào được khấu trừ của công ty trong kỳ là:",
                 answerOptions: [
-                    { text: "A. 65 triệu đồng", isCorrect: true },
-                    { text: "B. 40 triệu đồng", isCorrect: false },
-                    { text: "C. 70 triệu đồng", isCorrect: false },
-                    { text: "D. 25 triệu đồng", isCorrect: false }
+                    { text: "65 triệu đồng", isCorrect: true },
+                    { text: "40 triệu đồng", isCorrect: false },
+                    { text: "70 triệu đồng", isCorrect: false },
+                    { text: "25 triệu đồng", isCorrect: false }
                 ],
                 hint: "Hóa đơn sai không được khấu trừ.",
                 rationale: "Đáp án đúng là: A"
@@ -1224,10 +1224,10 @@
                 questionNumber: 94,
                 question: "Công ty TNHH Hải Đăng chuyên nhập khẩu và kinh doanh hàng tiêu dùng. Công ty thực hiện kê khai thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 7/N công ty nhập khẩu 1.000 chai rượu ngoại. Tuy nhiên khi làm thủ tục nhập khẩu thì có 30 chai bị vỡ (có xác nhận của cơ quan hải quan). Trị giá nhập khẩu của 1 chai rượu được xác định là 120 USD. Tỷ giá tính thuế được xác định là 21.500VNĐ/1USD. Thuế suất thuế nhập khẩu là 50%. Thuế suất thuế TTĐB của loại rượu này là 65%. Thuế suất thuế GTGT là 10%. Công ty đã thực hiện nộp đầy đủ các loại thuế tại khâu nhập khẩu. Vậy thuế GTGT công ty phải nộp cho lô hàng nhập khẩu này là:",
                 answerOptions: [
-                    { text: "A. 638.550.000 đồng", isCorrect: false },
-                    { text: "B. 619.393.500 đồng", isCorrect: true },
-                    { text: "C. 387.000.000 đồng", isCorrect: false },
-                    { text: "D. 425.700.000 đồng", isCorrect: false }
+                    { text: "638.550.000 đồng", isCorrect: false },
+                    { text: "619.393.500 đồng", isCorrect: true },
+                    { text: "387.000.000 đồng", isCorrect: false },
+                    { text: "425.700.000 đồng", isCorrect: false }
                 ],
                 hint: "Trừ hàng vỡ.",
                 rationale: "Đáp án đúng là: B"
@@ -1236,10 +1236,10 @@
                 questionNumber: 95,
                 question: "Công ty TNHH Hải Đăng chuyên nhập khẩu và kinh doanh hàng tiêu dùng. Công ty thực hiện kê khai thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 7/N công ty nhập khẩu 1.000 chai rượu ngoại. Tuy nhiên khi làm thủ tục nhập khẩu thì có 30 chai bị vỡ (có xác nhận của cơ quan hải quan). Trị giá nhập khẩu của 1 chai rượu được xác định là 120 USD. Tỷ giá tính thuế được xác định là 21.500VNĐ/1USD. + Thuế suất thuế nhập khẩu là 50%. Thuế suất thuế TTĐB của loại rượu này là 65%. Thuế suất thuế GTGT là 10%. + Công ty đã thực hiện nộp đầy đủ các loại thuế tại khâu nhập khẩu. + Thuế GTGT của hàng hóa khác mua vào trong tháng đủ điều kiện khấu trừ là 500.000.000 đồng. Vậy thuế GTGT đầu vào được khấu trừ trong tháng là:",
                 answerOptions: [
-                    { text: "A. 1.138.550.000 đồng", isCorrect: false },
-                    { text: "B. 1.119.393.500 đồng", isCorrect: true },
-                    { text: "C. 887.000.000 đồng", isCorrect: false },
-                    { text: "D. 925.700.000 đồng", isCorrect: false }
+                    { text: "1.138.550.000 đồng", isCorrect: false },
+                    { text: "1.119.393.500 đồng", isCorrect: true },
+                    { text: "887.000.000 đồng", isCorrect: false },
+                    { text: "925.700.000 đồng", isCorrect: false }
                 ],
                 hint: "Cộng kết quả câu 94 với 500tr.",
                 rationale: "Đáp án đúng là: B"
@@ -1248,10 +1248,10 @@
                 questionNumber: 96,
                 question: "Công ty TNHH Hải Đăng chuyên nhập khẩu và kinh doanh hàng tiêu dùng. Công ty thực hiện kê khai thuế GTGT theo phương pháp khấu trừ, kỳ kê khai theo tháng. + Tháng 7/N công ty nhập khẩu 1.000 chai rượu ngoại. Trị giá nhập khẩu của 1 chai rượu được xác định là 120 USD. Tỷ giá tính thuế được xác định là 21.500VNĐ/1USD. Thuế suất thuế nhập khẩu là 50%. Thuế suất thuế TTĐB của loại rượu này là 65%. Thuế suất thuế GTGT là 10%. Công ty đã thực hiện nộp đầy đủ các loại thuế tại khâu nhập khẩu. + Trong tháng công ty tiêu thụ được 500 chai rượu nhập khẩu trên với giá bán chưa bao gồm thuế GTGT là 10.000.000đ/chai. Thuế GTGT công ty phải nộp trong tháng là:",
                 answerOptions: [
-                    { text: "A. -38.550.000 đồng", isCorrect: false },
-                    { text: "B. -138.550.000 đồng", isCorrect: true },
-                    { text: "C. 500.000.000 đồng", isCorrect: false },
-                    { text: "D. 638.550.000 đồng", isCorrect: false }
+                    { text: "-38.550.000 đồng", isCorrect: false },
+                    { text: "-138.550.000 đồng", isCorrect: true },
+                    { text: "500.000.000 đồng", isCorrect: false },
+                    { text: "638.550.000 đồng", isCorrect: false }
                 ],
                 hint: "Đầu ra trừ đầu vào đã nộp.",
                 rationale: "Đáp án đúng là: B"
@@ -1260,10 +1260,10 @@
                 questionNumber: 97,
                 question: "Công ty Bảo Trâm kinh doanh xuất nhập khẩu kê khai nộp thuế GTGT theo phương pháp khấu trừ. Trong kỳ tính thuế có tình hình sau: + Nhận ủy thác xuất khẩu một lô hàng tiêu dùng, giá FOB là 5 tỷ đồng. Hoa hồng ủy thác chưa thuế GTGT đã nhận được 50 triệu đồng. + Trực tiếp xuất khẩu một lô hàng thiết bị điện tử, giá FOB là 1 tỷ đồng. Thuế suất thuế GTGT của hàng tiêu dùng và hoa hồng ủy thác là 10%. Thuế GTGT đầu ra mà công ty phải nộp trong kỳ là:",
                 answerOptions: [
-                    { text: "A. 5 triệu đồng", isCorrect: true },
-                    { text: "B. 150 triệu đồng", isCorrect: false },
-                    { text: "C. 200 triệu đồng", isCorrect: false },
-                    { text: "D. 205 triệu đồng", isCorrect: false }
+                    { text: "5 triệu đồng", isCorrect: true },
+                    { text: "150 triệu đồng", isCorrect: false },
+                    { text: "200 triệu đồng", isCorrect: false },
+                    { text: "205 triệu đồng", isCorrect: false }
                 ],
                 hint: "Chỉ tính trên hoa hồng.",
                 rationale: "Đáp án đúng là: A"
@@ -1272,10 +1272,10 @@
                 questionNumber: 98,
                 question: "Công ty Bảo Trâm kinh doanh xuất nhập khẩu kê khai nộp thuế GTGT theo phương pháp khấu trừ. Trong kỳ tính thuế có tình hình sau: + Nhận ủy thác xuất khẩu một lô hàng tiêu dùng, giá FOB là 5 tỷ đồng. Hoa hồng ủy thác chưa thuế GTGT đã nhận được 50 triệu đồng. + Trực tiếp xuất khẩu một lô hàng thiết bị điện tử, giá FOB là 1 tỷ đồng. + Bán một xe ô tô cũ, giá bán chưa bao gồm thuế GTGT là 100 triệu đồng. Thuế suất thuế GTGT của các mặt hàng trên là 10%. Thuế GTGT đầu vào được khấu trừ trong kỳ của công ty là 200 triệu đồng. Thuế GTGT mà công ty phải nộp trong kỳ là:",
                 answerOptions: [
-                    { text: "A. 315 triệu đồng", isCorrect: false },
-                    { text: "B. -185 triệu đồng", isCorrect: true },
-                    { text: "C. -195 triệu đồng", isCorrect: false },
-                    { text: "D. 310 triệu đồng", isCorrect: false }
+                    { text: "315 triệu đồng", isCorrect: false },
+                    { text: "-185 triệu đồng", isCorrect: true },
+                    { text: "-195 triệu đồng", isCorrect: false },
+                    { text: "310 triệu đồng", isCorrect: false }
                 ],
                 hint: "Đầu ra trừ đầu vào.",
                 rationale: "Đáp án đúng là: B"
@@ -1284,10 +1284,10 @@
                 questionNumber: 99,
                 question: "Công ty Bảo Trâm kinh doanh xuất nhập khẩu kê khai nộp thuế GTGT theo phương pháp khấu trừ. Trong kỳ tính thuế có tình hình sau: + Nhận ủy thác xuất khẩu một lô hàng tiêu dùng, giá FOB là 5 tỷ đồng. Hoa hồng ủy thác chưa thuế GTGT đã nhận được 50 triệu đồng. + Trực tiếp xuất khẩu một lô hàng thiết bị điện tử, giá FOB là 1 tỷ đồng. + Bán một xe ô tô cũ, giá bán chưa bao gồm thuế GTGT là 100 triệu đồng. Thuế suất thuế GTGT của các mặt hàng trên là 10%. Thuế GTGT đầu ra công ty phải kê khai trong kỳ tính thuế là:",
                 answerOptions: [
-                    { text: "A. 15 triệu đồng", isCorrect: true },
-                    { text: "B. 5 triệu đồng", isCorrect: false },
-                    { text: "C. 115 triệu đồng", isCorrect: false },
-                    { text: "D. 10 triệu đồng", isCorrect: false }
+                    { text: "15 triệu đồng", isCorrect: true },
+                    { text: "5 triệu đồng", isCorrect: false },
+                    { text: "115 triệu đồng", isCorrect: false },
+                    { text: "10 triệu đồng", isCorrect: false }
                 ],
                 hint: "Tổng đầu ra.",
                 rationale: "Đáp án đúng là: A"
@@ -1296,10 +1296,10 @@
                 questionNumber: 100,
                 question: "Công ty Lâm Anh kinh doanh xuất nhập khẩu kê khai nộp thuế GTGT theo phương pháp khấu trừ. + Trong kỳ tính thuế, công ty nhận nhập khẩu ủy thác cho công ty A một lô hàng tiêu dùng với giá nhập khẩu được xác định là 2 tỷ đồng. Hoa hồng ủy thác nhận được là 2% trên giá nhập. + Ngoài ra công ty Lâm Anh còn trực tiếp nhập khẩu về một lô hàng tiêu dùng với giá tính thuế nhập khẩu là 1 tỷ đồng. + Thuế suất thuế nhập khẩu các mặt hàng trên là 20%. Thuế suất thuế GTGT của các mặt hàng này là 10%. Thuế GTGT mà công ty Lâm Anh phải kê khai, nộp ở khâu nhập khẩu liên quan đến tình hình trên là:",
                 answerOptions: [
-                    { text: "A. 300 triệu đồng", isCorrect: false },
-                    { text: "B. 360 triệu đồng", isCorrect: true },
-                    { text: "C. 100 triệu đồng", isCorrect: false },
-                    { text: "D. 120 triệu đồng", isCorrect: false }
+                    { text: "300 triệu đồng", isCorrect: false },
+                    { text: "360 triệu đồng", isCorrect: true },
+                    { text: "100 triệu đồng", isCorrect: false },
+                    { text: "120 triệu đồng", isCorrect: false }
                 ],
                 hint: "Nộp thuế cho cả hàng ủy thác và hàng tự nhập.",
                 rationale: "Đáp án đúng là: B"
