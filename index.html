@@ -7,139 +7,172 @@
     <!-- Tải Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
         
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
         }
 
         .smooth-transition {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
         }
 
-        /* Hiệu ứng hover: Bóng đổ sâu hơn và đậm hơn */
+        /* Hiệu ứng Hover: Nổi lên nhẹ và bóng đổ lan tỏa (Glow) */
         .smooth-transition:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 25px 30px -10px rgba(30, 64, 175, 0.2), 0 15px 15px -5px rgba(30, 64, 175, 0.1); /* Bóng màu xanh đậm */
-        }
-
-        .smooth-transition:active {
-            transform: scale(0.98);
-            box-shadow: 0 10px 15px -5px rgba(30, 64, 175, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.15); /* Bóng xanh nhẹ */
         }
 
         .page-out {
             opacity: 0;
-            transform: translateY(20px) scale(0.95);
-            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            transform: scale(0.95);
+            filter: blur(10px);
+            transition: all 0.4s ease-in-out;
         }
 
         .page-in {
             opacity: 1;
-            transform: translateY(0) scale(1);
-            transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: scale(1);
+            filter: blur(0);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* Style cho nút chương: Viền rõ nét, bóng đổ sâu */
-        .chapter-button {
-            @apply bg-white border-2 border-blue-100 border-b-4 border-b-blue-200 shadow-xl shadow-blue-900/10;
+        /* Style mới cho nút chương: Card trắng sạch, không viền dày */
+        .chapter-card {
+            background: white;
+            /* Viền siêu mỏng để tách nền */
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            border-radius: 2rem; /* Bo góc cực lớn (Squircle) */
+            /* Bóng đổ rất nhẹ lúc bình thường */
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
         }
-        
-        .chapter-button:hover {
-            @apply border-blue-400 border-b-blue-500;
+
+        /* Trang trí nền mờ bên trong card */
+        .chapter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+            transition: transform 0.4s ease;
+        }
+
+        .chapter-card:hover::before {
+            transform: translate(20%, -20%) scale(1.2);
+        }
+
+        /* Text Gradient cho số */
+        .text-gradient {
+            background: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 page-in bg-slate-100">
+<body class="min-h-screen flex items-center justify-center p-6 page-in bg-slate-50 selection:bg-blue-100">
 
-    <div id="main-content" class="w-full max-w-5xl bg-white p-8 md:p-12 rounded-[2rem] shadow-2xl border border-gray-100/50">
+    <div id="main-content" class="w-full max-w-6xl">
         
-        <!-- Tiêu đề Chính -->
-        <div class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-3 tracking-tight">
-                Ôn Tập Thuế và Thực Hành
+        <!-- Header -->
+        <div class="text-center mb-16">
+            <span class="inline-block py-1 px-3 rounded-full bg-blue-50 text-blue-600 text-xs font-bold tracking-wider mb-4 border border-blue-100 uppercase">Hệ thống E-Learning</span>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 mb-4 tracking-tight">
+                Ôn Tập Thuế & Thực Hành
             </h1>
-            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-                Hệ thống kiến thức và bài tập thực hành.
+            <p class="text-lg text-slate-500 max-w-2xl mx-auto font-medium">
+                Chọn nội dung bên dưới để bắt đầu bài học.
             </p>
         </div>
 
-        <!-- Container cho các nút Chương học (Đã bỏ text tiêu đề) -->
-        <div class="grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-12">
+        <!-- Grid Buttons -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mb-12">
             
             <!-- CHƯƠNG 1 -->
-            <button class="menu-button smooth-transition chapter-button p-6 rounded-2xl group flex flex-col items-center justify-center h-40" 
+            <button class="menu-button smooth-transition chapter-card p-8 h-48 flex flex-col items-center justify-center group" 
                     data-link="chuong1.html">
-                <span class="text-sm font-bold uppercase tracking-widest text-blue-400 mb-2 group-hover:text-blue-600 transition-colors">Chương</span>
-                <span class="text-6xl font-black text-blue-500 group-hover:text-blue-600 transition-colors">01</span>
+                <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-2 group-hover:text-blue-500 transition-colors">Chương</span>
+                <span class="text-7xl font-black text-gradient group-hover:scale-110 transition-transform duration-300">01</span>
             </button>
             
             <!-- CHƯƠNG 2 -->
-            <button class="menu-button smooth-transition chapter-button p-6 rounded-2xl group flex flex-col items-center justify-center h-40" 
+            <button class="menu-button smooth-transition chapter-card p-8 h-48 flex flex-col items-center justify-center group" 
                     data-link="chuong2.html">
-                <span class="text-sm font-bold uppercase tracking-widest text-blue-400 mb-2 group-hover:text-blue-600 transition-colors">Chương</span>
-                <span class="text-6xl font-black text-blue-500 group-hover:text-blue-600 transition-colors">02</span>
+                <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-2 group-hover:text-blue-500 transition-colors">Chương</span>
+                <span class="text-7xl font-black text-gradient group-hover:scale-110 transition-transform duration-300">02</span>
             </button>
 
             <!-- CHƯƠNG 3 -->
-            <button class="menu-button smooth-transition chapter-button p-6 rounded-2xl group flex flex-col items-center justify-center h-40" 
+            <button class="menu-button smooth-transition chapter-card p-8 h-48 flex flex-col items-center justify-center group" 
                     data-link="chuong3.html">
-                <span class="text-sm font-bold uppercase tracking-widest text-blue-400 mb-2 group-hover:text-blue-600 transition-colors">Chương</span>
-                <span class="text-6xl font-black text-blue-500 group-hover:text-blue-600 transition-colors">03</span>
+                <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-2 group-hover:text-blue-500 transition-colors">Chương</span>
+                <span class="text-7xl font-black text-gradient group-hover:scale-110 transition-transform duration-300">03</span>
             </button>
 
             <!-- CHƯƠNG 4 -->
-            <button class="menu-button smooth-transition chapter-button p-6 rounded-2xl group flex flex-col items-center justify-center h-40" 
+            <button class="menu-button smooth-transition chapter-card p-8 h-48 flex flex-col items-center justify-center group" 
                     data-link="chuong4.html">
-                <span class="text-sm font-bold uppercase tracking-widest text-blue-400 mb-2 group-hover:text-blue-600 transition-colors">Chương</span>
-                <span class="text-6xl font-black text-blue-500 group-hover:text-blue-600 transition-colors">04</span>
+                <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-2 group-hover:text-blue-500 transition-colors">Chương</span>
+                <span class="text-7xl font-black text-gradient group-hover:scale-110 transition-transform duration-300">04</span>
             </button>
 
             <!-- CHƯƠNG 5 -->
-            <button class="menu-button smooth-transition chapter-button p-6 rounded-2xl group flex flex-col items-center justify-center h-40" 
+            <button class="menu-button smooth-transition chapter-card p-8 h-48 flex flex-col items-center justify-center group" 
                     data-link="chuong5.html">
-                <span class="text-sm font-bold uppercase tracking-widest text-blue-400 mb-2 group-hover:text-blue-600 transition-colors">Chương</span>
-                <span class="text-6xl font-black text-blue-500 group-hover:text-blue-600 transition-colors">05</span>
+                <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-2 group-hover:text-blue-500 transition-colors">Chương</span>
+                <span class="text-7xl font-black text-gradient group-hover:scale-110 transition-transform duration-300">05</span>
             </button>
             
             <!-- CHƯƠNG 6 -->
-            <button class="menu-button smooth-transition chapter-button p-6 rounded-2xl group flex flex-col items-center justify-center h-40" 
+            <button class="menu-button smooth-transition chapter-card p-8 h-48 flex flex-col items-center justify-center group" 
                     data-link="chuong6.html">
-                <span class="text-sm font-bold uppercase tracking-widest text-blue-400 mb-2 group-hover:text-blue-600 transition-colors">Chương</span>
-                <span class="text-6xl font-black text-blue-500 group-hover:text-blue-600 transition-colors">06</span>
+                <span class="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-2 group-hover:text-blue-500 transition-colors">Chương</span>
+                <span class="text-7xl font-black text-gradient group-hover:scale-110 transition-transform duration-300">06</span>
             </button>
         </div>
 
-        <!-- Container cho các nút Ôn tập và Kiểm tra (Tăng bóng đổ và viền) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Action Buttons -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             <!-- Button Bài Ôn Tổng Hợp -->
-            <button class="menu-button smooth-transition w-full text-white p-6 rounded-2xl shadow-xl shadow-blue-700/40 border-2 border-blue-400 border-b-4 border-b-blue-600
-                           bg-gradient-to-br from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 hover:shadow-2xl hover:shadow-blue-700/60 hover:border-blue-500 hover:border-b-blue-700" 
+            <button class="menu-button smooth-transition w-full p-6 rounded-[2rem] 
+                           bg-white border border-blue-100 shadow-xl shadow-blue-500/10 hover:shadow-blue-500/20 group relative overflow-hidden" 
                     data-link="tonghop.html">
-                <div class="flex items-center justify-center space-x-4">
-                    <div class="p-3 bg-white/20 rounded-xl backdrop-blur-sm shadow-inner">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                <!-- Background Gradient nhẹ -->
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-indigo-500/5 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div class="relative flex items-center justify-between px-4">
+                    <div class="flex flex-col text-left">
+                        <span class="text-xs font-bold text-blue-500 uppercase tracking-wider mb-1">Luyện tập</span>
+                        <span class="text-2xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors">Bài Ôn Tổng Hợp</span>
                     </div>
-                    <div class="text-left">
-                        <div class="text-sm font-medium text-blue-100 uppercase tracking-wide">Luyện tập</div>
-                        <span class="font-bold text-2xl drop-shadow-md">Bài Ôn Tổng Hợp</span>
+                    <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </div>
                 </div>
             </button>
             
             <!-- Button Bài Kiểm Tra Tổng Hợp -->
-            <button class="menu-button smooth-transition w-full text-white p-6 rounded-2xl shadow-xl shadow-pink-700/40 border-2 border-pink-400 border-b-4 border-b-pink-600
-                           bg-gradient-to-br from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 hover:shadow-2xl hover:shadow-pink-700/60 hover:border-pink-500 hover:border-b-pink-700" 
+            <button class="menu-button smooth-transition w-full p-6 rounded-[2rem] 
+                           bg-white border border-pink-100 shadow-xl shadow-pink-500/10 hover:shadow-pink-500/20 group relative overflow-hidden" 
                     data-link="kiemtra.html">
-                <div class="flex items-center justify-center space-x-4">
-                     <div class="p-3 bg-white/20 rounded-xl backdrop-blur-sm shadow-inner">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <!-- Background Gradient nhẹ -->
+                <div class="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-rose-500/5 group-hover:opacity-100 transition-opacity"></div>
+
+                <div class="relative flex items-center justify-between px-4">
+                    <div class="flex flex-col text-left">
+                        <span class="text-xs font-bold text-pink-500 uppercase tracking-wider mb-1">Đánh giá</span>
+                        <span class="text-2xl font-bold text-slate-800 group-hover:text-pink-600 transition-colors">Kiểm Tra Tổng Hợp</span>
                     </div>
-                    <div class="text-left">
-                        <div class="text-sm font-medium text-pink-100 uppercase tracking-wide">Đánh giá</div>
-                        <span class="font-bold text-2xl drop-shadow-md">Kiểm Tra Tổng Hợp</span>
+                    <div class="w-12 h-12 bg-pink-50 rounded-full flex items-center justify-center text-pink-600 group-hover:bg-pink-600 group-hover:text-white transition-all duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
                 </div>
             </button>
@@ -150,22 +183,22 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const buttons = document.querySelectorAll('.menu-button');
-            
+            const mainContent = document.querySelector('body'); // Hiệu ứng cho body để mượt hơn
+
             buttons.forEach(button => {
                 button.addEventListener('click', (event) => {
                     if (!event.ctrlKey && !event.metaKey) {
                         event.preventDefault();
                         const targetLink = button.getAttribute('data-link');
                         if (targetLink && targetLink.length > 0 && targetLink !== '#') {
-                            document.body.classList.remove('page-in');
-                            document.body.classList.add('page-out');
+                            mainContent.classList.remove('page-in');
+                            mainContent.classList.add('page-out');
                             setTimeout(() => { window.location.href = targetLink; }, 400);
                         } else {
                             // Lấy text hiển thị để thông báo lỗi
-                            let buttonText = button.querySelector('.font-bold.text-2xl')?.textContent;
+                            let buttonText = button.querySelector('.text-2xl')?.textContent;
                             if (!buttonText) {
-                                // Nếu là nút chương (chỉ có số), lấy số chương
-                                const chuongNum = button.querySelector('.text-6xl')?.textContent;
+                                const chuongNum = button.querySelector('.text-7xl')?.textContent;
                                 if(chuongNum) buttonText = "Chương " + chuongNum;
                             }
                             showLinkMissingModal(buttonText || 'Nút này');
@@ -176,22 +209,22 @@
             
             function showLinkMissingModal(buttonName) {
                 const modalHtml = `
-                    <div id="link-modal-overlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300 opacity-0">
-                        <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-sm w-full transform transition-all duration-300 scale-95 border border-gray-100">
-                            <div class="text-center mb-6">
-                                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-50 border border-red-100 mb-4 shadow-sm">
-                                    <svg class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <div id="link-modal-overlay" class="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center z-50 transition-opacity duration-300 opacity-0">
+                        <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-sm w-full transform transition-all duration-300 scale-95 border border-white/20">
+                            <div class="text-center">
+                                <div class="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-red-50 text-red-500 mb-4">
+                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                     </svg>
                                 </div>
-                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Chưa có liên kết</h3>
-                                <p class="text-gray-600">
+                                <h3 class="text-lg font-bold text-slate-900 mb-2">Chưa có liên kết</h3>
+                                <p class="text-slate-500 text-sm mb-6">
                                     Nút <strong>"${buttonName}"</strong> hiện chưa được gắn liên kết.
                                 </p>
+                                <button id="close-modal-btn" class="w-full py-3 px-4 bg-slate-900 text-white rounded-xl font-semibold hover:bg-slate-800 transition duration-200">
+                                    Đóng
+                                </button>
                             </div>
-                            <button id="close-modal-btn" class="w-full py-3 px-4 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 shadow-lg shadow-gray-900/20 transition duration-200">
-                                Đã hiểu, đóng lại
-                            </button>
                         </div>
                     </div>
                 `;
