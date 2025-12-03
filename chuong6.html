@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc Nghiệm Thuế Tiêu Thụ Đặc Biệt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Thiết lập font Inter cho giao diện */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0fdfa; /* Nền xanh nhạt hiện đại */
+        }
+        .quiz-card {
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.1), 0 8px 20px -5px rgba(0, 0, 0, 0.05); /* Đổ bóng sâu hơn */
+        }
+        .option-button {
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            border: 2px solid #e2e8f0; /* Border mềm mại */
+        }
+        .option-button:hover {
+            transform: translateY(-2px);
+            background-color: #f0f9ff; /* Rất nhẹ */
+            border-color: #06b6d4; /* Màu xanh ngọc nhẹ */
+        }
+        /* Hiệu ứng khi chọn */
+        .option-selected {
+            border-color: #06b6d4 !important; /* Xanh ngọc */
+            background-color: #e0f7fa !important;
+            box-shadow: 0 0 0 2px #67e8f9;
+        }
+        /* Hiệu ứng câu trả lời đúng/sai */
+        .option-correct {
+            background-color: #d1fae5 !important;
+            border-color: #059669 !important; /* Xanh lá đậm */
+            box-shadow: 0 0 0 2px #34d399 !important;
+        }
+        .option-incorrect {
+            background-color: #fee2e2 !important;
+            border-color: #ef4444 !important; /* Đỏ */
+            box-shadow: 0 0 0 2px #fca5a5 !important;
+        }
+        .btn-action {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-primary {
+            background-color: #06b6d4; /* Màu xanh ngọc */
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: #0e7490;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(6, 182, 212, 0.5), 0 2px 4px -2px rgba(6, 182, 212, 0.5);
+        }
+        .btn-secondary {
+            background-color: #10b981; /* Màu xanh lá tươi */
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.5), 0 2px 4px -2px rgba(16, 185, 129, 0.5);
+        }
+        .disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8 flex justify-center items-start min-h-screen">
+
+    <div id="quiz-container" class="relative w-full max-w-3xl bg-white rounded-2xl p-6 sm:p-10 quiz-card transition-all duration-300">
+        <a href="index.html" class="absolute top-6 left-6 z-10">
+            <button class="flex items-center space-x-1 px-4 py-2 text-sm border border-gray-200 bg-gray-50 text-gray-700 font-semibold rounded-full shadow-sm hover:bg-gray-100 transition duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left">
+                    <path d="m12 19-7-7 7-7" />
+                    <path d="M19 12H5" />
+                </svg>
+                <span>Quay lại</span>
+            </button>
+        </a>
+        
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-8 text-center pt-8 sm:pt-4">Ôn Tập: Thuế Tiêu Thụ Đặc Biệt (50 Câu)</h1>
+        <div id="quiz-content">
+            </div>
+        <div id="results-screen" class="hidden text-center py-12">
+            <h2 class="text-4xl font-black text-teal-600 mb-4">Hoàn Thành!</h2>
+            <p id="final-score" class="text-2xl font-semibold text-gray-700 mb-8"></p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mt-6">
+                <button onclick="restartQuiz()" class="btn-action px-8 py-3 btn-secondary text-white font-bold rounded-xl shadow-lg">
+                    Làm Lại Bài Thi
+                </button>
+                <a href="index.html" class="inline-block">
+                    <button class="w-full sm:w-auto btn-action px-8 py-3 border border-gray-300 bg-white text-gray-700 font-bold rounded-xl shadow-lg hover:bg-gray-100">
+                        Về Trang Chính
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu quiz 50 câu từ file temp.docx về Thuế TTĐB
+        const quizData = [
+            {
+                questionNumber: 1,
+                question: "Thuế thu nhập cá nhân không bóp méo giá cả hàng hóa (dịch vụ) vì:",
+                answerOptions: [
+                    { text: "Nó làm giảm thu nhập của cá nhân", isCorrect: false },
+                    { text: "Nó ảnh hưởng đến cầu có khả năng thanh toán của cá nhân", isCorrect: false },
+                    { text: "Nó không cấu thành trong giá cả của hàng hóa (dịch vụ)", isCorrect: true, rationale: "Thuế TNCN là thuế trực thu, đánh trực tiếp vào thu nhập người nhận, không cấu thành trong giá bán như thuế gián thu." },
+                    { text: "Nó cấu thành trong giá cả của hàng hóa (dịch vụ)", isCorrect: false }
+                ],
+                hint: "Bản chất của thuế trực thu."
+            },
+            {
+                questionNumber: 2,
+                question: "Mức thuế suất thuế TNCN cao nhất trong biểu thuế thu nhập cá nhân hiện hành ở nước ta là:",
+                answerOptions: [
+                    { text: "35%", isCorrect: true, rationale: "Biểu thuế lũy tiến từng phần có 7 bậc, bậc cao nhất là 35%." },
+                    { text: "40%", isCorrect: false },
+                    { text: "45%", isCorrect: false },
+                    { text: "50%", isCorrect: false }
+                ],
+                hint: "Bậc 7 của biểu thuế lũy tiến."
+            },
+            {
+                questionNumber: 3,
+                question: "Theo quy định của pháp luật hiện hành, đối tượng nộp thuế TNCN ở Việt Nam là:",
+                answerOptions: [
+                    { text: "Cá nhân cư trú có thu nhập chịu thuế", isCorrect: false },
+                    { text: "Cá nhân cư trú và không cư trú", isCorrect: false },
+                    { text: "Cá nhân cư trú có thu nhập chịu thuế và cá nhân không cư trú có thu nhập chịu thuế", isCorrect: true, rationale: "Bao gồm cả người cư trú và không cư trú nếu có thu nhập chịu thuế phát sinh." },
+                    { text: "Cá nhân không cư trú có thu nhập chịu thuế", isCorrect: false }
+                ],
+                hint: "Phạm vi đối tượng nộp thuế."
+            },
+            {
+                questionNumber: 4,
+                question: "Theo quy định pháp luật hiện hành, mức giảm trừ gia cảnh cho bản thân người nộp thuế là (triệu đồng/tháng):",
+                answerOptions: [
+                    { text: "3", isCorrect: false },
+                    { text: "4", isCorrect: false },
+                    { text: "6", isCorrect: false },
+                    { text: "11", isCorrect: true, rationale: "Mức giảm trừ bản thân hiện hành là 11 triệu đồng/tháng (Nghị quyết 954/2020/UBTVQH14)." }
+                ],
+                hint: "Mức áp dụng từ năm 2020."
+            },
+            {
+                questionNumber: 5,
+                question: "Theo quy định pháp luật hiện hành, mức giảm trừ gia cảnh cho mỗi người phụ thuộc mà người nộp thuế có trách nhiệm nuôi dưỡng là (triệu đồng/tháng):",
+                answerOptions: [
+                    { text: "2", isCorrect: false },
+                    { text: "3,2", isCorrect: false },
+                    { text: "3,4", isCorrect: false },
+                    { text: "4,4", isCorrect: true, rationale: "Mức giảm trừ người phụ thuộc hiện hành là 4,4 triệu đồng/tháng." }
+                ],
+                hint: "Mức áp dụng từ năm 2020."
+            },
+            {
+                questionNumber: 6,
+                question: "Theo quy định pháp luật hiện hành, khoản thu nhập nào sau đây được trừ (không tính vào thu nhập chịu thuế) khi xác định thu nhập chịu thuế của cá nhân:",
+                answerOptions: [
+                    { text: "Phụ cấp nghành nghề theo quy định của Nhà nước", isCorrect: true, rationale: "Các khoản phụ cấp đặc thù ngành nghề theo quy định nhà nước thường được trừ khỏi thu nhập chịu thuế." },
+                    { text: "Tiền thưởng tăng năng suất lao động", isCorrect: false },
+                    { text: "Tiền thưởng đột xuất nhân ngày lễ", isCorrect: false },
+                    { text: "Thù lao quản lý từ việc tham gia hội đồng quản trị công ty", isCorrect: false }
+                ],
+                hint: "Khoản phụ cấp mang tính chất ưu đãi nghề nghiệp."
+            },
+            {
+                questionNumber: 7,
+                question: "Theo quy định pháp luật hiện hành, để tính số thuế TNCN phải nộp đối với thu nhập từ tiền lương, tiền công của một cá nhân cư trú có thu nhập tính thuế 50 triệu đồng/tháng thì cần sử dụng:",
+                answerOptions: [
+                    { text: "2 mức thuế suất trong biểu thuế", isCorrect: false },
+                    { text: "3 mức thuế suất trong biểu thuế", isCorrect: false },
+                    { text: "4 mức thuế suất trong biểu thuế", isCorrect: false },
+                    { text: "5 mức thuế suất trong biểu thuế", isCorrect: true, rationale: "50 triệu nằm trong bậc 5 (trên 32 đến 52 triệu). Do đó phải dùng 5 mức thuế suất (5%, 10%, 15%, 20%, 25%)." }
+                ],
+                hint: "Thu nhập 50 triệu nằm ở bậc mấy?"
+            },
+            {
+                questionNumber: 8,
+                question: "Theo quy định pháp luật hiện hành, mức thuế suất thuế TNCN 20% được áp dụng cho thu nhập từ tiền lương của cá nhân cư trú có thu nhập tính thuế một tháng từ:",
+                answerOptions: [
+                    { text: "Trên 10 triệu đồng đến 18 triệu đồng", isCorrect: false },
+                    { text: "Trên 18 triệu đồng đến 32 triệu đồng", isCorrect: true, rationale: "Bậc 4 thuế suất 20% áp dụng cho phần thu nhập tính thuế trên 18 triệu đến 32 triệu đồng." },
+                    { text: "Trên 32 triệu đồng đến 52 triệu đồng", isCorrect: false },
+                    { text: "Trên 52 triệu đồng đến 80 triệu đồng", isCorrect: false }
+                ],
+                hint: "Bậc 4 trong biểu thuế lũy tiến."
+            },
+            {
+                questionNumber: 9,
+                question: "Người nước ngoài được coi là cư trú ở Việt Nam nếu trong năm tính thuế người đó ở Việt Nam:",
+                answerOptions: [
+                    { text: "dưới 183 ngày", isCorrect: false },
+                    { text: "từ 183 ngày trở lên", isCorrect: true, rationale: "Điều kiện cư trú cơ bản là có mặt tại VN từ 183 ngày trở lên." },
+                    { text: "trên 183 ngày", isCorrect: false },
+                    { text: "từ 3 tháng trở lên", isCorrect: false }
+                ],
+                hint: "Mốc 183 ngày."
+            },
+            {
+                questionNumber: 10,
+                question: "Người nước ngoài được coi là không cư trú ở Việt Nam chỉ phải chịu thuế thu nhập cá nhân đối với thu nhập chịu thuế phát sinh ở:",
+                answerOptions: [
+                    { text: "Việt Nam", isCorrect: true, rationale: "Cá nhân không cư trú chỉ nộp thuế trên thu nhập phát sinh tại lãnh thổ Việt Nam." },
+                    { text: "Nước ngoài", isCorrect: false },
+                    { text: "Việt Nam và nước ngoài", isCorrect: false },
+                    { text: "50% ở Việt Nam và 50% ở nước ngoài", isCorrect: false }
+                ],
+                hint: "Nguyên tắc nguồn phát sinh thu nhập."
+            },
+            {
+                questionNumber: 11,
+                question: "Thu nhập tính thuế đối với thu nhập từ trúng thưởng là:",
+                answerOptions: [
+                    { text: "Toàn bộ số tiền trúng thưởng", isCorrect: false },
+                    { text: "Số tiền trúng thưởng vượt trên 5 triệu đồng/lần", isCorrect: false },
+                    { text: "Số tiền trúng thưởng vượt trên 10 triệu đồng/lần", isCorrect: true, rationale: "Thuế TNCN trúng thưởng chỉ tính trên phần giá trị vượt trên 10 triệu đồng." },
+                    { text: "Số tiền trúng thưởng vượt trên 15 triệu đống/lần", isCorrect: false }
+                ],
+                hint: "Mốc miễn thuế cho trúng thưởng."
+            },
+            {
+                questionNumber: 12,
+                question: "Biểu thuế TNCN áp dụng đối với thu nhập từ tiền lương, tiền công hiện hành ở Việt Nam có:",
+                answerOptions: [
+                    { text: "5 mức thuế suất", isCorrect: false },
+                    { text: "6 mức thuế suất", isCorrect: false },
+                    { text: "7 mức thuế suất", isCorrect: true, rationale: "Biểu thuế lũy tiến từng phần gồm 7 bậc (5%, 10%, 15%, 20%, 25%, 30%, 35%)." },
+                    { text: "8 mức thuế suất", isCorrect: false }
+                ],
+                hint: "Biểu thuế lũy tiến từng phần."
+            },
+            {
+                questionNumber: 13,
+                question: "Mức thuế suất thuế TNCN thấp nhất trong biểu thuế lũy tiến từng phần đối với thu nhập từ kinh doanh, từ tiền lương, tiền công hiện hành ở nước ta là:",
+                answerOptions: [
+                    { text: "5%", isCorrect: true, rationale: "Mức thuế suất bậc 1 là 5%." },
+                    { text: "10%", isCorrect: false },
+                    { text: "15%", isCorrect: false },
+                    { text: "20%", isCorrect: false }
+                ],
+                hint: "Thuế suất bậc 1."
+            },
+            {
+                questionNumber: 14,
+                question: "Mức giảm trừ gia cảnh theo quy định của Luật thuế thu nhập cá nhân hiện hành là:",
+                answerOptions: [
+                    { text: "5,6 triệu đồng/người", isCorrect: false },
+                    { text: "11 triệu đồng/tháng cho bản thân người nộp thuế và 4,4 triệu đồng/tháng cho mỗi người phụ thuộc", isCorrect: true, rationale: "Theo Nghị quyết 954/2020/UBTVQH14." },
+                    { text: "5 triệu đồng/tháng cho bản thân người nộp thuế", isCorrect: false },
+                    { text: "1,8 triệu đồng/tháng cho mỗi  ngươì phụ thuộc", isCorrect: false }
+                ],
+                hint: "11 triệu và 4.4 triệu."
+            },
+            {
+                questionNumber: 15,
+                question: "Quy định về việc giảm trừ gia cảnh khi tính thuế thu nhập cá nhân chỉ áp dụng đối với cá nhân:",
+                answerOptions: [
+                    { text: "Cư trú", isCorrect: true, rationale: "Giảm trừ gia cảnh chỉ áp dụng cho cá nhân cư trú có thu nhập từ tiền lương, tiền công, kinh doanh." },
+                    { text: "Không cư trú", isCorrect: false },
+                    { text: "Cả cư trú và không cư trú", isCorrect: false },
+                    { text: "Có thu nhập phát sinh tại Việt Nam nhưng không có mặt tại Việt Nam", isCorrect: false }
+                ],
+                hint: "Người không cư trú nộp thuế toàn phần (flat rate)."
+            },
+            {
+                questionNumber: 16,
+                question: "Cá nhân không cư trú tại Việt Nam sẽ phải nộp thuế thu nhập cá nhân cho phần thu nhập phát sinh:",
+                answerOptions: [
+                    { text: "Trong lãnh thổ Việt Nam", isCorrect: true, rationale: "Chỉ chịu thuế trên thu nhập tại Việt Nam." },
+                    { text: "Ngoài lãnh thổ Việt Nam", isCorrect: false },
+                    { text: "Cả trong và ngoài lãnh thổ Việt Nam", isCorrect: false },
+                    { text: "Vượt trên 5 triệu đồng/tháng", isCorrect: false }
+                ],
+                hint: "Nguyên tắc nguồn."
+            },
+            {
+                questionNumber: 17,
+                question: "Khoản đóng góp nào sau đây KHÔNG được coi là khoản giảm trừ khi xác định thu nhập tính thuế TNCN của các cá nhân có thu nhập từ tiền lương, tiền công:",
+                answerOptions: [
+                    { text: "Đóng góp bảo hiểm xã hội", isCorrect: false },
+                    { text: "Đóng góp bảo hiểm y tế", isCorrect: false },
+                    { text: "Đóng góp bảo hiểm thất nghiệp", isCorrect: false },
+                    { text: "Đóng góp xây dựng đường làng", isCorrect: true, rationale: "Đóng góp xây dựng đường làng là tự nguyện, không thuộc các khoản đóng góp từ thiện, nhân đạo, khuyến học được trừ theo quy định." }
+                ],
+                hint: "Chỉ BHXH, BHYT, BHTN và quỹ từ thiện nhân đạo đúng quy định mới được trừ."
+            },
+            {
+                questionNumber: 18,
+                question: "Theo quy định hiện hành, khoản thu nhập nào sau đây KHÔNG thuộc thu nhập chịu thuế của cá nhân:",
+                answerOptions: [
+                    { text: "Tiền thưởng sáng kiến cải tiến do công ty trao tặng", isCorrect: false },
+                    { text: "Phụ cấp độc hại", isCorrect: true, rationale: "Phụ cấp độc hại, nguy hiểm thuộc danh mục các khoản phụ cấp không tính vào thu nhập chịu thuế." },
+                    { text: "Phụ cấp trách nhiệm", isCorrect: false },
+                    { text: "Thù lao quản lý từ việc tham gia hội đồng quản trị công ty", isCorrect: false }
+                ],
+                hint: "Khoản phụ cấp bù đắp sức khỏe."
+            },
+            {
+                questionNumber: 19,
+                question: "Khoản thu nhập nào sau đây KHÔNG thuộc thu nhập chịu thuế khi xác định thu nhập tính thuế TNCN của các cá nhân có thu nhập từ đầu tư vốn:",
+                answerOptions: [
+                    { text: "Lợi tức cổ phần", isCorrect: false },
+                    { text: "Tiền lãi do cá nhân cho doanh nghiệp vay vốn", isCorrect: false },
+                    { text: "Tiền lãi từ trái phiếu Chính phủ", isCorrect: true, rationale: "Lãi trái phiếu Chính phủ được miễn thuế TNCN." },
+                    { text: "Lợi tức thu được từ việc góp vốn bằng quyền sử dụng đất", isCorrect: false }
+                ],
+                hint: "Khoản lãi được Nhà nước ưu đãi miễn thuế."
+            },
+            {
+                questionNumber: 20,
+                question: "Quy định về việc giảm trừ gia cảnh chỉ áp dụng đối với các cá nhân có thu nhập từ:",
+                answerOptions: [
+                    { text: "Tiền lương, tiền công", isCorrect: true, rationale: "Giảm trừ gia cảnh áp dụng cho thu nhập từ tiền lương, tiền công và kinh doanh (thực tế kinh doanh nộp khoán nên ít áp dụng trực tiếp nhưng về luật là có)." },
+                    { text: "Chuyển nhượng chứng khoán", isCorrect: false },
+                    { text: "Chuyển nhượng bất động sản", isCorrect: false },
+                    { text: "Chuyển nhượng vốn", isCorrect: false }
+                ],
+                hint: "Thu nhập thường xuyên."
+            },
+            {
+                questionNumber: 21,
+                question: "Thu nhập của cá nhân kinh doanh có doanh thu từ 100 triệu đồng/năm trở xuống:",
+                answerOptions: [
+                    { text: "Được miễn thuế TNCN", isCorrect: true, rationale: "Cá nhân kinh doanh doanh thu <= 100 triệu/năm không phải nộp thuế TNCN và GTGT." },
+                    { text: "Được trừ vào thu nhập chịu thuế", isCorrect: false },
+                    { text: "Không chịu thuế TNCN", isCorrect: false },
+                    { text: "Được hoàn thuế TNCN", isCorrect: false }
+                ],
+                hint: "Ngưỡng doanh thu tối thiểu."
+            },
+            {
+                questionNumber: 22,
+                question: "Thu nhập nào được miễn thuế TNCN:",
+                answerOptions: [
+                    { text: "Thu nhập từ đầu tư vốn", isCorrect: false },
+                    { text: "Thu nhập từ lãi tiền gửi tại tổ chức tín dụng, lãi từ hợp đồng bảo hiểm nhân thọ", isCorrect: true, rationale: "Lãi tiền gửi tiết kiệm ngân hàng và lãi bảo hiểm nhân thọ được miễn thuế." },
+                    { text: "Thu nhập từ trúng thưởng", isCorrect: false },
+                    { text: "Thu nhập từ bản quyền", isCorrect: false }
+                ],
+                hint: "Thu nhập khuyến khích tiết kiệm."
+            },
+            {
+                questionNumber: 23,
+                question: "Theo cơ sở “cư trú”, các cá nhân cư trú ở một nước phải nộp thuế tại nước đó cho mọi khoản thu nhập chịu thuế:",
+                answerOptions: [
+                    { text: "Phát sinh ở nước đó", isCorrect: false },
+                    { text: "Phát sinh ở nước ngoài", isCorrect: false },
+                    { text: "Phát sinh ở cả trong nước và cả ở nước ngoài", isCorrect: true, rationale: "Cá nhân cư trú chịu thuế trên thu nhập toàn cầu (trong và ngoài nước)." },
+                    { text: "Phát sinh trong thời gian cư trú", isCorrect: false }
+                ],
+                hint: "Thu nhập toàn cầu."
+            },
+            {
+                questionNumber: 24,
+                question: "Theo quy định hiện hành của Luật thuế TNCN, giảm trừ gia cảnh được áp dụng đối với:",
+                answerOptions: [
+                    { text: "Thu nhập từ đầu tư của cá nhân cư trú", isCorrect: false },
+                    { text: "Thu nhập từ bản quyền của cá nhân cư trú", isCorrect: false },
+                    { text: "Thu nhập từ tiền lương của cá nhân không cư trú", isCorrect: false },
+                    { text: "Thu nhập từ tiền lương của cá nhân cư trú", isCorrect: true, rationale: "Chỉ cá nhân cư trú có thu nhập từ tiền lương, tiền công mới được tính giảm trừ gia cảnh." }
+                ],
+                hint: "Người cư trú + Lương."
+            },
+            {
+                questionNumber: 25,
+                question: "Thu nhập tính thuế đối với thu nhập từ chuyển nhượng vốn là:",
+                answerOptions: [
+                    { text: "Toàn bộ tiền lãi từ chuyển nhượng vốn", isCorrect: true, rationale: "Đối với chuyển nhượng vốn góp (không phải chứng khoán), thuế tính trên thu nhập chịu thuế (Giá bán - Giá mua - Chi phí), tức là tiền lãi. Thuế suất 20%." },
+                    { text: "Số tiền lãi từ chuyển nhượng vốn vượt trên 5 triệu đồng/lần", isCorrect: false },
+                    { text: "Số tiền lãi từ chuyển nhượng vốn vượt trên 10 triệu đồng/lần", isCorrect: false },
+                    { text: "Số tiền lãi từ chuyển nhượng vốn vượt trên 15 triệu đồng/lần", isCorrect: false }
+                ],
+                hint: "Tính trên chênh lệch (lãi)."
+            },
+            {
+                questionNumber: 26,
+                question: "Thuế suất thuế TNCN áp dụng đối với thu nhập từ chuyển nhượng bất động sản trong trường hợp không xác định được thu nhập chịu thuế là:",
+                answerOptions: [
+                    { text: "0,5%/doanh thu", isCorrect: false },
+                    { text: "1%/doanh thu", isCorrect: false },
+                    { text: "2%/doanh thu", isCorrect: true, rationale: "Hiện nay luật quy định áp dụng thống nhất mức 2% trên giá chuyển nhượng (doanh thu) đối với chuyển nhượng BĐS." },
+                    { text: "3%/doanh thu", isCorrect: false }
+                ],
+                hint: "Mức khoán trên giá bán."
+            },
+            {
+                questionNumber: 27,
+                question: "Thuế thu nhập cá nhân đối với thu nhập từ thừa kế được kê khai:",
+                answerOptions: [
+                    { text: "Hàng năm", isCorrect: false },
+                    { text: "Hàng quý", isCorrect: false },
+                    { text: "Hàng tháng", isCorrect: false },
+                    { text: "Theo từng lần phát sinh thu nhập", isCorrect: true, rationale: "Thu nhập thừa kế, quà tặng kê khai theo từng lần phát sinh." }
+                ],
+                hint: "Phát sinh lúc nào khai lúc đó."
+            },
+            {
+                questionNumber: 28,
+                question: "Thu nhập chịu thuế TNCN từ thừa kế, quà tặng được xác định:",
+                answerOptions: [
+                    { text: "Là toàn bộ giá trị tài sản thừa kế, quà tặng nhận được theo từng lần phát sinh", isCorrect: false },
+                    { text: "Là phần giá trị của tài sản thừa kế, quà tặng từ 10 triệu đồng trở lên theo từng lần phát sinh", isCorrect: false },
+                    { text: "Là phần giá trị tài sản thừa kế, quà tặng vượt trên 10 triệu đồng nhận được theo từng lần phát sinh", isCorrect: true, rationale: "Chỉ tính thuế phần giá trị vượt trên 10 triệu đồng." },
+                    { text: "Không phải các đáp án trên.", isCorrect: false }
+                ],
+                hint: "Phần vượt trên 10 triệu."
+            },
+            {
+                questionNumber: 29,
+                question: "Thu nhập từ tiền lương của cá nhân không cư trú tại Việt Nam được áp dụng với mức thuế suất:",
+                answerOptions: [
+                    { text: "10%", isCorrect: false },
+                    { text: "15%", isCorrect: false },
+                    { text: "20%", isCorrect: true, rationale: "Cá nhân không cư trú chịu thuế suất toàn phần 20% trên thu nhập chịu thuế." },
+                    { text: "25%", isCorrect: false }
+                ],
+                hint: "Thuế suất toàn phần (Flat rate)."
+            },
+            {
+                questionNumber: 30,
+                question: "Một cá nhân cư trú không có người phụ thuộc trong tháng tính thuế có thu nhập chịu thuế từ tiền lương, tiền công sau khi đã trừ phí bảo hiểm xã hội và bảo hiểm y tế là 50 triệu đồng, số thuế mà cá nhân này phải nộp trong tháng tính thuế (ngàn đồng) là:",
+                answerOptions: [
+                    { text: "8.250", isCorrect: false },
+                    { text: "9.250", isCorrect: false },
+                    { text: "10.000", isCorrect: false },
+                    { text: "6.500", isCorrect: true, rationale: "TNTT = 50 - 11 = 39tr. Bậc 5 (trên 32-52): 39tr. Thuế = (39 * 25%) - 3.25 = 6.5 triệu." }
+                ],
+                hint: "Thu nhập tính thuế là 39 triệu (50 - 11)."
+            },
+            {
+                questionNumber: 31,
+                question: "Một cá nhân cư trú đủ điều kiện được giảm trừ một người phụ thuộc trong tháng tính thuế có thu nhập chịu thuế từ tiền lương, tiền công sau khi đã trừ phí bảo hiểm xã hội và bảo hiểm y tế là 50 triệu đồng, số thuế mà cá nhân này phải nộp trong tháng tính thuế (ngàn đồng) là:",
+                answerOptions: [
+                    { text: "7.850", isCorrect: false },
+                    { text: "8.250", isCorrect: false },
+                    { text: "5.400", isCorrect: true, rationale: "Giảm trừ: 11 + 4.4 = 15.4tr. TNTT = 50 - 15.4 = 34.6tr. Bậc 5. Thuế = (34.6 * 25%) - 3.25 = 5.4 triệu." },
+                    { text: "10.000", isCorrect: false }
+                ],
+                hint: "TNTT = 50 - 11 - 4.4 = 34.6 triệu."
+            },
+            {
+                questionNumber: 32,
+                question: "Một cá nhân cư trú đủ điều kiện được giảm trừ một người phụ thuộc trong tháng tính thuế có thu nhập chịu thuế từ tiền lương, tiền công là 70 triệu đồng, thu nhập tính thuế trong tháng của cá nhân này là (triệu đồng):",
+                answerOptions: [
+                    { text: "70", isCorrect: false },
+                    { text: "54,6", isCorrect: true, rationale: "TN Tính Thuế = TN Chịu Thuế (70) - Giảm trừ (11 + 4.4) = 54.6 triệu." },
+                    { text: "65", isCorrect: false },
+                    { text: "64,4", isCorrect: false }
+                ],
+                hint: "70 - 11 - 4.4."
+            },
+            {
+                questionNumber: 33,
+                question: "Theo quy định của Luật thuế TNCN, người phụ thuộc của người nộp thuế KHÔNG bao gồm:",
+                answerOptions: [
+                    { text: "Con chưa thành niên; con bị tàn tật, không có khả năng lao động", isCorrect: false },
+                    { text: "Con thành niên đang theo học đại học, cao đẳng, trung học chuyên nghiệp hoặc học nghề", isCorrect: false },
+                    { text: "Bố mẹ trong độ tuổi lao động, có khả năng lao động nhưng không có thu nhập", isCorrect: true, rationale: "Bố mẹ trong độ tuổi lao động phải KHÔNG có khả năng lao động mới được tính là người phụ thuộc." },
+                    { text: "Câu A và B", isCorrect: false }
+                ],
+                hint: "Phải ngoài độ tuổi hoặc mất khả năng lao động."
+            },
+            {
+                questionNumber: 34,
+                question: "Thuế TNCN đối với thu nhập từ tiền lương, tiền công của cá nhân không cư trú được xác định:",
+                answerOptions: [
+                    { text: "Thu nhập chịu thuế nhân (x) biểu thuế suất lũy tiến từng phần", isCorrect: false },
+                    { text: "Thu nhập chịu thuế nhân (x) thuế suất 20%", isCorrect: true, rationale: "Công thức tính cho cá nhân không cư trú." },
+                    { text: "[Thu nhập chịu thuế trừ (-) giảm trừ gia cảnh] nhân (x) thuế suất 20%", isCorrect: false },
+                    { text: "[Thu nhập chịu thuế trừ (-) giảm trừ gia cảnh trừ (-) các khoản đóng góp từ thiện, nhân đạo] nhân (x) thuế suất 20%", isCorrect: false }
+                ],
+                hint: "Không được giảm trừ gia cảnh."
+            },
+            {
+                questionNumber: 35,
+                question: "Quy định tạm khấu trừ thuế TNCN tại nguồn 10% tính trên thu nhập áp dụng đối với thu nhập từ:",
+                answerOptions: [
+                    { text: "Đầu tư vốn", isCorrect: false },
+                    { text: "Tiền thù lao trả cho thu nhập vãng lai", isCorrect: true, rationale: "Thu nhập vãng lai từ 2 triệu đồng/lần trở lên khấu trừ 10%." },
+                    { text: "Trúng thưởng", isCorrect: false },
+                    { text: "Bản quyền", isCorrect: false }
+                ],
+                hint: "Thu nhập vãng lai."
+            },
+            {
+                questionNumber: 36,
+                question: "Một cá nhân được giải thưởng từ cuộc thi “Ai là triệu phú” với số tiền 25 triệu đồng, thuế TNCN phải nộp đối với thu nhập từ trúng thưởng của cá nhân này là:",
+                answerOptions: [
+                    { text: "750.000 đồng", isCorrect: false },
+                    { text: "1.250.000 đồng", isCorrect: false },
+                    { text: "1.500.000 đồng", isCorrect: true, rationale: "Thu nhập tính thuế = 25 - 10 = 15tr. Thuế = 15tr * 10% = 1.500.000 đồng." },
+                    { text: "2.500.000 đồng", isCorrect: false }
+                ],
+                hint: "Trừ 10 triệu rồi nhân 10%."
+            },
+            {
+                questionNumber: 37,
+                question: "Một cá nhân có thu nhập từ lãi tiền gửi ngân hàng trong năm tính thuế là 40 triệu đồng, thuế TNCN phải nộp đối với khoản thu nhập này là (triệu đồng):",
+                answerOptions: [
+                    { text: "0", isCorrect: true, rationale: "Lãi tiền gửi ngân hàng được miễn thuế TNCN." },
+                    { text: "1,5", isCorrect: false },
+                    { text: "2", isCorrect: false },
+                    { text: "3", isCorrect: false }
+                ],
+                hint: "Khoản này được miễn thuế."
+            },
+            {
+                questionNumber: 38,
+                question: "Mức khoán chi trang phục (bằng tiền) cho người lao động KHÔNG tính vào thu nhập chịu thuế TNCN là:",
+                answerOptions: [
+                    { text: "Không quá 5 triệu đồng/năm", isCorrect: true, rationale: "Mức khoán chi bằng tiền tối đa 5 triệu/năm không bị tính thuế." },
+                    { text: "Vượt trên 5 triệu đồng/năm", isCorrect: false },
+                    { text: "Dưới 5 triệu đồng/năm", isCorrect: false },
+                    { text: "Đáp án khác", isCorrect: false }
+                ],
+                hint: "Mức 5 triệu."
+            },
+            {
+                questionNumber: 39,
+                question: "Ông Trump trong 2 tuần du lịch tại Việt Nam (Không cư trú) đã trúng thưởng xổ số 500 triệu đồng. Thuế TNCN ông Trump phải nộp là (triệu đồng):",
+                answerOptions: [
+                    { text: "49", isCorrect: true, rationale: "Trúng thưởng trên 10 triệu chịu 10%. Thuế = (500 - 10) * 10% = 49 triệu." },
+                    { text: "50", isCorrect: false },
+                    { text: "51", isCorrect: false },
+                    { text: "52", isCorrect: false }
+                ],
+                hint: "Trừ 10 triệu miễn thuế, còn lại nhân 10%."
+            },
+            {
+                questionNumber: 40,
+                question: "Đối tượng nào sau đây KHÔNG được coi là người phụ thuộc khi xác định thu nhập tính thuế TNCN:",
+                answerOptions: [
+                    { text: "Con chưa thành niên", isCorrect: false },
+                    { text: "Con thành niên đang học đại học", isCorrect: false },
+                    { text: "Con thành  niên đang học nghề", isCorrect: false },
+                    { text: "Con thành niên đang học cao học", isCorrect: true, rationale: "Luật chỉ quy định con thành niên đang học đại học, cao đẳng, trung học chuyên nghiệp hoặc học nghề (không thu nhập/thu nhập thấp) là người phụ thuộc. Học cao học không được liệt kê." }
+                ],
+                hint: "Học cao học không nằm trong diện ưu tiên giảm trừ."
+            },
+            {
+                questionNumber: 41,
+                question: "Căn cứ tính thuế TNCN từ tiền lương, tiền công đối với cá nhân không cư trú là:",
+                answerOptions: [
+                    { text: "Toàn bộ tiền lương, tiền công nhận được tại Việt Nam, không phân biệt nơi trả thu nhập", isCorrect: true, rationale: "Tính trên thu nhập phát sinh tại Việt Nam." },
+                    { text: "Toàn bộ tiền lương, tiền công nhận được ở Việt Nam và kể cả ở nước ngoài trong năm tính thuế", isCorrect: false },
+                    { text: "Tiền lương nhận được tại Việt Nam sau khi đã giảm trừ gia cảnh", isCorrect: false },
+                    { text: "Tiền lương nhận được ở Việt Nam và ở nước ngoài sau khi đã giảm trừ gia cảnh", isCorrect: false }
+                ],
+                hint: "Thu nhập nguồn Việt Nam."
+            },
+            {
+                questionNumber: 42,
+                question: "Cá nhân cư trú trúng thưởng qua các hình thức cá cược thì:",
+                answerOptions: [
+                    { text: "Không chịu thuế TNCN", isCorrect: false },
+                    { text: "Phải chịu thuế TNCN", isCorrect: true, rationale: "Trúng thưởng cá cược, xổ số, khuyến mại... đều chịu thuế TNCN." },
+                    { text: "Phải chịu thuế TNCN nhưng được miễn thuế TNCN", isCorrect: false },
+                    { text: "Không phải chịu thuế TNCN vì không nằm trong phạm vi điều chỉnh của Luật", isCorrect: false }
+                ],
+                hint: "Thu nhập từ trúng thưởng."
+            },
+            {
+                questionNumber: 43,
+                question: "Khoản thu nhập nào sau đây KHÔNG được miễn thuế TNCN:",
+                answerOptions: [
+                    { text: "Thu nhập từ lãi tiền gửi ngân hàng", isCorrect: false },
+                    { text: "Thu nhập từ nhận thừa kế là bất động sản giữa cha nuôi, mẹ nuôi với con nuôi", isCorrect: false },
+                    { text: "Thu nhâp từ trúng thưởng", isCorrect: true, rationale: "Thu nhập từ trúng thưởng phải nộp thuế (nếu trên 10 triệu), không được miễn." },
+                    { text: "Thu nhập từ bồi thường hợp đồng bảo hiểm nhân thọ", isCorrect: false }
+                ],
+                hint: "Trúng thưởng là thu nhập chịu thuế."
+            },
+            {
+                questionNumber: 44,
+                question: "Khoản thu nhập nào sau đây được miễn thuế TNCN:",
+                answerOptions: [
+                    { text: "Toàn bộ tiền lương, làm thêm giờ", isCorrect: false },
+                    { text: "Phần tiền lương làm đêm, làm thêm giờ được trả cao hơn so với tiền lương làm việc ban ngày, làm trong giờ theo quy định của pháp luật", isCorrect: true, rationale: "Chỉ miễn phần chênh lệch trả cao hơn." },
+                    { text: "Tiền thưởng tăng năng suất lao động", isCorrect: false },
+                    { text: "Tiền thưởng đột xuất nhân ngày lễ", isCorrect: false }
+                ],
+                hint: "Phần trả cao hơn do làm thêm."
+            },
+            {
+                questionNumber: 45,
+                question: "Khoản thu nhập nào sau đây được miễn thuế TNCN theo quy định của pháp luật hiện hành:",
+                answerOptions: [
+                    { text: "Lãi cho các doanh nghiệp vay vốn", isCorrect: false },
+                    { text: "Lãi tiền gửi ngân hàng", isCorrect: true, rationale: "Lãi gửi tiết kiệm ngân hàng được miễn thuế." },
+                    { text: "Lãi cho các cá nhân khác vay vốn", isCorrect: false },
+                    { text: "Toàn bộ tiền lương làm việc ngoài giờ hành chính", isCorrect: false }
+                ],
+                hint: "Khuyến khích gửi tiết kiệm."
+            },
+            {
+                questionNumber: 46,
+                question: "Thuế suất thuế TNCN áp dụng đối với thu nhập từ chuyển nhượng chứng khoán là:",
+                answerOptions: [
+                    { text: "0,1%/giá chuyển nhượng", isCorrect: true, rationale: "Áp dụng mức 0,1% trên giá chuyển nhượng từng lần." },
+                    { text: "0,2%/giá chuyển nhượng", isCorrect: false },
+                    { text: "0,5%/giá chuyển nhượng", isCorrect: false },
+                    { text: "1%/giá chuyển nhượng", isCorrect: false }
+                ],
+                hint: "Mức thuế khoán chứng khoán."
+            },
+            {
+                questionNumber: 47,
+                question: "Trong năm tính thuế đầu tiên, người nước ngoài là đối tượng cư trú theo quy định pháp luật hiện hành về thuế TNCN nếu:",
+                answerOptions: [
+                    { text: "Tổng số ngày có mặt ở Việt Nam là 183 ngày trở nên tính theo 12 tháng liên tục kể từ ngày đầu tiên có mặt tại Việt Nam", isCorrect: true, rationale: "Quy tắc 183 ngày trong 12 tháng liên tục cho năm đầu tiên." },
+                    { text: "Tổng số ngày có mặt ở Việt Nam là 183 gày trở nên tính trong 1 năm dương lịch", isCorrect: false },
+                    { text: "Tổng số ngày có mặt ở Việt Nam là 183 ngày liên tục trở lên trong 1 năm dương lịch", isCorrect: false },
+                    { text: "Tổng số ngày có mặt ở Việt Nam là 183 ngày liên tục trở nên tính theo 12 tháng kể từ ngày đầu tiên có mặt tại Việt Nam", isCorrect: false }
+                ],
+                hint: "12 tháng liên tục từ ngày đến."
+            },
+            {
+                questionNumber: 48,
+                question: "Khoản nào sau đây KHÔNG tính vào thu nhập chịu thuế TNCN:",
+                answerOptions: [
+                    { text: "Khoán chi trang phục 5 triệu đồng/năm", isCorrect: true, rationale: "Khoản khoán chi trang phục trong mức quy định (<= 5tr) không tính vào thu nhập chịu thuế. (Lưu ý: Tiền thưởng sáng kiến D cũng có thể được miễn nếu là sáng kiến cấp Nhà nước, nhưng A là phổ biến nhất)." },
+                    { text: "Khoán tiền ăn ca vượt quá mức theo quy định hiện hành", isCorrect: false },
+                    { text: "Thuê kê khai thuế cho đích danh cá nhân", isCorrect: false },
+                    { text: "Tiền thưởng sáng kiến được Nhà nước phong tặng", isCorrect: false }
+                ],
+                hint: "Khoản khoán chi hợp lệ."
+            },
+            {
+                questionNumber: 49,
+                question: "Một cá nhân chuyển giao công nghệ tại Việt Nam và thu được 70 triệu đồng tiền bản quyền theo một hợp đồng chuyển giao công nghệ đã ký kết, thuế TNCN phải nộp đối với thu nhập từ bản quyền của cá nhân này là:",
+                answerOptions: [
+                    { text: "3 triệu đồng", isCorrect: true, rationale: "Thu nhập tính thuế = 70 - 10 = 60tr. Thuế = 60 * 5% = 3 triệu." },
+                    { text: "3,5 triệu đồng", isCorrect: false },
+                    { text: "6 triệu đồng", isCorrect: false },
+                    { text: "7 triệu đồng", isCorrect: false }
+                ],
+                hint: "Trừ 10 triệu, nhân 5%."
+            },
+            {
+                questionNumber: 50,
+                question: "Một cá nhân nhận được cổ tức trong năm tính thuế là 40 triệu đồng, thuế TNCN phải nộp đối với khoản thu nhập này là (triệu đồng):",
+                answerOptions: [
+                    { text: "0", isCorrect: false },
+                    { text: "1,5", isCorrect: false },
+                    { text: "2", isCorrect: true, rationale: "Đầu tư vốn thuế suất 5%. 40 * 5% = 2 triệu." },
+                    { text: "3", isCorrect: false }
+                ],
+                hint: "Thuế suất 5%."
+            },
+            {
+                questionNumber: 51,
+                question: "Một cá nhân cư trú đủ điều kiện được giảm trừ 02 người phụ thuộc trong năm tính thuế có thu nhập chịu thuế từ tiền lương, tiền công sau khi đã trừ bảo hiểm xã hội và bảo hiểm y tế là 700 triệu đồng. Trong năm cá nhân này có ủng hộ đồng bào bão lũ qua Đài TNVN là 5 triệu. Thu nhập tính thuế trong năm tính thuế của cá nhân này là (triệu đồng):",
+                answerOptions: [
+                    { text: "700", isCorrect: false },
+                    { text: "652", isCorrect: false },
+                    { text: "613,6", isCorrect: false },
+                    { text: "457,4", isCorrect: true, rationale: "Giảm trừ bản thân: 11*12=132. Phụ thuộc: 4.4*2*12=105.6. Từ thiện: 5. Tổng giảm trừ: 242.6. TNTT = 700 - 242.6 = 457.4." }
+                ],
+                hint: "Trừ đi tổng các khoản giảm trừ cả năm."
+            },
+            {
+                questionNumber: 52,
+                question: "Một cá nhân cư trú trong năm tính thuế có tài liệu sau: Thu nhập nhận được từ tiền lương sau khi đóng BHXH, BHYT: 300 triệu đồng. Tiền thưởng nhân ngày lễ: 20 triệu đồng. Phụ cấp nghề nghiệp theo quy định của Nhà nước: 30 triệu đồng. Cá nhân không phải nuôi dưỡng người phụ thuộc. Thu nhập tính thuế của cá nhân này trong năm tính thuế là (triệu đồng):",
+                answerOptions: [
+                    { text: "168", isCorrect: false },
+                    { text: "302", isCorrect: false },
+                    { text: "320", isCorrect: false },
+                    { text: "188", isCorrect: true, rationale: "TN Chịu Thuế = (300 + 20) = 320 (Phụ cấp nghề được trừ). Giảm trừ bản thân = 132. TNTT = 320 - 132 = 188." }
+                ],
+                hint: "Lấy thu nhập chịu thuế trừ 132 triệu."
+            },
+            {
+                questionNumber: 53,
+                question: "Một cá nhân cư trú trong năm tính thuế có tài liệu sau: Thu nhập nhận được từ tiền lương sau khi đóng BHXH, BHYT: 300 triệu đồng. Tiền thưởng phát minh khoa học được Bộ Khoa học và Công nghệ cấp bằng sáng chế: 50 triệu đồng. Tiền ăn giữa ca: 6 triệu đồng. Cá nhân không phải nuôi dưỡng người phụ thuộc. Thu nhập tính thuế của cá nhân này trong năm tính thuế là (triệu đồng):",
+                answerOptions: [
+                    { text: "252", isCorrect: false },
+                    { text: "258", isCorrect: false },
+                    { text: "302", isCorrect: false },
+                    { text: "168", isCorrect: true, rationale: "Thưởng sáng chế nhà nước: Miễn. Ăn ca: Miễn (vì < 730k/tháng). TN Chịu Thuế = 300. Giảm trừ bản thân = 132. TNTT = 300 - 132 = 168." }
+                ],
+                hint: "300 - 132."
+            },
+            {
+                questionNumber: 54,
+                question: "Thu nhập chịu thuế TNCN từ bản quyền là:",
+                answerOptions: [
+                    { text: "Là toàn bộ phần thu nhập nhận được khi chuyển giao, chuyển quyền sử dụng các đối tượng của quyền sở hữu trí tuệ, chuyển giao công nghệ theo từng hợp đồng", isCorrect: false },
+                    { text: "Là thu nhâp nhận được khi chuyển giao, chuyển quyền sử dụng các đối tượng của quyền sở hữu trí tuệ, chuyển giao công nghệ có giá trị từ 10 triệu đồng trở lên theo từng hợp đồng", isCorrect: false },
+                    { text: "Là phần thu nhập vượt trên 10 triệu đồng nhận được khi chuyển giao, chuyển quyền sử dụng các đối tượng của quyền sở hữu trí tuệ, chuyển giao công nghệ theo từng hợp đồng.", isCorrect: true, rationale: "Chỉ tính thuế phần vượt trên 10 triệu đồng." },
+                    { text: "Không phải theo các phương án trên", isCorrect: false }
+                ],
+                hint: "Phần vượt trên 10 triệu."
+            },
+            {
+                questionNumber: 55,
+                question: "Ông Brown là cá nhân không cư trú theo Luật thuế TNCN, trong tháng 9 năm 20XX có thu nhập từ tiền công do doanh nghiệp tại Việt Nam chi trả là 10 triệu đồng. Ông X phải nuôi 2 con nhỏ và không có khoản đóng góp từ thiện nhân đạo nào. Số thuế TNCN trong tháng 9 năm 20XX ông Brown phải nộp là:",
+                answerOptions: [
+                    { text: "140.000 đồng", isCorrect: false },
+                    { text: "350.000 đồng", isCorrect: false },
+                    { text: "750.000 đồng", isCorrect: false },
+                    { text: "Số khác", isCorrect: true, rationale: "Cá nhân không cư trú nộp 20% trên thu nhập chịu thuế, không giảm trừ. Thuế = 10tr * 20% = 2.000.000đ. Đáp án D (Số khác) là đúng vì A, B, C không khớp." }
+                ],
+                hint: "10 triệu x 20% = 2 triệu."
+            },
+            {
+                questionNumber: 56,
+                question: "Khoản chi nào của cá nhân sau đây KHÔNG được tính giảm trừ khi tính thu nhập chịu thuế TNCN:",
+                answerOptions: [
+                    { text: "Ủng hộ Quỹ khuyến học", isCorrect: false },
+                    { text: "Ủng hộ Quỹ nuôi dưỡng trẻ em có hoàn cảnh đặc biệt khó khăn không nơi nương tựa", isCorrect: false },
+                    { text: "Ủng hộ địa phương xây dựng đường làng", isCorrect: true, rationale: "Xây dựng đường làng là khoản đóng góp tự nguyện địa phương, không thuộc danh mục các quỹ từ thiện nhân đạo được giảm trừ." },
+                    { text: "Ủng hộ đồng bào lụt qua Hội chữ thập đỏ", isCorrect: false }
+                ],
+                hint: "Khoản đóng góp không qua quỹ quy định."
+            },
+            {
+                questionNumber: 57,
+                question: "Theo quy định hiện hành, đối tượng nộp thuế thu nhập cá nhân ở nước ta là:",
+                answerOptions: [
+                    { text: "Cá nhân cư trú có thu nhập chịu thuế", isCorrect: false },
+                    { text: "Cá nhân cư trú và không cư trú", isCorrect: false },
+                    { text: "Cá nhân cư trú có thu nhập chịu thuế và cá nhân không cư trú có thu nhập chịu thuế", isCorrect: true, rationale: "Bao gồm tất cả cá nhân có thu nhập chịu thuế phát sinh." },
+                    { text: "Cá nhân không cư trú có thu nhập chịu thuế", isCorrect: false }
+                ],
+                hint: "Người có thu nhập chịu thuế."
+            },
+            {
+                questionNumber: 58,
+                question: "Khoản đóng góp nào sau đây KHÔNG được coi là khoản giảm trừ khi xác định thu nhập tính thuế TNCN của các cá nhân:",
+                answerOptions: [
+                    { text: "Đóng góp cho quỹ “Vì người nghèo” của Hội chữ thập đỏ", isCorrect: false },
+                    { text: "Tài trợ cho cuộc thi Olimpic Toán học cho một trường tiểu học công lập trên địa bàn cư trú", isCorrect: true, rationale: "Tài trợ cho giáo dục phải là tài trợ cơ sở vật chất, thiết bị trường học, học bổng... Tài trợ tổ chức cuộc thi có thể không được coi là khoản giảm trừ hợp lệ nếu không đúng danh mục quy định." },
+                    { text: "Tài trợ đồ chơi cho một trường nuôi dạy trẻ em khuyết tật do Chính phủ thành lập", isCorrect: false },
+                    { text: "Đóng góp quỹ khuyến học", isCorrect: false }
+                ],
+                hint: "Tài trợ tổ chức cuộc thi."
+            },
+            {
+                questionNumber: 59,
+                question: "Khoản thu nhập từ chuyển nhượng bất động sản nào sau đây KHÔNG phải là thu nhập được miễn thuế TNCN:",
+                answerOptions: [
+                    { text: "Thu nhập từ chuyển nhượng bất động sản giữa cha đẻ, mẹ đẻ với con đẻ", isCorrect: false },
+                    { text: "Thu nhâp từ chuyển nhượng bất động sản giữa cha chồng, mẹ chống với con dâu", isCorrect: false },
+                    { text: "Thu nhập từ chuyển nhượng bất động sản giữa cha vợ, mẹ vợ với con rể", isCorrect: false },
+                    { text: "Thu nhập từ chuyển nhượng bất động sản giữa mẹ kế và con chồng", isCorrect: false }
+                ],
+                hint: "Thực tế cả 4 trường hợp này đều được miễn thuế. Tuy nhiên trong các đề thi cũ, 'mẹ kế - con chồng' thường bị coi là đáp án gây nhiễu. Về luật hiện hành, quan hệ mẹ kế - con chồng vẫn được miễn.",
+                rationale: "Đáp án D (theo thông lệ đề thi trắc nghiệm cũ, dù luật hiện hành miễn cho cả 4)."
+            },
+            {
+                questionNumber: 60,
+                question: "Khoản thu nhập từ chuyển nhượng bất động sản nào sau đây KHÔNG phải là thu nhập được miễn thuế TNCN:",
+                answerOptions: [
+                    { text: "Thu nhập từ chuyển nhượng bất động sản giữa cha đẻ, mẹ đẻ với con đẻ", isCorrect: false },
+                    { text: "Thu nhâp từ chuyển nhượng bất động sản giữa cha chồng, mẹ chống với con dâu", isCorrect: false },
+                    { text: "Thu nhập từ chuyển nhượng bất động sản giữa cha vợ, mẹ vợ với con rể", isCorrect: false },
+                    { text: "Thu nhập từ chuyển nhượng bất động sản giữa anh rể và em vợ", isCorrect: true, rationale: "Miễn thuế chỉ áp dụng giữa anh chị em ruột. Quan hệ dâu/rể với anh/chị/em không được miễn." }
+                ],
+                hint: "Anh rể - em vợ không thuộc diện miễn thuế (chỉ trực hệ hoặc ruột thịt)."
+            }
+        ];
+            
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let isAnswerChecked = false;
+
+        const quizContent = document.getElementById('quiz-content');
+        const resultsScreen = document.getElementById('results-screen');
+        const finalScoreText = document.getElementById('final-score');
+
+        // Hàm trộn ngẫu nhiên thứ tự các options
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function renderQuestion() {
+            if (currentQuestionIndex >= quizData.length) {
+                showResults();
+                return;
+            }
+
+            const currentQuestion = quizData[currentQuestionIndex];
+            isAnswerChecked = false;
+
+            // Đảm bảo các tùy chọn được trộn mỗi lần hiển thị
+            currentQuestion.shuffledOptions = shuffleArray([...currentQuestion.answerOptions]);
+
+            let optionsHtml = currentQuestion.shuffledOptions.map((option, index) => `
+                <button
+                    class="option-button w-full text-left p-4 mb-3 rounded-xl bg-white focus:outline-none"
+                    data-option-index="${index}"
+                    onclick="selectOption(this, ${index})"
+                    >
+                    <span class="font-bold text-gray-800">${String.fromCharCode(65 + index)}. </span>
+                    <span class="text-gray-700 font-medium">${option.text}</span>
+                </button>
+            `).join('');
+
+            quizContent.innerHTML = `
+                <div class="mb-8 p-4 bg-teal-50 rounded-xl border border-teal-200">
+                    <p class="text-md font-semibold text-teal-600 mb-3">Câu hỏi <span class="text-teal-800 font-extrabold">${currentQuestion.questionNumber}</span>/<span class="text-teal-800 font-extrabold">${quizData.length}</span></p>
+                    <h2 class="text-xl font-semibold text-gray-900 leading-relaxed">${currentQuestion.question}</h2>
+                </div>
+                <div id="options-container" class="space-y-4">
+                    ${optionsHtml}
+                </div>
+                <div id="feedback-area" class="mt-6 p-4 rounded-xl hidden transition-all duration-300">
+                    <p id="rationale-text" class="text-sm"></p>
+                    <p id="hint-text" class="text-xs text-gray-600 mt-2 italic">Gợi ý: ${currentQuestion.hint}</p>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between items-center mt-10 space-y-4 sm:space-y-0">
+                    <button id="check-button" class="btn-action w-full sm:w-auto px-6 py-3 btn-secondary text-white font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:shadow-none" onclick="checkAnswer()" disabled>
+                        Kiểm Tra
+                    </button>
+                    <div class="text-center text-md font-bold text-gray-600">
+                        Điểm hiện tại: <span id="current-score" class="text-teal-600 font-extrabold">${score}</span>/${quizData.length}
+                    </div>
+                    <button id="next-button" class="btn-action w-full sm:w-auto px-6 py-3 btn-primary text-white font-bold rounded-xl shadow-lg disabled:opacity-50 disabled:shadow-none" onclick="nextQuestion()" disabled>
+                        Câu Tiếp Theo
+                    </button>
+                </div>
+            `;
+        }
+
+        function selectOption(button, optionIndex) {
+            if (isAnswerChecked) return;
+
+            // Xóa trạng thái chọn của tất cả các nút
+            document.querySelectorAll('.option-button').forEach(btn => {
+                btn.classList.remove('option-selected');
+                btn.setAttribute('aria-pressed', 'false');
+            });
+
+            // Đặt trạng thái chọn cho nút hiện tại
+            button.classList.add('option-selected');
+            button.setAttribute('aria-pressed', 'true');
+
+            // Lưu trữ lựa chọn của người dùng
+            userAnswers[currentQuestionIndex] = optionIndex;
+
+            // Bật nút Kiểm Tra
+            document.getElementById('check-button').disabled = false;
+        }
+
+        function checkAnswer() {
+            if (isAnswerChecked) return;
+            isAnswerChecked = true;
+
+            const selectedOptionIndex = userAnswers[currentQuestionIndex];
+            const currentQuestion = quizData[currentQuestionIndex];
+            const feedbackArea = document.getElementById('feedback-area');
+            const rationaleText = document.getElementById('rationale-text');
+            const nextButton = document.getElementById('next-button');
+            const checkButton = document.getElementById('check-button');
+
+            const isCorrect = currentQuestion.shuffledOptions[selectedOptionIndex].isCorrect;
+
+            // Hiển thị kết quả và rationale
+            feedbackArea.classList.remove('hidden');
+            feedbackArea.classList.remove('bg-red-50', 'bg-green-50');
+            feedbackArea.classList.add(isCorrect ? 'bg-green-50' : 'bg-red-50');
+            
+            rationaleText.classList.remove('text-green-800', 'text-red-800');
+            rationaleText.classList.add(isCorrect ? 'text-green-800' : 'text-red-800');
+            rationaleText.innerHTML = `
+                <span class="font-bold">${isCorrect ? 'Chính xác! ' : 'Chưa đúng. '}</span>
+                ${currentQuestion.shuffledOptions.find(opt => opt.isCorrect).rationale || ""}
+            `;
+
+            // Cập nhật điểm
+            if (isCorrect) {
+                score++;
+                document.getElementById('current-score').textContent = score;
+            }
+
+            // Đánh dấu các tùy chọn
+            document.querySelectorAll('.option-button').forEach((btn, index) => {
+                const option = currentQuestion.shuffledOptions[index];
+                btn.disabled = true;
+                btn.classList.remove('option-selected', 'hover:bg-gray-100');
+
+                if (option.isCorrect) {
+                    btn.classList.add('option-correct');
+                } else if (index === selectedOptionIndex) {
+                    btn.classList.add('option-incorrect');
+                }
+            });
+
+            // Vô hiệu hóa nút Kiểm Tra và Bật nút Câu Tiếp Theo
+            checkButton.disabled = true;
+            nextButton.disabled = false;
+            nextButton.focus(); // Tập trung vào nút Tiếp theo để tiện thao tác
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            renderQuestion();
+        }
+
+        function showResults() {
+            quizContent.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+            finalScoreText.innerHTML = `Bạn đã hoàn thành bài thi với <span class="text-teal-700 font-black">${score}</span>/${quizData.length} câu trả lời đúng.`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            quizContent.classList.remove('hidden');
+            resultsScreen.classList.add('hidden');
+            renderQuestion();
+        }
+
+        // Bắt đầu quiz khi tải trang
+        window.onload = renderQuestion;
+    </script>
+</body>
+</html>
